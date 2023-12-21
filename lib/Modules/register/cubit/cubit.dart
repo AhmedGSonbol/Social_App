@@ -8,9 +8,7 @@ import 'package:social_app/Models/Login_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/login/cubit/states.dart';
 import 'package:social_app/Modules/register/cubit/states.dart';
-import 'package:social_app/Network/Remote/dio_Helper.dart';
-import 'package:social_app/Network/end_points.dart';
-import 'package:social_app/cubit/cubit.dart';
+
 
 class RegisterCubit extends Cubit<RegisterStates>{
 
@@ -59,7 +57,8 @@ class RegisterCubit extends Cubit<RegisterStates>{
     required String email,
     required String name,
     required String phone,
-    required String uId
+    required String uId,
+
 })
   {
 
@@ -68,7 +67,10 @@ class RegisterCubit extends Cubit<RegisterStates>{
       email: email,
       phone: phone,
       uId: uId,
-      isEmailVrified: false
+      isEmailVrified: false,
+      bio: 'write your bio ...',
+      image: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?w=740&t=st=1703176605~exp=1703177205~hmac=fd901b864e9889ae99f1e28d0e36be32c67a4cf5c792c23f80740c28da7c9e3b',
+      cover: 'https://img.freepik.com/free-psd/3d-render-digital-communication-background_23-2150762212.jpg?w=740&t=st=1703180352~exp=1703180952~hmac=2e944def7da0d55bacc74364688bbbffdd81bdfff3eb2d69e7ad41279c484361'
     );
 
 

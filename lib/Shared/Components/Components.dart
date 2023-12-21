@@ -1,12 +1,12 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//
-import 'package:social_app/Styles/appLanguage.dart';
-import 'package:social_app/Styles/colors.dart';
-import 'package:social_app/cubit/cubit.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
+import 'package:social_app/Shared/Styles/colors.dart';
+import 'package:social_app/Shared/Styles/icon_broken.dart';
+
+
 
 void navTo(context , route)
 {
@@ -37,7 +37,7 @@ Widget myButton({
     ),
 
     child: MaterialButton(
-      height: 50.0,
+      height: 40.0,
       onPressed: function,
       child: Text(
         isUpperCase ?  text.toUpperCase() : text,
@@ -58,7 +58,7 @@ Widget myTextFormField({
   required TextEditingController controller,
   required TextInputType keyboardType,
   required String labelText,
-  required Icon prefixIcon,
+  required IconData prefixIcon,
   required String? Function(String? x) validator,
   required context,
 
@@ -80,7 +80,7 @@ Widget myTextFormField({
       prefixIconColor: fontColor(context),
         suffixIconColor: fontColor(context),
         labelText: labelText,
-        prefixIcon: prefixIcon,
+        prefixIcon: Icon(prefixIcon),
         suffixIcon: suffixButtonIcon,
         labelStyle: TextStyle(color: fontColor(context)),
         // IconButton(
@@ -316,7 +316,7 @@ void myDialog(context,Function() refresh)
               height: 240,
               width: 300,
               decoration: BoxDecoration(
-                color: AppCubit.get(context).isDarkMode ? darkColor : Colors.white,
+                // color: AppCubit.get(context).isDarkMode ? darkColor : Colors.white,
                 borderRadius: BorderRadius.circular(25.0),
                 shape: BoxShape.rectangle,
                 boxShadow:
@@ -372,6 +372,24 @@ void myDialog(context,Function() refresh)
 
       );
     },
+  );
+}
+
+PreferredSizeWidget defaultAppBar({
+  required BuildContext context,
+  String? title,
+  List<Widget>? actions,
+})
+{
+  return AppBar(
+    leading: IconButton(
+      icon: Icon(IconBroken.Arrow___Left_2),
+      onPressed: () => Navigator.of(context).pop(),
+    ),
+
+    title: Text(title ?? ''),
+    actions: actions,
+    titleSpacing: 5.0,
   );
 }
 

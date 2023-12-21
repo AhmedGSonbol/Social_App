@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:social_app/cubit/cubit.dart';
 
-const DefaultColor = Colors.blue ;
+
+const defaultColor = Colors.blue ;
 
 final darkColor =  HexColor('#333739');
 
 Color fontColor(context)
 {
-  if(AppCubit.get(context).isDarkMode)
+  // if(AppCubit.get(context).isDarkMode)
+  if(false)
   {
     return Colors.white;
   }

@@ -1,10 +1,7 @@
-
-
-
 import 'package:social_app/Modules/login/login_Screen.dart';
-import 'package:social_app/Network/Local/Cach_Helper.dart';
-import 'package:social_app/components/Components.dart';
-import 'package:social_app/cubit/cubit.dart';
+import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
+
 
 void printFullText(String text)
 {
@@ -18,7 +15,7 @@ void signOut(context)
   {
     if(value!)
     {
-      AppCubit.get(context).current_index = 0;
+      // AppCubit.get(context).current_index = 0;
       CachHelper.removeData(key: 'token');
       navAndFinishTo(context, Login_Screen());
     }
@@ -26,3 +23,5 @@ void signOut(context)
 }
 
 String token = '';
+
+String? uId;

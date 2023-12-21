@@ -1,9 +1,11 @@
 
-import 'package:social_app/cubit/cubit.dart';
+
+
+
 
 String langSalla(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Salla';
   }
@@ -16,7 +18,7 @@ String langSalla(context)
 
 String langNewProduct(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'New Product';
   }
@@ -29,7 +31,7 @@ String langNewProduct(context)
 
 String langHome(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Home';
   }
@@ -41,7 +43,7 @@ String langHome(context)
 
 String langCategories(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Categories';
   }
@@ -54,7 +56,7 @@ String langCategories(context)
 
 String langFavorites(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Favorites';
   }
@@ -66,7 +68,7 @@ String langFavorites(context)
 
 String langSettings(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Settings';
   }
@@ -78,7 +80,7 @@ String langSettings(context)
 
 String langDarkMode(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'DarkMode';
   }
@@ -90,7 +92,7 @@ String langDarkMode(context)
 
 String langLanguage(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Language';
   }
@@ -102,7 +104,7 @@ String langLanguage(context)
 
 String langEditProfile(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Edit Profile';
   }
@@ -114,7 +116,7 @@ String langEditProfile(context)
 
 String langAboutDeveloper(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'About Developer';
   }
@@ -126,7 +128,7 @@ String langAboutDeveloper(context)
 
 String langLogOut(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Logout';
   }
@@ -138,7 +140,7 @@ String langLogOut(context)
 
 String langLogIn(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Login';
   }
@@ -150,7 +152,7 @@ String langLogIn(context)
 
 String langUserName(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'User Name';
   }
@@ -162,7 +164,7 @@ String langUserName(context)
 
 String langEnterYourUserName(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please enter your user name';
   }
@@ -175,7 +177,7 @@ String langEnterYourUserName(context)
 
 String langPhone(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Phone';
   }
@@ -187,7 +189,7 @@ String langPhone(context)
 
 String langEnterYourPhone(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please enter your phone';
   }
@@ -199,7 +201,7 @@ String langEnterYourPhone(context)
 
 String langEmailAddress(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Email Address';
   }
@@ -211,7 +213,7 @@ String langEmailAddress(context)
 
 String langEnterYourEmailAddress(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please enter your Email Address';
   }
@@ -223,7 +225,7 @@ String langEnterYourEmailAddress(context)
 
 String langPassword(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Password';
   }
@@ -235,7 +237,7 @@ String langPassword(context)
 
 String langEnterYourPassword(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please enter your password';
   }
@@ -247,7 +249,7 @@ String langEnterYourPassword(context)
 
 String langInCart(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'In Cart';
   }
@@ -259,7 +261,7 @@ String langInCart(context)
 
 String langTotal(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Total :';
   }
@@ -271,7 +273,7 @@ String langTotal(context)
 
 String langRegister(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Register';
   }
@@ -283,7 +285,7 @@ String langRegister(context)
 
 String langSearch(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Search';
   }
@@ -295,7 +297,7 @@ String langSearch(context)
 
 String langUpdate(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Update';
   }
@@ -307,7 +309,7 @@ String langUpdate(context)
 
 String langDiscount(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Discount';
   }
@@ -319,7 +321,7 @@ String langDiscount(context)
 
 String langConnectionError(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Connection Error';
   }
@@ -331,7 +333,7 @@ String langConnectionError(context)
 
 String langConnectionErrorDescription(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please check your internet connection !';
   }
@@ -343,7 +345,7 @@ String langConnectionErrorDescription(context)
 
 String langreTry(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'RETRY';
   }
@@ -355,7 +357,7 @@ String langreTry(context)
 
 String langAddedSuccessfully(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Added Successfully';
   }
@@ -368,7 +370,7 @@ String langAddedSuccessfully(context)
 
 String langPleaseWait(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Please Wait';
   }
@@ -380,7 +382,7 @@ String langPleaseWait(context)
 
 String langThereIsNoItems(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'There is no items in your cart !';
   }
@@ -392,7 +394,7 @@ String langThereIsNoItems(context)
 
 String langLoginNowToBrowseOurHotOffers(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Login now to communicate with friends ';
   }
@@ -404,7 +406,7 @@ String langLoginNowToBrowseOurHotOffers(context)
 
 String langDontHaveAnAccount(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'Don\'t have an account?';
   }
@@ -416,7 +418,7 @@ String langDontHaveAnAccount(context)
 
 String langNoFavoritesFound(context)
 {
-  if(AppCubit.get(context).isEnglish)
+  if(true)
   {
     return'No Fevorites Found !';
   }
@@ -428,7 +430,7 @@ String langNoFavoritesFound(context)
 
 // String langLoginError(context)
 // {
-//   if(AppCubit.get(context).isEnglish)
+//   if(true)
 //   {
 //     return'Login faild , Please check your email address and password';
 //   }

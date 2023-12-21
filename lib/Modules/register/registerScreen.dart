@@ -5,11 +5,9 @@ import 'package:social_app/Modules/home/home_Screen.dart';
 import 'package:social_app/Modules/login/cubit/cubit.dart';
 import 'package:social_app/Modules/register/cubit/cubit.dart';
 import 'package:social_app/Modules/register/cubit/states.dart';
-import 'package:social_app/Network/Local/Cach_Helper.dart';
-import 'package:social_app/Styles/appLanguage.dart';
-import 'package:social_app/Styles/colors.dart';
-import 'package:social_app/components/Components.dart';
-import 'package:social_app/components/constants.dart';
+import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
+import 'package:social_app/Shared/Styles/colors.dart';
 
 class RegisterScreen extends StatelessWidget
 {
@@ -78,7 +76,7 @@ class RegisterScreen extends StatelessWidget
                           controller: nameController,
                           keyboardType: TextInputType.name,
                           labelText: langUserName(context),
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: Icons.person,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
@@ -95,7 +93,7 @@ class RegisterScreen extends StatelessWidget
                           controller: phoneController,
                           keyboardType: TextInputType.phone,
                           labelText: langPhone(context),
-                          prefixIcon: Icon(Icons.phone),
+                          prefixIcon: Icons.phone,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
@@ -112,7 +110,7 @@ class RegisterScreen extends StatelessWidget
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           labelText: langEmailAddress(context),
-                          prefixIcon: Icon(Icons.email_outlined),
+                          prefixIcon: Icons.email_outlined,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
@@ -136,7 +134,7 @@ class RegisterScreen extends StatelessWidget
                               cubit.userRegister(context,email: emailController.text, Password: passwordController.text ,name:nameController.text,phone:phoneController.text );
                             }
                           },
-                          prefixIcon: Icon(Icons.lock_outline),
+                          prefixIcon: Icons.lock_outline,
                           // suffixIcon: Icon(Icons.visibility),
                           // SuffixOnPressed: (){},
                           suffixButtonIcon: IconButton(
