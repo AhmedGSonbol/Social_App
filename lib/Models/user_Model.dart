@@ -1,23 +1,23 @@
 class User_Model
 {
-  late String name;
-  late String email;
-  late String phone;
-  late String uId;
-  late bool isEmailVrified;
-  late String image;
-  late String cover;
-  late String bio;
+  String? name;
+  String? email;
+  String? phone;
+  String? uId;
+  bool? isEmailVrified;
+  String? image;
+  String? cover;
+  String? bio;
 
   User_Model({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.uId,
-    required this.isEmailVrified,
-    required this.image,
-    required this.cover,
-    required this.bio
+    this.name,
+    this.phone,
+    this.image,
+    this.cover,
+    this.email,
+    this.uId,
+    this.isEmailVrified,
+    this.bio
 });
 
   User_Model.fromJson(Map<String,dynamic> json)
@@ -36,14 +36,29 @@ class User_Model
   Map<String,dynamic> toMap()
   {
     return{
-      'name':name,
-      'email':email,
-      'phone':phone,
-      'uId':uId,
-      'isEmailVrified':isEmailVrified,
-      'image':image,
-      'cover':cover,
-      'bio':bio
+      if(name != null)
+        'name':name,
+
+      if(email != null)
+        'email':email,
+
+      if(phone != null)
+        'phone':phone,
+
+      if(uId != null)
+        'uId':uId,
+
+      if(isEmailVrified != null)
+        'isEmailVrified':isEmailVrified,
+
+      if(image != null)
+        'image':image,
+
+      if(cover != null)
+        'cover':cover,
+
+      if(bio != null)
+        'bio':bio
     };
   }
 
