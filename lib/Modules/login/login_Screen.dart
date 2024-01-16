@@ -8,8 +8,10 @@ import 'package:social_app/Modules/register/registerScreen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
+import 'package:social_app/Shared/Network/Remote/dio_Helper.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
+import 'package:social_app/Shared/cubit/cubit.dart';
 
 
 class Login_Screen extends StatelessWidget {
@@ -31,7 +33,7 @@ class Login_Screen extends StatelessWidget {
               {
                 uId = state.uId;
 
-                // ShopCubit.get(context).refresh();
+                AppCubit.get(context).getAppData();
                 navAndFinishTo(context, Home_Screen());
               });
 
@@ -145,7 +147,8 @@ class Login_Screen extends StatelessWidget {
                           Text(langDontHaveAnAccount(context),style: TextStyle(color: fontColor(context)),),
                           myTextButton(text: langRegister(context), function: ()
                           {
-                            navTo(context, RegisterScreen());
+
+                             navTo(context, RegisterScreen());
                           })
 
                         ],

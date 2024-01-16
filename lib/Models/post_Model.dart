@@ -6,6 +6,10 @@ class Post_Model
   String? datetime;
   String? text;
   String? postImage;
+  String? postId;
+  int? likes;
+  bool? isLiked;
+  int? commentsCount;
 
 
 
@@ -16,6 +20,10 @@ class Post_Model
     this.datetime,
     this.text,
     this.postImage,
+    this.postId,
+    this.likes,
+    this.isLiked,
+    this.commentsCount
   });
 
   Post_Model.fromJson(Map<String,dynamic> json)
@@ -26,6 +34,11 @@ class Post_Model
     datetime = json['datetime'];
     text = json['text'];
     postImage = json['postImage'];
+    postId = json['postId'];
+
+    likes = json['likes'];
+    isLiked = json['isLiked'];
+    commentsCount = json['commentsCount'];
 
   }
 
@@ -50,7 +63,18 @@ class Post_Model
       if(postImage != null)
         'postImage':postImage,
 
+      if(postId != null)
+        'postId':postId,
+
+      if(likes != null)
+        'likes':likes,
+
+      if(isLiked != null)
+        'isLiked':isLiked,
+
+      if(commentsCount != null)
+        'commentsCount':commentsCount,
+
     };
   }
-
 }

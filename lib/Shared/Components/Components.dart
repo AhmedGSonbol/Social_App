@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
+import 'package:social_app/Shared/cubit/cubit.dart';
 
 
 
@@ -147,129 +150,6 @@ Widget myDivider() => Padding(
 );
 
 
-// Widget buildProductItem(product , context,{bool isSearch = false})
-// {
-//   return
-//
-//     InkWell(
-//       onTap: ()
-//       {
-//         navTo(context , Products_Details(product!.id));
-//       },
-//       child: Padding(
-//       padding: const EdgeInsets.all(20.0),
-//       child: SizedBox(
-//         height: 120.0,
-//         child: Row(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children:
-//           [
-//             Container(
-//               decoration: BoxDecoration(
-//                   color: Colors.white,
-//                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
-//                   border: Border.all(color: fontColor(context),width: 2.0)
-//               ),
-//               child: Stack(
-//                 alignment: AlignmentDirectional.bottomStart,
-//                 children:
-//                 [
-//                   ClipRRect(
-//                     borderRadius: BorderRadius.circular(25.0),
-//                     child: Image(image: NetworkImage('${product!.image}'),
-//                       width: 120.0,
-//                       height: 120.0,
-//
-//                       errorBuilder: (context, error, stackTrace) => Container(
-//                         height: 130.0,
-//                         width: 120.0,
-//                         child: Center(child: Icon(Icons.error,color: Colors.grey,size: 40.0,)),
-//                       ),
-//                     ),
-//                   ),
-//                   if(isSearch == false && product.discount != 0)
-//                     Padding(
-//                       padding: const EdgeInsets.only(left: 0.0),
-//                       child: Container(
-//                         decoration: BoxDecoration(
-//                             color: Colors.red,
-//                             borderRadius: BorderRadius.all(Radius.circular(15.0)),
-//                         ),
-//
-//                         child: Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
-//                           child: Text('DISCOUNT',
-//                             style: TextStyle(
-//                                 fontSize: 10.0,
-//                                 color: Colors.white
-//                             ),
-//                           ),
-//                         ),
-//
-//                       ),
-//                     )
-//                 ],
-//               ),
-//             ),
-//             SizedBox(width: 20.0,),
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(product.name!,
-//                     maxLines: 3,
-//                     overflow: TextOverflow.ellipsis,
-//                     style: TextStyle(
-//                       height: 1.3,
-//                         color: fontColor(context)
-//
-//                     ),
-//                   ),
-//
-//                   Spacer(),
-//
-//                   Row(
-//                     children: [
-//                       Text('${product.price!.round()}\$',
-//                         style: TextStyle(
-//                             color: DefaultColor
-//                         ),
-//                       ),
-//
-//                       SizedBox(width: 5.0,),
-//
-//                       if(isSearch == false && product.discount != 0)
-//                         Text('${product.oldPrice!.round()}',
-//                           style: TextStyle(
-//                               decoration: TextDecoration.lineThrough,
-//                               fontSize: 10.0,
-//                               color: Colors.grey
-//                           ),
-//                         ),
-//                       Spacer(),
-//                       LikeButton(
-//                         isLiked: ShopCubit.get(context).infavourites[product.id] ,
-//                         onTap:  (bool x) async
-//                         {
-//                           ShopCubit.get(context).changeFavorites(product.id);
-//                           return true;
-//                         },
-//                       )
-//
-//
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//
-//           ],
-//         ),
-//       ),
-//   ),
-//     );
-// }
-
 Widget myCachedNetworkIMG({required String url , double? width , double? height , BoxFit? fit})
 {
   return CachedNetworkImage(
@@ -393,6 +273,73 @@ PreferredSizeWidget defaultAppBar({
   );
 }
 
+Widget myMessageSection(
+    {
+      required context,
+      required TextEditingController messageController,
+      required void Function() onPressed,
+      Widget icon = const  Icon(
+        IconBroken.Send,
+        color: Colors.white,
+        size: 18.0,
+      ),
+    })
+{
+  return Container(
+    decoration: BoxDecoration(
+      border: Border.all(
+          color: Colors.grey[300]!,
+          width: 1.0
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(10.0),
+      ),
+
+    ),
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    child: Row(
+      children:
+      [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 10.0
+            ),
+            child: TextFormField(
+              controller: messageController,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Type your message here ...'
+              ),
+            ),
+          ),
+        ),
+        Container(
+          color: defaultColor,
+          child: MaterialButton(
+            onPressed: onPressed,
+            minWidth: 1.0,
+            child: icon
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+Future<User_Model?> getUserDataByUid({
+  required String uId
+})async
+{
+  await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value)
+  {
+
+    return User_Model.fromJson(value.data()!);
+
+
+  });
+
+
+}
 
 
 

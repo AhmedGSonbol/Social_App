@@ -2,16 +2,22 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_app/Models/comment_Model.dart';
+import 'package:social_app/Models/message_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chats/chat_Screen.dart';
 import 'package:social_app/Modules/feeds/feeds_Screen.dart';
 import 'package:social_app/Modules/settings/settings_Screen.dart';
 import 'package:social_app/Modules/users/users_Screen.dart';
+import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
+import 'package:social_app/Shared/Network/Remote/dio_Helper.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -24,11 +30,20 @@ class AppCubit extends Cubit<AppStates>
   static AppCubit get(context) => BlocProvider.of(context);
 
 
+  void getAppData()
+  {
+    initNotifications();
+    getUserData();
+    getPosts();
+
+  }
 
   User_Model? user_model;
 
   Future<void> getUserData()async
   {
+
+
     emit(AppGetUserLoadingState());
 
     await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value)
@@ -66,7 +81,10 @@ class AppCubit extends Cubit<AppStates>
   void changeBottomNav(int index)
   {
 
-
+    if(index == 1)
+    {
+      getUsers();
+    }
     if(index == 2)
       emit(AppNewPostState());
     else
@@ -74,7 +92,6 @@ class AppCubit extends Cubit<AppStates>
 
 
       currentNavIndex = index;
-      print(currentNavIndex);
       emit(AppChangeBottomNavState());
     }
 
@@ -98,7 +115,7 @@ class AppCubit extends Cubit<AppStates>
     }
     else
     {
-      print('No Image Selected !');
+      // print('No Image Selected !');
       emit(AppProfileImagePickedErrorState());
     }
   }
@@ -119,7 +136,7 @@ class AppCubit extends Cubit<AppStates>
     }
     else
     {
-      print('No Image Selected !');
+      // print('No Image Selected !');
       emit(AppCoverImagePickedErrorState());
     }
   }
@@ -151,7 +168,7 @@ class AppCubit extends Cubit<AppStates>
       await value.ref.getDownloadURL().then((value)
       {
         emit(AppProfileUploadImageSuccessState());
-        print(value);
+        // print(value);
         profileImageURL = value;
       }).catchError((err)
       {
@@ -174,7 +191,7 @@ class AppCubit extends Cubit<AppStates>
       await value.ref.getDownloadURL().then((value)
       {
         emit(AppCoverUploadImageSuccessState());
-        print(value);
+        // print(value);
         coverImageURL = value;
       }).catchError((err)
       {
@@ -194,6 +211,13 @@ class AppCubit extends Cubit<AppStates>
 })async
   {
     emit(AppUserUpdatingState());
+
+
+    if(cover_image == null && profile_image == null && name == user_model!.name && phone == user_model!.phone && bio == user_model!.bio)
+    {
+      emit(AppUserUpdateErrorState());
+      return;
+    }
 
     if(cover_image != null)
     {
@@ -231,9 +255,36 @@ class AppCubit extends Cubit<AppStates>
 
     );
 
-    FirebaseFirestore.instance.collection('users').doc(user_model!.uId).
+    FirebaseFirestore.instance.collection('users').doc(uId).
     update( model.toMap() ).then((value)
     {
+
+
+      if(name != user_model!.name || profile_image != null)
+      {
+        posts.forEach((ele)
+        {
+          if(ele.name == user_model!.name)
+          {
+
+
+            if(name != user_model!.name)
+            {
+              ele.name = name ?? ele.name;
+            }
+
+            if(profile_image != null)
+            {
+              ele.image = profileImageURL;
+            }
+
+
+          }
+        });
+      }
+
+
+
 
       getUserData().then((value)
       {
@@ -241,12 +292,15 @@ class AppCubit extends Cubit<AppStates>
         coverImageURL=null;
         profile_image=null;
         profileImageURL=null;
+
+
+
         emit(AppUserUpdateSuccessState());
       });
 
     }).catchError((err)
     {
-      emit(AppUserUpdateErrorState(err.toString()));
+      emit(AppUserUpdateErrorState());
       print(err.toString());
     });
   }
@@ -271,7 +325,7 @@ class AppCubit extends Cubit<AppStates>
     }
     else
     {
-      print('No Image Selected !');
+      // print('No Image Selected !');
       emit(AppPostImagePickedErrorState());
     }
   }
@@ -306,6 +360,9 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
+
+  // posts
+
   Future<void> createPost(
       {
         required String datetime,
@@ -321,9 +378,9 @@ class AppCubit extends Cubit<AppStates>
     }
 
     Post_Model model = Post_Model(
-      name: user_model!.name,
-      image: user_model!.image,
-      uId: user_model!.uId,
+      // name: user_model!.name,
+      // image: user_model!.image,
+      uId: uId,
       datetime: datetime,
       text: text,
       postImage: postImageURL??'',
@@ -334,12 +391,27 @@ class AppCubit extends Cubit<AppStates>
     add( model.toMap() ).then((value)
     {
 
+      Post_Model newPost = Post_Model(
+        uId: uId,
+        postId: value.id,
+        datetime: datetime,
+        text: text,
+        image: user_model!.image,
+        name: user_model!.name,
+        postImage: postImageURL??'',
+        likes: 0,
+        isLiked: false,
+        commentsCount: 0
+
+      );
+
+      posts.insert(0,newPost);
+
       emit(AppCreatePostSuccessState());
 
     }).catchError((err)
     {
       emit(AppCreatePostErrorState());
-      print(err.toString());
     });
   }
 
@@ -348,20 +420,463 @@ class AppCubit extends Cubit<AppStates>
 
   List<Post_Model> posts = [];
 
-  void getPosts()
+  Future<void> getPosts() async
   {
-    FirebaseFirestore.instance.collection('posts').get().then((value)
+    posts = [];
+    Map<String,dynamic> postData = {};
+
+    await FirebaseFirestore.instance.collection('posts').orderBy('datetime',descending: true).get().then((value) async
     {
-      value.docs.forEach((ele)
+      await Future.forEach(value.docs, (ele) async
       {
-        posts.add(Post_Model.fromJson(ele.data()));
+
+        await FirebaseFirestore.instance.collection('users').doc(ele['uId']).get().then((value)
+        {
+          postData['name'] =  value.data()!['name'];
+          postData['image'] =  value.data()!['image'];
+        });
+
+        //likes
+        await ele.reference.collection('likes').get().then((likesValues) async
+        {
+          if(likesValues.docs.isEmpty)
+          {
+            postData['likes']= 0;
+            postData['isLiked'] = false;
+          }
+          else
+          {
+            postData['likes']= likesValues.docs.length;
+          }
+
+
+          await Future.forEach(likesValues.docs, (likeEle)
+          {
+            if(likeEle.reference.id == uId)
+            {
+              postData['isLiked'] = likeEle.data()['like'];
+            }else
+            {
+              postData['isLiked'] = false;
+            }
+
+          }).then((value) async
+          {
+            //comments
+            await ele.reference.collection('comments').get().then((commentsValues)async
+            {
+              postData['commentsCount'] = commentsValues.docs.isEmpty ? 0 : commentsValues.docs.length;
+
+            }).then((value)
+            {
+
+              postData['postId'] = ele.id;
+              postData.addAll(ele.data());
+
+              posts.add(Post_Model.fromJson(postData));
+              emit(AppGetPostSuccessState());
+              // print(postData);
+            });
+          });
+
+        });
+
+
+
+      }).then((value)
+      {
+        emit(AppGetAllPostsSuccessState());
+
+
       });
 
-      emit(AppGetPostsSuccessState());
     }).catchError((err)
     {
       emit(AppGetPostsErrorState(error: err.toString()));
+      print(err.toString());
     });
+
+  }
+
+
+
+  void likePost({
+    required String postID
+})
+  {
+    bool isLike = true;
+    int eleIndex = 0;
+
+    for(int x = 0 ; x < posts.length ; x ++)
+    {
+      if(posts[x].postId == postID)
+      {
+        eleIndex = x;
+
+        if(posts[x].isLiked == false)
+        {
+          posts[x].likes =  posts[x].likes!+1;
+          posts[x].isLiked = true;
+        }
+        else
+        {
+          posts[x].likes =  posts[x].likes!-1;
+          posts[x].isLiked = false;
+          isLike = false;
+        }
+
+      }
+    }
+
+    emit(AppLikePostSuccessState());
+
+    FirebaseFirestore.instance.
+    collection('posts')
+        .doc(postID)
+        .collection('likes')
+        .doc(uId)
+        .set({
+      'like':isLike
+    })
+        .then((value) {}).catchError((err)
+    {
+      if(posts[eleIndex].isLiked == false)
+      {
+
+        posts[eleIndex].likes =  posts[eleIndex].likes!+1;
+        posts[eleIndex].isLiked = true;
+      }
+      else
+      {
+        posts[eleIndex].likes =  posts[eleIndex].likes!-1;
+        posts[eleIndex].isLiked = false;
+        isLike = false;
+      }
+
+      emit(AppLikePostErrorState(err.toString()));
+    });
+  }
+
+
+
+  Future<void> commentPost({
+    required String postID,
+    required String commentText,
+    required String datetime,
+})async
+{
+  emit(AppCommentPostLoadingState());
+
+  Comment_Model model  = Comment_Model(
+    uId: uId,
+    datetime: datetime,
+    commentText: commentText
+  );
+
+  await FirebaseFirestore.instance.collection('posts')
+      .doc(postID)
+      .collection('comments')
+      .add(model.toMap()).then((value) async
+  {
+    //increase number of comments on feeds screen
+
+    increaseDecreasePostCommentCount(
+        postId: postID,
+        isIncrease: true
+    );
+    await getPostComments(postID: postID, firstTimeFlag: false);
+
+  }).catchError((err)
+  {
+    emit(AppCommentPostErrorState(err.toString()));
+  });
+
+}
+
+
+  List<Comment_Model> postComments = [];
+
+Future<void> getPostComments({
+    required String postID,
+    bool firstTimeFlag = true
+})async
+{
+  postComments = [];
+
+  Map<String,dynamic> defaultModel = {};
+
+  if(firstTimeFlag)
+  {
+    emit(AppGetCommentPostLoadingState());
+  }
+
+  await FirebaseFirestore.instance.collection('posts')
+      .doc(postID).collection('comments').orderBy('datetime',descending: false).get().then((value) async
+  {
+    await Future.forEach(value.docs, (element) async
+    {
+      defaultModel['datetime'] = element['datetime'];
+      defaultModel['commentText'] = element['commentText'];
+      defaultModel['commentId'] = element.id;
+
+      if(element['uId'] == uId)
+      {
+        defaultModel['isMyComment'] = true;
+      }
+      else
+      {
+        defaultModel['isMyComment'] = false;
+      }
+
+
+
+      await FirebaseFirestore.instance.collection('users').doc(element['uId']).get().then((value)
+      {
+        defaultModel['userName'] =  value.data()!['name'];
+        defaultModel['userImage'] =  value.data()!['image'];
+      });
+
+      postComments.add(Comment_Model.fromJson(defaultModel));
+
+
+
+    }).then((value)
+    {
+
+      emit(AppGetCommentPostSuccessState());
+    }).catchError((err)
+    {
+      emit(AppGetCommentPostErrorState(err.toString()));
+    });
+  });
+
+}
+
+void increaseDecreasePostCommentCount({
+    required String postId,
+  required bool isIncrease,
+})
+{
+  posts.forEach((postEle)
+  {
+    if(postEle.postId == postId)
+    {
+      print('ttttttttttttttttttttttt');
+      if(isIncrease)
+      {
+        postEle.commentsCount = postEle.commentsCount! + 1;
+      }
+      else
+      {
+        postEle.commentsCount = postEle.commentsCount! - 1;
+      }
+      print('vvvvvvvvvvvvvvvvvvvvvvvvv');
+      print(postEle.commentsCount);
+
+      return;
+    }
+
+  });
+}
+
+Future<void> deleteComment({
+  required String postId,
+    required String commentId
+})async
+{
+  await FirebaseFirestore.instance
+      .collection('posts')
+      .doc(postId)
+      .collection('comments')
+      .doc(commentId)
+      .delete()
+      .then((value)
+  {
+    
+    late Comment_Model itemToRemove ;
+
+    postComments.forEach((element)
+    {
+      if(element.commentId == commentId)
+      {
+        itemToRemove = element;
+        return;
+      }
+    });
+    postComments.remove(itemToRemove);
+
+    increaseDecreasePostCommentCount(
+        postId: postId,
+        isIncrease: false
+    );
+
+    emit(AppDeleteCommentPostSuccessState());
+  })
+      .catchError((err)
+  {
+    emit(AppDeleteCommentPostErrorState(err.toString()));
+    print(err.toString());
+  });
+}
+  // ==========> 4 - Chat Section <==========
+
+  // 4.1 - Get all users
+  List<User_Model> users = [];
+
+  void getUsers()
+  {
+    if(users.isEmpty) {
+      FirebaseFirestore.instance.collection('users').get().then((value)
+    {
+      value.docs.forEach((ele)
+      {
+        if(ele.data()['uId'] != uId)
+          users.add(User_Model.fromJson(ele.data()));
+        return;
+      });
+
+      emit(AppGetAllUsersSuccessState());
+    }).catchError((err)
+    {
+      emit(AppGetAllUsersErrorState(error: err.toString()));
+    });
+    }
+  }
+
+  // 4.1 - Send Message
+  Future<void> sendMessage({
+    required String receiverId,
+    required String datetime,
+    required String text,
+}) async
+  {
+    Message_Model model = Message_Model(
+      text: text,
+      senderId: uId,
+      receiverId: receiverId,
+      datetime: datetime
+    );
+
+    //Set my chat
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('chat')
+        .doc(receiverId)
+        .collection('messages')
+        .add(
+        model.toMap()).then((value)
+    {
+      getUserDataByUid(uId: receiverId).then((value)
+      {
+        DioHelper.post(
+            data: DioHelper.FCM_Data(
+                fcmToken: value!.FCM_token!,
+                data:
+                {
+                  'hello':'World'
+                }
+            )
+        );
+
+        emit(AppSendMessageSuccessState());
+      });
+
+
+
+    }).catchError((err)
+    {
+      emit(AppSendMessageErrorState());
+    });
+
+    //Set receiver chat
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .collection('chat')
+        .doc(uId)
+        .collection('messages')
+        .add(
+        model.toMap()).then((value)
+    {
+      emit(AppSendMessageSuccessState());
+
+    }).catchError((err)
+    {
+      emit(AppSendMessageErrorState());
+    });
+
+
+  }
+
+
+  // 4.2 - Get Messages
+
+  List<Message_Model> messages = [];
+
+  void getMessages({
+    required String receiverId
+})
+  {
+    FirebaseFirestore.instance.collection('users')
+        .doc(uId)
+        .collection('chat')
+        .doc(receiverId)
+        .collection('messages')
+        .orderBy('datetime')
+        .snapshots()
+        .listen((event)
+    {
+      messages = [];
+      event.docs.forEach((ele)
+      {
+        messages.add(Message_Model.fromJson(ele.data()));
+      });
+
+
+      emit(AppGetMessagesSuccessState());
+
+    });
+  }
+
+
+
+  // Notification Initialization
+
+void initNotifications()
+{
+  FirebaseMessaging.instance.getToken().then((value)
+  {
+    print(value);
+  });
+
+  FirebaseMessaging.onMessage.listen((event)
+  {
+    print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+    print(event.data.toString() );
+    print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+    myToast(msg: 'on Message', state: ToastStates.SUCCESS);
+    // print(event.notification!.body );
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((event)
+  {
+    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    print(event.data.toString() );
+    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    myToast(msg: 'on App Message', state: ToastStates.WARNING);
+    // print(event.notification!.body );
+  });
+
+  FirebaseMessaging.onBackgroundMessage(background_Messaging);
+}
+
+  Future<void> background_Messaging(RemoteMessage message)async
+  {
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    print(message.data.toString() );
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    myToast(msg: 'on Background Message', state: ToastStates.ERROR);
   }
 
 }

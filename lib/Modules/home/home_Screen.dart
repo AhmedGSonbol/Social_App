@@ -1,14 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Components/constants.dart';
+import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 
 
-class Home_Screen extends StatelessWidget {
+class Home_Screen extends StatelessWidget
+{
   const Home_Screen({Key? key}) : super(key: key);
 
   @override
@@ -33,8 +39,43 @@ class Home_Screen extends StatelessWidget {
             title: Text(
                 cubit.titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
             ),
+
             actions:
-            [
+                cubit.currentNavIndex == 4
+                    ?
+                    [
+                      IconButton(
+                        icon: Icon(IconBroken.Logout),
+                        onPressed: ()
+                        {
+                          FirebaseMessaging.instance.deleteToken().then((TokenValue)
+                          {
+                            FirebaseFirestore.instance.collection('users').doc(uId).set(
+                                {
+                                  'FCM_token':''
+                                }
+                            ).then((val)
+                            {
+                              CachHelper.removeData(key: 'uId').then((value)
+                              {
+                                navAndFinishTo(context, Login_Screen());
+                                Future.delayed(Duration(seconds: 3),()
+                                {
+                                  cubit.currentNavIndex = 0;
+                                });
+
+                              });
+                            });
+                          });
+
+
+
+
+                        },
+                      ),
+                    ]
+                    :
+                [
 
               IconButton(
                 icon: Icon(IconBroken.Notification),
@@ -43,7 +84,7 @@ class Home_Screen extends StatelessWidget {
 
               IconButton(
                 icon: Icon(IconBroken.Search),
-                onPressed: (){},
+                onPressed: () {},
               ),
             ],
           ),
@@ -58,6 +99,7 @@ class Home_Screen extends StatelessWidget {
               {
                 cubit.changeBottomNav(index);
               },
+
 
               items: 
               [
@@ -76,8 +118,10 @@ class Home_Screen extends StatelessWidget {
                 BottomNavigationBarItem(
                     icon: Icon(
                       IconBroken.Paper_Upload,
+                      color: Colors.black,
                     ),
-                    label: 'Post'
+                    label: 'Post',
+                  backgroundColor: Colors.red
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(

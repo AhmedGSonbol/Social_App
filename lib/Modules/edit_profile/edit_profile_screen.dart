@@ -25,21 +25,27 @@ class Edit_profile_screen extends StatelessWidget {
       {
         if(state is AppUserUpdateErrorState)
         {
-          if(state.err.contains('cloud_firestore/unknown'))
-          {
+
             myToast(msg: 'Please change your data first to update !', state: ToastStates.ERROR);
-          }
+
+        }
+
+        else if(state is AppUserUpdateSuccessState)
+        {
+
+          myToast(msg: 'Data has been updated successfully', state: ToastStates.SUCCESS);
+
         }
       },
       builder: (context, state)
       {
         var cubit = AppCubit.get(context);
 
-        var userModel = cubit.user_model;
+        var userModel = cubit.user_model!;
 
-        nameEditController.text = userModel!.name! ;
-        bioEditController.text = userModel!.bio!;
-        phoneEditController.text = userModel!.phone!;
+        nameEditController.text = userModel.name! ;
+        bioEditController.text = userModel.bio!;
+        phoneEditController.text = userModel.phone!;
 
         var profileImage = cubit.profile_image;
         var coverImage = cubit.cover_image;

@@ -6,8 +6,11 @@ import 'package:social_app/Modules/login/cubit/cubit.dart';
 import 'package:social_app/Modules/register/cubit/cubit.dart';
 import 'package:social_app/Modules/register/cubit/states.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Components/constants.dart';
+import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
+import 'package:social_app/Shared/cubit/cubit.dart';
 
 class RegisterScreen extends StatelessWidget
 {
@@ -34,12 +37,27 @@ class RegisterScreen extends StatelessWidget
         if(state is CreateUserSuccessState)
         {
 
-          // CachHelper.saveData(key: 'uId', value: state.uId).then((value)
-          // {
-          //   navAndFinishTo(context, Home_Screen());
-          // });
+          myToast(msg: 'You have been registered successfully !',state: ToastStates.SUCCESS ,);
+
+          CachHelper.saveData(key: 'uId', value: state.uId).then((value)
+          {
+            uId = state.uId;
+            AppCubit.get(context).getAppData();
+            navAndFinishTo(context, Home_Screen());
+          });
 
         }
+
+        else if(state is RegisterErrorState)
+        {
+
+          if(state.error.contains('The email address is badly formatted'))
+            myToast(msg: 'Your email address is not valid !',state: ToastStates.ERROR ,);
+
+          // if(state.error.contains('Password should be at least 6 characters'))
+          //   myToast(msg: 'Your password should be at least 6 characters !',state: ToastStates.ERROR ,);
+        }
+
         else if(state is CreateUserErrorState)
         {
           myToast(msg: state.error,state: ToastStates.ERROR ,);
@@ -96,9 +114,14 @@ class RegisterScreen extends StatelessWidget
                           prefixIcon: Icons.phone,
                           validator: (String? val)
                           {
+
                             if(val!.isEmpty)
                             {
                               return langEnterYourPhone(context);
+                            }
+                            if(val.length < 11)
+                            {
+                              return 'Your phone number must be at least 11 number';
                             }
 
                           }
@@ -118,9 +141,15 @@ class RegisterScreen extends StatelessWidget
                               return langEnterYourEmailAddress(context);
                             }
 
+                            if(!checkEmailValidation())
+                            {
+                              return "Your email address is not in a correct format !";
+                            }
+
                           }
                       ),
                       SizedBox(height: 15.0),
+
                       myTextFormField(
                           context: context,
                           controller: passwordController,
@@ -149,6 +178,11 @@ class RegisterScreen extends StatelessWidget
                             if(val!.isEmpty)
                             {
                               return langEnterYourPassword(context);
+                            }
+
+                            if(val.length < 6)
+                            {
+                              return 'Your password should be at least 6 characters !';
                             }
                           }
                       ),
@@ -180,5 +214,11 @@ class RegisterScreen extends StatelessWidget
       },
     ),
     );
+  }
+
+  bool checkEmailValidation()
+  {
+    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(emailController.text);
   }
 }

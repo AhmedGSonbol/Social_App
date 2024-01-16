@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
@@ -20,6 +21,8 @@ class New_Post_Screen extends StatelessWidget {
 
         var cubit = AppCubit.get(context);
 
+        User_Model userModer = cubit.user_model!;
+
         return Scaffold(
           appBar: defaultAppBar(
               context: context,
@@ -30,6 +33,14 @@ class New_Post_Screen extends StatelessWidget {
                     text: 'Post',
                     function: ()
                     {
+
+                    if(cubit.postImage == null && postTextController.text.trim().isEmpty)
+                    {
+                      myToast(msg: 'Please add text or image to your post before posting !', state: ToastStates.ERROR);
+                      return;
+
+                    }
+
                       cubit.createPost(
                           datetime: DateTime.now().toString(),
                           text: postTextController.text,
@@ -60,7 +71,7 @@ class New_Post_Screen extends StatelessWidget {
                   [
                     CircleAvatar(
                       radius: 25.0,
-                      backgroundImage: AssetImage('assets/images/img2.jpg'),
+                      backgroundImage: NetworkImage('${userModer.image}'),
                     ),
                     SizedBox(
                       width: 15.0,
@@ -73,7 +84,7 @@ class New_Post_Screen extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Ahmed Sonbol',
+                              Text('${userModer.name}',
                                 style: TextStyle(
                                     height: 1.4
                                 ),
@@ -112,7 +123,7 @@ class New_Post_Screen extends StatelessWidget {
                         maxLines: null,
 
                         decoration: InputDecoration(
-                            hintText: 'What is in your mind , Ahmed Sonbol ?',
+                            hintText: 'What is in your mind , ${userModer.name} ?',
                           border: InputBorder.none
                         ),
                       ),
@@ -187,12 +198,7 @@ class New_Post_Screen extends StatelessWidget {
                         },
                       ),
                     ),
-                    Expanded(
-                      child: TextButton(
-                        child: Text('# Tag'),
-                        onPressed: (){},
-                      ),
-                    ),
+
                   ],
                 )
               ],

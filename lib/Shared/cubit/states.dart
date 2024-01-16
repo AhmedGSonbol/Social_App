@@ -13,6 +13,17 @@ class AppGetUserErrorState extends AppStates{
   AppGetUserErrorState({required this.error});
 }
 
+
+class AppGetAllUsersLoadingState extends AppStates{}
+
+class AppGetAllUsersSuccessState extends AppStates{}
+
+class AppGetAllUsersErrorState extends AppStates{
+  final String error;
+
+  AppGetAllUsersErrorState({required this.error});
+}
+
 class AppChangeBottomNavState extends AppStates{}
 
 class AppNewPostState extends AppStates{}
@@ -38,8 +49,8 @@ class AppUserUpdatingState extends AppStates{}
 class AppUserUpdateSuccessState extends AppStates{}
 
 class AppUserUpdateErrorState extends AppStates{
-  String err;
-  AppUserUpdateErrorState(this.err);
+  // String err;
+  // AppUserUpdateErrorState(this.err);
 
 }
 
@@ -67,12 +78,56 @@ class AppCancelUploadedPostImageState extends AppStates{}
 
 
 //Get Posts States
-class AppGetPostsLoadingState extends AppStates{}
+class AppGetPostSuccessState extends AppStates{}
 
-class AppGetPostsSuccessState extends AppStates{}
+class AppGetAllPostsSuccessState extends AppStates{}
 
 class AppGetPostsErrorState extends AppStates{
   final String error;
 
   AppGetPostsErrorState({required this.error});
 }
+
+
+//Post Likes
+class AppLikePostSuccessState extends AppStates{}
+
+class AppLikePostErrorState extends AppStates{
+  final String error;
+
+  AppLikePostErrorState(this.error);
+}
+
+//Post Comments
+class AppCommentPostLoadingState extends AppStates{}
+
+class AppCommentPostErrorState extends AppStates{
+  final String error;
+
+  AppCommentPostErrorState(this.error);
+}
+
+class AppGetCommentPostLoadingState extends AppStates{}
+
+class AppGetCommentPostSuccessState extends AppStates{}
+
+class AppGetCommentPostErrorState extends AppStates{
+  final String error;
+
+  AppGetCommentPostErrorState(this.error);
+}
+
+class AppDeleteCommentPostSuccessState extends AppStates{}
+
+class AppDeleteCommentPostErrorState extends AppStates{
+  final String error;
+
+  AppDeleteCommentPostErrorState(this.error);
+}
+
+//Chat
+class AppSendMessageSuccessState extends AppStates{}
+
+class AppSendMessageErrorState extends AppStates{}
+
+class AppGetMessagesSuccessState extends AppStates{}

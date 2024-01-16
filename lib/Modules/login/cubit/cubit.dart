@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +27,24 @@ class LoginCubit extends Cubit<LoginStates>{
 
     FirebaseAuth.instance.signInWithEmailAndPassword(
         email: Email,
-        password: Password).then((value)
+        password: Password
+    ).then((value)
     {
-      emit(LoginSuccessState(value.user!.uid));
+
+      FirebaseMessaging.instance.getToken().then((TokenValue)
+      {
+        FirebaseFirestore.instance.collection('users').doc(value.user!.uid).set(
+            {
+              'FCM_token':TokenValue
+            }
+        ).then((val)
+        {
+          emit(LoginSuccessState(value.user!.uid));
+        });
+      });
+
+
+
 
     }).catchError((err)
     {

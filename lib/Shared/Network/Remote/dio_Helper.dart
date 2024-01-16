@@ -1,91 +1,55 @@
-
 import 'package:dio/dio.dart';
 
-class DioHelper
-{
-  static Dio? dio;
 
-  static init()
-  {
+class DioHelper {
+  static late Dio dio;
+
+  static init() {
     dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://student.valuxapps.com/api/',
-
-        receiveDataWhenStatusError: true,
-      )
+        BaseOptions(
+            baseUrl: 'https://fcm.googleapis.com/fcm/send',
+            receiveDataWhenStatusError: true,
+            headers:
+            {
+              'Content-Type': 'application/json',
+              'Authorization': 'key=AAAA979ncVI:APA91bECbLjj04oY5xIPwMQnk0dflXaFu0kn0bLKmuFYX6A93rrjOKD2xAT71RMkwI7XsMeEJXpCjTVuB9QMrGRjNWA6nvu8P1jrxgq6EuRt7y_Q9St44_okcXMFw3hfjpxSaahYv4wr',
+            }
+        )
     );
   }
 
-  static Future<Response>? getData({
-    required String url,
-    Map<String , dynamic>? query,
-
-    String lang = 'en' ,
-    String? token,
-  })async
+  static Future<Response>? post({
+    required Map<String, dynamic> data,
+  }) async
   {
-    dio!.options.headers =
-    {
-      'Content-Type':'application/json',
-      'lang' : lang,
-      'Authorization' : token??''
-    };
-
-    return await dio!.get(url , queryParameters: query,);
-  }
-
-
-
-  static Future<Response>? postData({
-    required String url,
-    required Map<String , dynamic> data,
-
-    Map<String , dynamic>? query,
-    String lang = 'en',
-    String? token,
-
-  })async
-  {
-
-    dio!.options.headers =
-    {
-      'Content-Type':'application/json',
-      'lang' : lang,
-      'Authorization' : token??''
-    };
-
-    return await dio!.post(
-        url,
-        queryParameters: query,
-        data: data
-
+    print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
+    print(data);
+    return await dio.post(
+      '',
+      data: data
     );
   }
 
-  static Future<Response>? putData({
-    required String url,
-    required Map<String , dynamic> data,
-
-    Map<String , dynamic>? query,
-    String lang = 'en',
-    String? token,
-
-  })async
+  static Map<String, dynamic> FCM_Data({
+    required String fcmToken,
+    String? title,
+    String? body,
+    required Map<String, String> data
+  })
   {
+    return {
+      "to": fcmToken,
+      "notification":
+      {
+        "title": title??"title here !",
+        "body": body??"Rich Notification testing (body)",
+        "mutable_content": true,
+        "sound": "Tri-tone"
+      },
 
-    dio!.options.headers =
-    {
-      'Content-Type':'application/json',
-      'lang' : lang,
-      'Authorization' : token??''
+      // data != null ? :
+      "data": data
     };
-
-    return await dio!.put(
-        url,
-        queryParameters: query,
-        data: data
-
-    );
   }
 
 }

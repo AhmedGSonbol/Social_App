@@ -8,6 +8,7 @@ class User_Model
   String? image;
   String? cover;
   String? bio;
+  String? FCM_token;
 
   User_Model({
     this.name,
@@ -17,7 +18,9 @@ class User_Model
     this.email,
     this.uId,
     this.isEmailVrified,
-    this.bio
+    this.bio,
+    this.FCM_token
+
 });
 
   User_Model.fromJson(Map<String,dynamic> json)
@@ -30,6 +33,7 @@ class User_Model
     image = json['image'];
     cover = json['cover'];
     bio = json['bio'];
+    FCM_token = json['FCM_token'];
 
   }
 
@@ -58,7 +62,10 @@ class User_Model
         'cover':cover,
 
       if(bio != null)
-        'bio':bio
+        'bio':bio,
+
+      if(FCM_token != null)
+        'FCM_token':FCM_token
     };
   }
 
