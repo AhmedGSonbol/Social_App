@@ -15,9 +15,9 @@ class RegisterErrorState extends RegisterStates{
 }
 
 class CreateUserSuccessState extends RegisterStates {
-  // final String uId;
-  //
-  // CreateUserSuccessState({required this.uId});
+  final String uId;
+
+  CreateUserSuccessState({required this.uId});
 
 }
 

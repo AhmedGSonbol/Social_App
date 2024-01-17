@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:social_app/Styles/colors.dart';
+import 'package:social_app/Shared/Styles/colors.dart';
 
 ThemeData darkTheme = ThemeData(
 
-  primarySwatch: DefaultColor,
+  primarySwatch: defaultColor,
 
   appBarTheme: AppBarTheme(
     //Control Status bar
@@ -19,6 +19,7 @@ ThemeData darkTheme = ThemeData(
       elevation: 0.0,
       titleTextStyle:const TextStyle(
         color: Colors.white,
+        fontFamily: 'Jannah',
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
       ),
@@ -27,7 +28,7 @@ ThemeData darkTheme = ThemeData(
 
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
-    selectedItemColor: DefaultColor,
+    selectedItemColor: defaultColor,
     unselectedItemColor: Colors.white,
     selectedLabelStyle: TextStyle(color: Colors.orange, fontSize: 15.0),
     elevation: 20.0,
@@ -37,11 +38,13 @@ ThemeData darkTheme = ThemeData(
 
   scaffoldBackgroundColor: darkColor,
 
-  textTheme:const TextTheme(bodyLarge: TextStyle(
-      fontSize: 18.0,
-      fontWeight: FontWeight.w600,
-      color: Colors.white
-  ),
+  textTheme:const TextTheme(
+    titleMedium: TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        height: 1.3
+    ),
   ),
 
     fontFamily: 'Jannah',
@@ -50,7 +53,7 @@ ThemeData darkTheme = ThemeData(
 
 
 ThemeData lightTheme = ThemeData(
-  primarySwatch: DefaultColor,
+  primarySwatch: defaultColor,
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(
     //Control Status bar
@@ -63,21 +66,25 @@ ThemeData lightTheme = ThemeData(
       elevation: 0.0,
       titleTextStyle: TextStyle(
         color: Colors.black,
+        fontFamily: 'Jannah',
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(color: Colors.black)),
   bottomNavigationBarTheme:const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: DefaultColor,
+      selectedItemColor: defaultColor,
       selectedLabelStyle:
       TextStyle(color: Colors.orange, fontSize: 15.0),
       elevation: 20.0),
-  textTheme:const TextTheme(bodyText1: TextStyle(
-      fontSize: 18.0,
-      fontWeight: FontWeight.w600,
-      color: Colors.black
-  )
+  textTheme:const TextTheme(
+    titleMedium: TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      height: 1.3
+    ),
+
   ),
   fontFamily: 'Jannah',
 );

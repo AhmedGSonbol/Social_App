@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/Components/Components.dart';
-import 'package:social_app/Components/constants.dart';
 import 'package:social_app/Modules/home/home_Screen.dart';
 import 'package:social_app/Modules/login/cubit/cubit.dart';
 // import 'package:social_app/Modules/login/cubit/cubit.dart';
 import 'package:social_app/Modules/login/cubit/states.dart';
 import 'package:social_app/Modules/register/registerScreen.dart';
-import 'package:social_app/Network/Local/Cach_Helper.dart';
-import 'package:social_app/Styles/appLanguage.dart';
-import 'package:social_app/Styles/colors.dart';
+import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Components/constants.dart';
+import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
+import 'package:social_app/Shared/Network/Remote/dio_Helper.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
+import 'package:social_app/Shared/Styles/colors.dart';
+import 'package:social_app/Shared/cubit/cubit.dart';
 
 
 class Login_Screen extends StatelessWidget {
@@ -29,9 +31,9 @@ class Login_Screen extends StatelessWidget {
           {
               CachHelper.saveData(key: 'uId', value: state.uId).then((value)
               {
-                // token = state.uId;
+                uId = state.uId;
 
-                // ShopCubit.get(context).refresh();
+                AppCubit.get(context).getAppData();
                 navAndFinishTo(context, Home_Screen());
               });
 
@@ -78,7 +80,7 @@ class Login_Screen extends StatelessWidget {
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           labelText: langEmailAddress(context),
-                          prefixIcon: Icon(Icons.email_outlined),
+                          prefixIcon: Icons.email_outlined,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
@@ -102,7 +104,7 @@ class Login_Screen extends StatelessWidget {
                               cubit.userLogin(context,Email: emailController.text, Password: passwordController.text);
                             }
                           },
-                          prefixIcon: Icon(Icons.lock_outline),
+                          prefixIcon: Icons.lock_outline,
                           // suffixIcon: Icon(Icons.visibility),
                           // SuffixOnPressed: (){},
                           suffixButtonIcon: IconButton(
@@ -145,7 +147,8 @@ class Login_Screen extends StatelessWidget {
                           Text(langDontHaveAnAccount(context),style: TextStyle(color: fontColor(context)),),
                           myTextButton(text: langRegister(context), function: ()
                           {
-                            navTo(context, RegisterScreen());
+
+                             navTo(context, RegisterScreen());
                           })
 
                         ],
