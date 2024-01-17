@@ -52,7 +52,7 @@ class Home_Screen extends StatelessWidget
                           {
                             FirebaseFirestore.instance.collection('users').doc(uId).set(
                                 {
-                                  'FCM_token':''
+                                  'FCM_token':'1'
                                 }
                             ).then((val)
                             {
