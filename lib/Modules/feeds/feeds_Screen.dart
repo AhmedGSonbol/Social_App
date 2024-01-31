@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/message_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
+import 'package:social_app/Modules/post_Details/post_Details_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
@@ -139,14 +140,14 @@ class FeedsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.more_horiz,
-                    size: 18.0,),
-                  onPressed: (){},
-                )
+                // const SizedBox(
+                //   width: 15.0,
+                // ),
+                // IconButton(
+                //   icon: const Icon(Icons.more_horiz,
+                //     size: 18.0,),
+                //   onPressed: (){},
+                // )
               ],
             ),
 
@@ -233,18 +234,21 @@ class FeedsScreen extends StatelessWidget {
             if(model.postImage != "")
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
-                child: Container(
-                  height: 140,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage('${model.postImage}'),
-                        fit: BoxFit.cover,
+                child: Hero(
+                  tag: model.postId!,
+                  child: Container(
+                    height: 140,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        image: DecorationImage(
+                          image: NetworkImage('${model.postImage}'),
+                          fit: BoxFit.cover,
 
-                      )
+                        )
+                    ),
+
                   ),
-
                 ),
               ),
 
@@ -301,11 +305,12 @@ class FeedsScreen extends StatelessWidget {
                       if(model.commentsCount != 0)
                       {
                         AppCubit.get(context).getPostComments(postID: model.postId!);
-                        myBottomSheet(
-                            context: context,
-                            model: model,
-                          commentController: commentController
-                        );
+                        // myBottomSheet(
+                        //     context: context,
+                        //     model: model,
+                        //   commentController: commentController
+                        // );
+                        navTo(context, Post_Details_Screen(post_model: model,hasComments: true,));
                       }
                       else
                       {
@@ -355,12 +360,17 @@ class FeedsScreen extends StatelessWidget {
                       {
                         AppCubit.get(context).getPostComments(postID: model.postId!);
                       }
+                      else
+                      {
+                        AppCubit.get(context).postComments = [];
+                      }
 
-                      myBottomSheet(
-                          context: context,
-                          model: model,
-                        commentController: commentController
-                      );
+                      // myBottomSheet(
+                      //     context: context,
+                      //     model: model,
+                      //   commentController: commentController
+                      // );
+                      navTo(context, Post_Details_Screen(post_model: model,hasComments:model.commentsCount != 0 ? true : false,));
                     },
                     keyboardType: TextInputType.none,
 
@@ -400,90 +410,90 @@ class FeedsScreen extends StatelessWidget {
   }
 
 
-  Future<dynamic> myBottomSheet({
-
-    required BuildContext context,
-    required Post_Model model,
-    required TextEditingController commentController
-
-  }) => showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
-        builder: (context, state)
-        {
-
-          return state is! AppGetCommentPostLoadingState
-              ?
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children:
-              [
-                Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 10
-                      ),
-                      child: AppCubit.get(context).postComments.isNotEmpty
-                          ?
-                      ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index)
-                        {
-                          return commentItem(
-                              context: context,
-                              model: AppCubit.get(context).postComments[index],
-                            postId: model.postId!
-                          );
-                        },
-                        itemCount: AppCubit.get(context).postComments.length,
-                      )
-                          :
-                      const Center(child: Text('No comments yet !'))
-                  ),
-                ),
-
-                //message section
-                myMessageSection(
-                  context: context,
-                  messageController: commentController,
-                  icon: state is AppCommentPostLoadingState
-                      ?
-                  const SizedBox(
-                      width: 15,
-                      height: 15,
-                      child: CircularProgressIndicator(color: Colors.white))
-
-                      :
-                  const Icon(
-                    IconBroken.Send,
-                    color: Colors.white,
-                    size: 18.0,
-                  ),
-
-                  onPressed: () {
-                    if (commentController.text.isNotEmpty) {
-                      AppCubit.get(context).commentPost(
-                          postID: model.postId!,
-                          commentText: commentController.text,
-                          datetime: DateTime.now().toString()
-                      ).then((value) {
-                        commentController.text = '';
-                      });
-                    }
-                  },
-                )
-              ],
-            ),
-          )
-              :
-          const Center(child: CircularProgressIndicator());
-        },
-      );
-    },
-  );
+  // Future<dynamic> myBottomSheet({
+  //
+  //   required BuildContext context,
+  //   required Post_Model model,
+  //   required TextEditingController commentController
+  //
+  // }) => showModalBottomSheet(
+  //   context: context,
+  //   builder: (context) {
+  //     return BlocConsumer<AppCubit, AppStates>(
+  //       listener: (context, state) {},
+  //       builder: (context, state)
+  //       {
+  //
+  //         return state is! AppGetCommentPostLoadingState
+  //             ?
+  //         Padding(
+  //           padding: const EdgeInsets.all(15.0),
+  //           child: Column(
+  //             children:
+  //             [
+  //               Expanded(
+  //                 child: Padding(
+  //                     padding: const EdgeInsets.only(
+  //                         bottom: 10
+  //                     ),
+  //                     child: AppCubit.get(context).postComments.isNotEmpty
+  //                         ?
+  //                     ListView.builder(
+  //                       physics: const BouncingScrollPhysics(),
+  //                       itemBuilder: (context, index)
+  //                       {
+  //                         return commentItem(
+  //                             context: context,
+  //                             model: AppCubit.get(context).postComments[index],
+  //                           postId: model.postId!
+  //                         );
+  //                       },
+  //                       itemCount: AppCubit.get(context).postComments.length,
+  //                     )
+  //                         :
+  //                     const Center(child: Text('No comments yet !'))
+  //                 ),
+  //               ),
+  //
+  //               //message section
+  //               mySendMessageSection(
+  //                 context: context,
+  //                 messageController: commentController,
+  //                 icon: state is AppCommentPostLoadingState
+  //                     ?
+  //                 const SizedBox(
+  //                     width: 15,
+  //                     height: 15,
+  //                     child: CircularProgressIndicator(color: Colors.white))
+  //
+  //                     :
+  //                 const Icon(
+  //                   IconBroken.Send,
+  //                   color: Colors.white,
+  //                   size: 18.0,
+  //                 ),
+  //
+  //                 onPressed: () {
+  //                   if (commentController.text.isNotEmpty) {
+  //                     AppCubit.get(context).commentPost(
+  //                         postID: model.postId!,
+  //                         commentText: commentController.text,
+  //                         datetime: DateTime.now().toString()
+  //                     ).then((value) {
+  //                       commentController.text = '';
+  //                     });
+  //                   }
+  //                 },
+  //               )
+  //             ],
+  //           ),
+  //         )
+  //             :
+  //         const Center(child: CircularProgressIndicator());
+  //       },
+  //     );
+  //   },
+  // );
 
   Widget commentItem({
     required BuildContext context,

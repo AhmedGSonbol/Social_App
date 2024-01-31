@@ -33,7 +33,7 @@ class LoginCubit extends Cubit<LoginStates>{
 
       FirebaseMessaging.instance.getToken().then((TokenValue)
       {
-        FirebaseFirestore.instance.collection('users').doc(value.user!.uid).set(
+        FirebaseFirestore.instance.collection('users').doc(value.user!.uid).update(
             {
               'FCM_token':TokenValue
             }

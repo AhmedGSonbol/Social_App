@@ -33,7 +33,7 @@ class Login_Screen extends StatelessWidget {
               {
                 uId = state.uId;
 
-                AppCubit.get(context).getAppData();
+                // AppCubit.get(context).getAppData();
                 navAndFinishTo(context, Home_Screen());
               });
 
@@ -42,8 +42,17 @@ class Login_Screen extends StatelessWidget {
           else if(state is LoginErrorState)
           {
 
+
             // myToast(msg: langConnectionError(context),state: ToastStates.ERROR ,);
-            myToast(msg: state.error,state: ToastStates.ERROR ,);
+            if(state.error.contains('The supplied auth credential is incorrect'))
+            {
+              myToast(msg: 'Your email or password is incorrect !',state: ToastStates.ERROR ,);
+            }else if(state.error.contains('We have blocked all requests from this device due to unusual activity'))
+            {
+              myToast(msg: 'Please try again later !',state: ToastStates.ERROR ,);
+            }
+
+            print(state.error);
           }
         },
         builder: (context, state)

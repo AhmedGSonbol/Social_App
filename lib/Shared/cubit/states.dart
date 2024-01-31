@@ -24,6 +24,26 @@ class AppGetAllUsersErrorState extends AppStates{
   AppGetAllUsersErrorState({required this.error});
 }
 
+class AppGetUsersChatWithLoadingState extends AppStates{}
+
+class AppGetUsersChatWithSuccessState extends AppStates{}
+
+class AppGetUsersChatWithErrorState extends AppStates{
+  final String error;
+
+  AppGetUsersChatWithErrorState({required this.error});
+}
+
+class ApptxtSearchChangedState extends AppStates{}
+
+class AppSearchSuccessState extends AppStates{}
+
+class AppSearchErrorState extends AppStates{
+  final String error;
+
+  AppSearchErrorState({required this.error});
+}
+
 class AppChangeBottomNavState extends AppStates{}
 
 class AppNewPostState extends AppStates{}

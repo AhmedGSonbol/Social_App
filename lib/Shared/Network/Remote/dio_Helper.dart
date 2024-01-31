@@ -30,26 +30,26 @@ class DioHelper {
     );
   }
 
-  static Map<String, dynamic> FCM_Data({
-    required String fcmToken,
-    String? title,
-    String? body,
-    required Map<String, String> data
-  })
-  {
-    return {
-      "to": fcmToken,
-      "notification":
-      {
-        "title": title??"title here !",
-        "body": body??"Rich Notification testing (body)",
-        "mutable_content": true,
-        "sound": "Tri-tone"
-      },
-
-      // data != null ? :
-      "data": data
-    };
-  }
+  // static Map<String, dynamic> FCM_Data({
+  //   required String fcmToken,
+  //   String? title,
+  //   String? body,
+  //   required Map<String, String> data
+  // })
+  // {
+  //   return {
+  //     "to": fcmToken,
+  //     "notification":
+  //     {
+  //       "title": title??"title here !",
+  //       "body": body??"Rich Notification testing (body)",
+  //       "mutable_content": true,
+  //       "sound": "Tri-tone"
+  //     },
+  //
+  //     // data != null ? :
+  //     "data": data
+  //   };
+  // }
 
 }

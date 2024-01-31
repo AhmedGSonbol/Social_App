@@ -50,6 +50,7 @@ class RegisterCubit extends Cubit<RegisterStates>{
 
     }).catchError((err){
       emit(RegisterErrorState(err.toString()));
+      print(err.toString());
     });
   }
 
@@ -87,6 +88,7 @@ class RegisterCubit extends Cubit<RegisterStates>{
       }).catchError((err)
       {
         emit(CreateUserErrorState(err.toString()));
+        print(err.toString());
       });
     });
 

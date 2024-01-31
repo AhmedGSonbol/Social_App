@@ -69,13 +69,14 @@ class Chat_Details_Screen extends StatelessWidget
                           itemCount: cubit.messages.length,
                       ),
                     )
+
                     else Expanded(
                       child: Center(
                         child: Text('No Messages Yet ;)'),
                       ),
                     ),
 
-                    myMessageSection(
+                    mySendMessageSection(
                         context: context,
                         messageController: messageController,
                         onPressed: ()

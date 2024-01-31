@@ -52,6 +52,7 @@ dependencies:
   intl:
   awesome_dialog: ^3.2.0
   firebase_messaging: ^14.7.10
+  get:
 
 
 

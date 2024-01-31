@@ -54,8 +54,8 @@ class RegisterScreen extends StatelessWidget
           if(state.error.contains('The email address is badly formatted'))
             myToast(msg: 'Your email address is not valid !',state: ToastStates.ERROR ,);
 
-          // if(state.error.contains('Password should be at least 6 characters'))
-          //   myToast(msg: 'Your password should be at least 6 characters !',state: ToastStates.ERROR ,);
+          if(state.error.contains('The email address is already in use by another account'))
+            myToast(msg: 'The email address is already in use by another account !',state: ToastStates.ERROR ,);
         }
 
         else if(state is CreateUserErrorState)

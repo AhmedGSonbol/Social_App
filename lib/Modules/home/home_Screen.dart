@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
+import 'package:social_app/Modules/search/search_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
@@ -17,9 +18,14 @@ class Home_Screen extends StatelessWidget
 {
   const Home_Screen({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context)
   {
+
+    AppCubit.get(context).getAppData();
+
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
       {
@@ -50,9 +56,9 @@ class Home_Screen extends StatelessWidget
                         {
                           FirebaseMessaging.instance.deleteToken().then((TokenValue)
                           {
-                            FirebaseFirestore.instance.collection('users').doc(uId).set(
+                            FirebaseFirestore.instance.collection('users').doc(uId).update(
                                 {
-                                  'FCM_token':'1'
+                                  'FCM_token':''
                                 }
                             ).then((val)
                             {
@@ -67,10 +73,6 @@ class Home_Screen extends StatelessWidget
                               });
                             });
                           });
-
-
-
-
                         },
                       ),
                     ]
@@ -84,7 +86,10 @@ class Home_Screen extends StatelessWidget
 
               IconButton(
                 icon: Icon(IconBroken.Search),
-                onPressed: () {},
+                onPressed: ()
+                {
+                  navTo(context,SearchScreen());
+                },
               ),
             ],
           ),

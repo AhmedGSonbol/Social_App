@@ -273,11 +273,12 @@ PreferredSizeWidget defaultAppBar({
   );
 }
 
-Widget myMessageSection(
+Widget mySendMessageSection(
     {
       required context,
       required TextEditingController messageController,
       required void Function() onPressed,
+      void Function(String text)? textChange,
       Widget icon = const  Icon(
         IconBroken.Send,
         color: Colors.white,
@@ -305,10 +306,12 @@ Widget myMessageSection(
                 horizontal: 10.0
             ),
             child: TextFormField(
+              onChanged: textChange,
               controller: messageController,
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Type your message here ...'
+                  hintText: 'Type your message here ...',
+
               ),
             ),
           ),
@@ -326,20 +329,27 @@ Widget myMessageSection(
   );
 }
 
-Future<User_Model?> getUserDataByUid({
+Future<User_Model> getUserDataByUid({
   required String uId
 })async
 {
   await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value)
   {
+    User_Model uModel = User_Model.fromJson(value.data()!);
 
-    return User_Model.fromJson(value.data()!);
+    print('88888888888888888888888888888888');
+    print(value.data());
+    return uModel;
 
 
   });
+  print('NULLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+
+  return User_Model.fromJson({});
 
 
 }
+
 
 
 
