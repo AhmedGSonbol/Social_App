@@ -33,14 +33,17 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
 
 
-  void getAppData() {
+  void getAppData()
+  {
     // initNotifications();
     getUserData();
 
-    getPosts().then((value)
-    {
-      getMyPosts();
-    });
+    // getPosts();
+
+    //     .then((value)
+    // {
+    //   getMyPosts();
+    // });
 
   }
 
@@ -94,6 +97,12 @@ class AppCubit extends Cubit<AppStates> {
     else {
       currentNavIndex = index;
       emit(AppChangeBottomNavState());
+    }
+
+    if(index == 4)
+    {
+      userPosts = [];
+      getUserPosts(uId!);
     }
   }
 
@@ -370,7 +379,7 @@ class AppCubit extends Cubit<AppStates> {
       );
 
       posts.insert(0, newPost);
-      myPosts.insert(0, newPost);
+      // myPosts.insert(0, newPost);
 
       emit(AppCreatePostSuccessState());
     }).catchError((err) {
@@ -385,6 +394,9 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> getPosts() async
   {
+
+
+
     posts = [];
     Map<String, dynamic> postData = {};
 
@@ -446,16 +458,16 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  List<Post_Model> myPosts = [];
+  List<Post_Model> userPosts = [];
 
-  void getMyPosts()
+  void getUserPosts(String uid)
   {
-    myPosts = [];
+    userPosts = [];
     for(int x = 0 ; x < posts.length ; x++)
     {
-      if(posts[x].uId == uId)
+      if(posts[x].uId == uid)
       {
-        myPosts.add(posts[x]);
+        userPosts.add(posts[x]);
       }
     }
   }
@@ -540,7 +552,7 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-
+  bool hasComments = false;
   List<Comment_Model> postComments = [];
 
   Future<void> getPostComments({
@@ -581,7 +593,7 @@ class AppCubit extends Cubit<AppStates> {
           defaultModel['userName'] = value.data()!['name'];
           defaultModel['userImage'] = value.data()!['image'];
         });
-
+        hasComments = true;
         postComments.add(Comment_Model.fromJson(defaultModel));
       }).then((value) {
         emit(AppGetCommentPostSuccessState());
@@ -633,7 +645,10 @@ class AppCubit extends Cubit<AppStates> {
         }
       });
       postComments.remove(itemToRemove);
-
+      if(postComments.isEmpty)
+      {
+        hasComments = false;
+      }
       increaseDecreasePostCommentCount(
           postId: postId,
           isIncrease: false
@@ -676,16 +691,52 @@ class AppCubit extends Cubit<AppStates> {
   }
 
 
+
+  Future<void> getUsersChatWith() async {
+    await FirebaseFirestore.instance.collection("Orders/$uId/Products").get()
+
+        .then((QuerySnapshot snapshot) {
+      final docs = snapshot.docs;
+      for (var data in docs) {
+        print(data.data());
+        print(data.reference);
+      }
+    }).catchError((err)
+    {
+      print(err.toString());
+    });
+  }
   //Get Users that i chats with only
   List<User_Model> usersChatWith = [];
 
-  Future<void>? getUsersChatWith() async
+  Future<void> getUsersChatWitht() async
   {
     // if (users.isEmpty) {
     print('x');
     print(uId);
 
-    await FirebaseFirestore.instance.collection('users').doc('7l8NUIbcivc01EfpAvi51pbIZe82').collection('chat').get().then((value)
+    FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc)
+      {
+
+        FirebaseFirestore.instance
+            .doc(doc.id)
+            .collection("chat")
+            .get()
+            .then((val)
+        {
+          print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+          print(val.docs.length);
+        });
+      });
+    });
+
+    await FirebaseFirestore.instance.collection('users')
+        .doc(uId)
+        .collection('chat').get().then((value)
     {
       print('f');
       print(value.docs.length);
@@ -856,6 +907,19 @@ class AppCubit extends Cubit<AppStates> {
 
       emit(AppGetMessagesSuccessState());
     });
+  }
+
+  Future<User_Model> getUserModelById(String uid) async
+  {
+    late User_Model model;
+
+    await FirebaseFirestore.instance.collection('users').doc(uid).get().then((value)
+    {
+      model = User_Model.fromJson(value.data()!);
+    });
+
+    return model;
+
   }
 
 

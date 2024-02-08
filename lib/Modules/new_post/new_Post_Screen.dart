@@ -71,7 +71,7 @@ class New_Post_Screen extends StatelessWidget {
                   [
                     CircleAvatar(
                       radius: 25.0,
-                      backgroundImage: NetworkImage('${userModer.image}'),
+                      backgroundImage: NetworkImage('${userModer.image!.replaceAll('"', '')}'),
                     ),
                     SizedBox(
                       width: 15.0,

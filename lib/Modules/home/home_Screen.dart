@@ -26,6 +26,8 @@ class Home_Screen extends StatelessWidget
 
     AppCubit.get(context).getAppData();
 
+
+
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
       {
@@ -79,10 +81,10 @@ class Home_Screen extends StatelessWidget
                     :
                 [
 
-              IconButton(
-                icon: Icon(IconBroken.Notification),
-                onPressed: (){},
-              ),
+              // IconButton(
+              //   icon: Icon(IconBroken.Notification),
+              //   onPressed: (){},
+              // ),
 
               IconButton(
                 icon: Icon(IconBroken.Search),

@@ -11,9 +11,9 @@ import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 
 class Post_Details_Screen extends StatelessWidget {
-  Post_Details_Screen({required this.post_model , required this.hasComments} );
+  Post_Details_Screen({required this.post_model } );
   Post_Model post_model;
-  bool hasComments;
+
   @override
   Widget build(BuildContext context)
   {
@@ -186,7 +186,7 @@ class Post_Details_Screen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 15.0),
                         child: Hero(
-                          tag: model.postId!,
+                          tag: model.postImage!,
                           child: Container(
                             height: 140,
                             width: double.infinity,
@@ -414,7 +414,7 @@ class Post_Details_Screen extends StatelessWidget {
            padding: const EdgeInsets.symmetric(vertical: 10),
            child:
            ((){
-             if(hasComments)
+             if(AppCubit.get(context).hasComments)
              {
                if(AppCubit.get(context).postComments.isNotEmpty)
                {

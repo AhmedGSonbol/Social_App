@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:social_app/Modules/home/home_Screen.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +33,13 @@ void main() async
   DioHelper.init();
   initNotifications();
 
+  await Permission.notification.isDenied.then((value)
+  {
+    if (value)
+    {
+      Permission.notification.request();
+    }
+  });
 
 
   Widget startScreen;
@@ -40,6 +48,7 @@ void main() async
 
   if (uId != null)
   {
+    print('2222222222222222222222222222222222222222222222222222222');
     startScreen = Home_Screen();
   }
   else

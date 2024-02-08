@@ -7,7 +7,9 @@ import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/message_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Modules/post_Details/post_Details_Screen.dart';
+import 'package:social_app/Modules/user_Profile/user_Profile_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
@@ -31,6 +33,7 @@ class FeedsScreen extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: ()
             {
+
               return cubit.getPosts();
 
             },
@@ -102,53 +105,74 @@ class FeedsScreen extends StatelessWidget {
           children:
           [
             //Person info
-            Row(
-              children:
-              [
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage: NetworkImage('${model.image}'),
-                ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                    [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('${model.name}',
-                            style: const TextStyle(
-                                height: 1.4
-                            ),
-                          ),
-                          const SizedBox(width: 3,),
-                          const Icon(Icons.check_circle,
-                            color: defaultColor,
-                            size: 16.0,
-                          )
-                        ],
-                      ),
-                      Text(DateFormat('E, yyyy/MM/dd  hh:mm a').format(DateTime.parse(model.datetime!)),
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              height: 1.4
-                          )
-                      )
-                    ],
+            InkWell(
+              child: Row(
+                children:
+                [
+                  CircleAvatar(
+                    radius: 25.0,
+                    backgroundImage: NetworkImage('${model.image!.replaceAll('"', '')}'),
                   ),
-                ),
-                // const SizedBox(
-                //   width: 15.0,
-                // ),
-                // IconButton(
-                //   icon: const Icon(Icons.more_horiz,
-                //     size: 18.0,),
-                //   onPressed: (){},
-                // )
-              ],
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${model.name}',
+                              style: const TextStyle(
+                                  height: 1.4
+                              ),
+                            ),
+                            const SizedBox(width: 3,),
+                            const Icon(Icons.check_circle,
+                              color: defaultColor,
+                              size: 16.0,
+                            )
+                          ],
+                        ),
+                        Text(DateFormat('E, yyyy/MM/dd  hh:mm a').format(DateTime.parse(model.datetime!)),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                height: 1.4
+                            )
+                        )
+                      ],
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   width: 15.0,
+                  // ),
+                  // IconButton(
+                  //   icon: const Icon(Icons.more_horiz,
+                  //     size: 18.0,),
+                  //   onPressed: (){},
+                  // )
+                ],
+              ),
+              onTap: ()async
+              {
+                await AppCubit.get(context).getUserModelById(model.uId!).then((value)
+                {
+                  AppCubit.get(context).userPosts = [];
+                  AppCubit.get(context).getUserPosts(value.uId!);
+
+                  if(value.uId == uId!)
+                  {
+                    AppCubit.get(context).changeBottomNav(4);
+
+                  }else
+                  {
+                    navTo(context, User_Profile_Screen(userModel: value));
+                  }
+
+
+                });
+              },
             ),
 
             //Divider
@@ -235,14 +259,14 @@ class FeedsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Hero(
-                  tag: model.postId!,
+                  tag: model.postImage!,
                   child: Container(
                     height: 140,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
-                          image: NetworkImage('${model.postImage}'),
+                          image: NetworkImage('${model.postImage!.replaceAll('"', '')}'),
                           fit: BoxFit.cover,
 
                         )
@@ -310,7 +334,8 @@ class FeedsScreen extends StatelessWidget {
                         //     model: model,
                         //   commentController: commentController
                         // );
-                        navTo(context, Post_Details_Screen(post_model: model,hasComments: true,));
+                        AppCubit.get(context).hasComments = true;
+                        navTo(context, Post_Details_Screen(post_model: model));
                       }
                       else
                       {
@@ -342,7 +367,7 @@ class FeedsScreen extends StatelessWidget {
               [
                 CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: NetworkImage('${AppCubit.get(context).user_model!.image}'),
+                  backgroundImage: NetworkImage('${AppCubit.get(context).user_model!.image!.replaceAll('"', '')}'),
                 ),
                 const SizedBox(width: 10,),
                 Expanded(
@@ -359,10 +384,12 @@ class FeedsScreen extends StatelessWidget {
                       if(model.commentsCount != 0)
                       {
                         AppCubit.get(context).getPostComments(postID: model.postId!);
+                        AppCubit.get(context).hasComments = true;
                       }
                       else
                       {
                         AppCubit.get(context).postComments = [];
+                        AppCubit.get(context).hasComments = false;
                       }
 
                       // myBottomSheet(
@@ -370,7 +397,7 @@ class FeedsScreen extends StatelessWidget {
                       //     model: model,
                       //   commentController: commentController
                       // );
-                      navTo(context, Post_Details_Screen(post_model: model,hasComments:model.commentsCount != 0 ? true : false,));
+                      navTo(context, Post_Details_Screen(post_model: model));
                     },
                     keyboardType: TextInputType.none,
 
@@ -495,101 +522,101 @@ class FeedsScreen extends StatelessWidget {
   //   },
   // );
 
-  Widget commentItem({
-    required BuildContext context,
-    required Comment_Model model,
-    required String postId,
-  })
-  {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          vertical: 10
-      ),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Row(
-          children:
-          [
-            CircleAvatar(
-              radius: 25.0,
-              backgroundImage: NetworkImage('${model.userImage}'),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-                  InkWell(
-                    onLongPress: ()
-                    {
-                      if(model.isMyComment!)
-                      {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.warning,
-                          headerAnimationLoop: false,
-                          animType: AnimType.bottomSlide,
-                          title: 'Delete comment !',
-                          desc: 'Are you sure , you want to delete your comment ?',
-                          buttonsTextStyle: const TextStyle(color: Colors.black),
-                          showCloseIcon: true,
-                          btnCancelColor: Colors.red.withOpacity(0.8),
-                          dismissOnBackKeyPress: true,
-                          dismissOnTouchOutside: true,
-                          btnCancelOnPress: () {},
-                          btnOkOnPress: ()
-                          {
-
-                            AppCubit.get(context).deleteComment(postId: postId, commentId: model.commentId!);
-                          },
-
-                        ).show();
-                      }
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              bottomRight: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              topLeft: Radius.circular(10.0),
-                            ),
-                            color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey[300]
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5.0,
-                            horizontal: 10.0
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                          [
-                            Text('${model.userName}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16
-                                )),
-                            Text(
-                              '${model.commentText}',
-                              softWrap: true,),
-                          ],
-                        )),
-                  ),
-                  const SizedBox(height: 5,),
-                  Text(DateFormat('E, yyyy/MM/dd  hh:mm a').format(DateTime.parse(model.datetime!)),
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          height: 1.4
-                      ))
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget commentItem({
+  //   required BuildContext context,
+  //   required Comment_Model model,
+  //   required String postId,
+  // })
+  // {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(
+  //         vertical: 10
+  //     ),
+  //     child: Align(
+  //       alignment: AlignmentDirectional.centerStart,
+  //       child: Row(
+  //         children:
+  //         [
+  //           CircleAvatar(
+  //             radius: 25.0,
+  //             backgroundImage: NetworkImage('${model.userImage!.replaceAll('"', '')}'),
+  //           ),
+  //           const SizedBox(
+  //             width: 10.0,
+  //           ),
+  //           Flexible(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children:
+  //               [
+  //                 InkWell(
+  //                   onLongPress: ()
+  //                   {
+  //                     if(model.isMyComment!)
+  //                     {
+  //                       AwesomeDialog(
+  //                         context: context,
+  //                         dialogType: DialogType.warning,
+  //                         headerAnimationLoop: false,
+  //                         animType: AnimType.bottomSlide,
+  //                         title: 'Delete comment !',
+  //                         desc: 'Are you sure , you want to delete your comment ?',
+  //                         buttonsTextStyle: const TextStyle(color: Colors.black),
+  //                         showCloseIcon: true,
+  //                         btnCancelColor: Colors.red.withOpacity(0.8),
+  //                         dismissOnBackKeyPress: true,
+  //                         dismissOnTouchOutside: true,
+  //                         btnCancelOnPress: () {},
+  //                         btnOkOnPress: ()
+  //                         {
+  //
+  //                           AppCubit.get(context).deleteComment(postId: postId, commentId: model.commentId!);
+  //                         },
+  //
+  //                       ).show();
+  //                     }
+  //                   },
+  //                   child: Container(
+  //                       decoration: BoxDecoration(
+  //                           borderRadius: const BorderRadius.only(
+  //                             bottomRight: Radius.circular(10.0),
+  //                             topRight: Radius.circular(10.0),
+  //                             topLeft: Radius.circular(10.0),
+  //                           ),
+  //                           color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey[300]
+  //                       ),
+  //                       padding: const EdgeInsets.symmetric(
+  //                           vertical: 5.0,
+  //                           horizontal: 10.0
+  //                       ),
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children:
+  //                         [
+  //                           Text('${model.userName}',
+  //                               style: const TextStyle(
+  //                                   fontWeight: FontWeight.bold,
+  //                                   fontSize: 16
+  //                               )),
+  //                           Text(
+  //                             '${model.commentText}',
+  //                             softWrap: true,),
+  //                         ],
+  //                       )),
+  //                 ),
+  //                 const SizedBox(height: 5,),
+  //                 Text(DateFormat('E, yyyy/MM/dd  hh:mm a').format(DateTime.parse(model.datetime!)),
+  //                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
+  //                         height: 1.4
+  //                     ))
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
 
 }
