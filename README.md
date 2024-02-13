@@ -1,16 +1,35 @@
-# social_app
+<h1>Social App</h1>
 
-Social App For Communications
+Is a communication app like Facebook that has been built using (Flutter).<br>
 
-## Getting Started
+- Project characteristics:-
+  
+  - Login and register a new account
+  - Login or register with Facebook or Gmail
+  - Vrefication is sent to email
+  - Add new post with or with no images
+  - Like a post
+  - Make a comment on a post and remove your comments
+  - Search for a specific user or choose a user from a list of users and chat with him
+  - Send and receive a real time chat
+  - Notifications are sent to your phone about new messages
+  - View your profile and check for your informations and posts that you made
+  - Edit and update your informations
+  - Switch between (Light / Dark) Mode
+  - Switch between (Arabic / English) Language
+  - User can not do any post , comment , like , chat , edit profile untill his account become vrefied
+  - Logout
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+- Techhnologies used :-
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  - Flutter
+  - Dart
+  - Firebase ( Authentication , Firestore , Storage , Messaging )
+  - Bloc & Cubit
+  - API
+  - Shared Preferences
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- APK Download :- soon.
+
+- Application Images :- soon.
