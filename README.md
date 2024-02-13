@@ -10,6 +10,7 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - Add new posts with or with no images
   - Like a post
   - Comment on a post and remove your comments
+  - Know the number of comments and likes on a post
   - Search for a specific user or choose a user from a list of users and chat with him
   - Send and receive a real-time chat
   - Notifications are sent to your phone about new messages
