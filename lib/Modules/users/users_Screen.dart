@@ -37,8 +37,14 @@ class UsersScreen extends StatelessWidget {
     return InkWell(
       onTap: ()
       {
-        // send model
-        navTo(context, Chat_Details_Screen(receiver_Model: model,));
+        if(!AppCubit.get(context).user_model!.isEmailVrified!)
+        {
+          myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+        }
+        else {
+          // send model
+          navTo(context, Chat_Details_Screen(receiver_Model: model,));
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(20.0),

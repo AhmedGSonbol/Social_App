@@ -33,23 +33,30 @@ class New_Post_Screen extends StatelessWidget {
                     text: 'Post',
                     function: ()
                     {
+                      if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                      {
+                        myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+                      }
+                      else
+                      {
+                        if(cubit.postImage == null && postTextController.text.trim().isEmpty)
+                        {
+                          myToast(msg: 'Please add text or image to your post before posting !', state: ToastStates.ERROR);
+                          return;
 
-                    if(cubit.postImage == null && postTextController.text.trim().isEmpty)
-                    {
-                      myToast(msg: 'Please add text or image to your post before posting !', state: ToastStates.ERROR);
-                      return;
+                        }
 
-                    }
-
-                      cubit.createPost(
+                        cubit.createPost(
                           datetime: DateTime.now().toString(),
                           text: postTextController.text,
-                      ).then((value)
-                      {
-                        postTextController.text = "";
-                        cubit.cancelUploadedPostImage();
-                        myToast(msg: 'Post has been published succesfully !', state: ToastStates.SUCCESS);
-                      });
+                        ).then((value)
+                        {
+                          postTextController.text = "";
+                          cubit.cancelUploadedPostImage();
+                          myToast(msg: 'Post has been published succesfully !', state: ToastStates.SUCCESS);
+                        });
+                      }
+
                     })
               ]
           ),

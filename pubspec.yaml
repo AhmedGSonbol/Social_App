@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^14.7.10
   get:
   permission_handler:
+  connectivity_plus: ^5.0.2
 
 
 

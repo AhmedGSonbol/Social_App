@@ -79,6 +79,7 @@ class MainScreen extends StatelessWidget
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
+
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.light,

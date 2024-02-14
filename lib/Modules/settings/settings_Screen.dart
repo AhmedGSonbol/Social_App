@@ -164,7 +164,13 @@ class SettingsScreen extends StatelessWidget
                           child: Text('Add Post'),
                           onPressed: ()
                           {
-                            navTo(context, New_Post_Screen());
+                            if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                            {
+                              myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+                            }
+                            else {
+                              navTo(context, New_Post_Screen());
+                            }
                           },
                         )
                         ),

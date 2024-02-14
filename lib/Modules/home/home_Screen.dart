@@ -26,7 +26,9 @@ class Home_Screen extends StatelessWidget
 
     AppCubit.get(context).getAppData();
 
-
+    print('bbbbbbbbbbboooooooooooooooooooooooooooooooooooooooooooooooo');
+    print(FirebaseAuth.instance.currentUser!.emailVerified);
+    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
 
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
@@ -35,12 +37,17 @@ class Home_Screen extends StatelessWidget
         {
           navTo(context, New_Post_Screen());
         }
+        else if(state is AppEmailVerifiedState)
+        {
+          myToast(msg: 'Your email has been verified successfully', state: ToastStates.SUCCESS);
+        }
       },
       builder: (context, state)
       {
+
+
         var cubit = AppCubit.get(context);
 
-        print(FirebaseAuth.instance.currentUser!.emailVerified);
 
         return Scaffold(
           appBar: AppBar(
@@ -95,11 +102,58 @@ class Home_Screen extends StatelessWidget
               ),
             ],
           ),
-          body: cubit.user_model == null
-              ?
-          Center(child: CircularProgressIndicator())
-              :
-          cubit.navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
+          body:  ((){
+            if(cubit.user_model == null)
+            {
+              return Center(child: CircularProgressIndicator());
+            }
+            else
+            {
+              return Column(
+                children:
+                [
+                  if(!cubit.user_model!.isEmailVrified!)
+                    Container(
+                      color: Colors.amber.withOpacity(0.6),
+                      height: 50.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children:
+                          [
+                            Icon(Icons.info_outline),
+
+                            SizedBox(width: 15,),
+
+                            Expanded(child: Text('Please verify your email !')),
+
+                            myTextButton(text: 'Send', function: ()
+                            {
+                              FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
+                              {
+                                myToast(msg: 'check your email !', state: ToastStates.WARNING);
+                              }).catchError((err)
+                              {
+                                myToast(msg: 'check your internet connection !', state: ToastStates.ERROR);
+                              });
+                            })
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    SizedBox(),
+
+                  Expanded(
+                    child: cubit.navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
+                  ),
+                ],
+              );
+            }
+          }()),
+
+
+          // )
 
             bottomNavigationBar: BottomNavigationBar(
               onTap: (index)

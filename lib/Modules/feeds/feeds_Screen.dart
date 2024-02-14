@@ -381,23 +381,29 @@ class FeedsScreen extends StatelessWidget {
                     ),
                     onTap: ()
                     {
-                      if(model.commentsCount != 0)
+                      if(!AppCubit.get(context).user_model!.isEmailVrified!)
                       {
-                        AppCubit.get(context).getPostComments(postID: model.postId!);
-                        AppCubit.get(context).hasComments = true;
+                        myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
                       }
                       else
                       {
-                        AppCubit.get(context).postComments = [];
-                        AppCubit.get(context).hasComments = false;
+                        if(model.commentsCount != 0)
+                        {
+                          AppCubit.get(context).getPostComments(postID: model.postId!);
+                          AppCubit.get(context).hasComments = true;
+                        }
+                        else
+                        {
+                          AppCubit.get(context).postComments = [];
+                          AppCubit.get(context).hasComments = false;
+                        }
+
+
+                        navTo(context, Post_Details_Screen(post_model: model));
+
                       }
 
-                      // myBottomSheet(
-                      //     context: context,
-                      //     model: model,
-                      //   commentController: commentController
-                      // );
-                      navTo(context, Post_Details_Screen(post_model: model));
+
                     },
                     keyboardType: TextInputType.none,
 
@@ -425,7 +431,12 @@ class FeedsScreen extends StatelessWidget {
                   ),
                   onTap: ()
                   {
-                    AppCubit.get(context).likePost(postID: model.postId!);
+                    if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                    {
+                      myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+                    }else {
+                      AppCubit.get(context).likePost(postID: model.postId!);
+                    }
                   },
                 ),
               ],

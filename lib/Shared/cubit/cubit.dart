@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +30,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 
-class AppCubit extends Cubit<AppStates> {
+class AppCubit extends Cubit<AppStates>
+{
   AppCubit() : super(AppInitialState());
 
   static AppCubit get(context) => BlocProvider.of(context);
@@ -36,9 +40,22 @@ class AppCubit extends Cubit<AppStates> {
   void getAppData()
   {
     // initNotifications();
-    getUserData();
+    // checkInternerConnection().then((value)
+    // {
+    //   if(value == true)
+    //   {
+        getUserData();
 
-    // getPosts();
+        getPosts();
+    //   }
+    //   else
+    //   {
+    //     print('noooooo coooooection');
+    //   }
+    //
+    // });
+
+
 
     //     .then((value)
     // {
@@ -47,6 +64,21 @@ class AppCubit extends Cubit<AppStates> {
 
   }
 
+  // Future<bool?> checkInternerConnection()async
+  // {
+  //   print('check for connection');
+  //   try {
+  //     final result = await InternetAddress.lookup('www.google.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       print('connected');
+  //       return true;
+  //     }
+  //   } on SocketException catch (_) {
+  //     print('not connected');
+  //     return false;
+  //   }
+  // }
+
   User_Model? user_model;
 
   Future<void> getUserData() async
@@ -54,13 +86,51 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppGetUserLoadingState());
 
     await FirebaseFirestore.instance.collection('users').doc(uId).get().then((
-        value) {
+        value)
+    {
+      // value.data()!['isVerefied'] = FirebaseAuth.instance.currentUser!.emailVerified;
+
+      if(value.data()!['isEmailVrified'] == false)
+      {
+        checkForEmailVerification();
+      }
+
       emit(AppGetUserSuccessState());
       user_model = User_Model.fromJson(value.data()!);
     }).catchError((err) {
       print(err.toString());
       emit(AppGetUserErrorState(error: err.toString()));
+
+
     });
+  }
+
+  late Timer myTimer;
+
+  void checkForEmailVerification()
+  {
+
+    myTimer = Timer.periodic(Duration(seconds: 5), (timer)
+    {
+      FirebaseAuth.instance.currentUser!.reload().then((value)
+      {
+        bool isVerefied = FirebaseAuth.instance.currentUser!.emailVerified;
+        print(timer.tick);
+        if(isVerefied)
+        {
+
+          timer.cancel();
+          user_model?.isEmailVrified = true;
+          FirebaseFirestore.instance.collection('users').doc(uId).update({'isEmailVrified':true}).then((value)
+          {
+            emit(AppEmailVerifiedState());
+          });
+
+
+        }
+      });
+    });
+
   }
 
   int currentNavIndex = 0;

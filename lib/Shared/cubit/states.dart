@@ -13,6 +13,8 @@ class AppGetUserErrorState extends AppStates{
   AppGetUserErrorState({required this.error});
 }
 
+class AppEmailVerifiedState extends AppStates{}
+
 
 class AppGetAllUsersLoadingState extends AppStates{}
 
