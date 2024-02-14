@@ -515,7 +515,7 @@ class Post_Details_Screen extends StatelessWidget {
                               topRight: Radius.circular(10.0),
                               topLeft: Radius.circular(10.0),
                             ),
-                            color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey[300]
+                            color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 5.0,
@@ -526,13 +526,13 @@ class Post_Details_Screen extends StatelessWidget {
                           children:
                           [
                             Text('${model.userName}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16
-                                )),
+                                style:Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold,
+                                    fontSize: 16)
+                            ),
                             Text(
                               '${model.commentText}',
-                              softWrap: true,),
+                              softWrap: true,style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 14),),
                           ],
                         )),
                   ),

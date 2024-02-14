@@ -161,7 +161,7 @@ class ProfileScreen extends StatelessWidget
                   [
                     Expanded(
                         child: OutlinedButton(
-                          child: Text('Add Post'),
+                          child: Text('Add Post',style: Theme.of(context).textTheme.titleMedium,),
                           onPressed: ()
                           {
                             if(!AppCubit.get(context).user_model!.isEmailVrified!)
@@ -179,7 +179,7 @@ class ProfileScreen extends StatelessWidget
 
                       child: Icon(
                           IconBroken.Edit,
-
+                        color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,
                       ),
 
                       onPressed: ()
@@ -246,9 +246,7 @@ class ProfileScreen extends StatelessWidget
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('${model.name}',
-                            style: const TextStyle(
-                                height: 1.4
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
                           ),
                           const SizedBox(width: 3,),
                           const Icon(Icons.check_circle,

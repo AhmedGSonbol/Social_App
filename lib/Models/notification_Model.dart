@@ -3,13 +3,15 @@ class Notification_Model
   late String user_FCM_Token;
   late String type;
   late String value;
-  String? title;
-  String? body;
+  late String title;
+  late String body;
 
   Notification_Model({
     required this.user_FCM_Token,
     required this.type,
     required this.value,
+    required this.title,
+    required this.body
 });
 
   Notification_Model.fromJson(Map<String,dynamic> json)
@@ -28,8 +30,8 @@ class Notification_Model
 
         },
         "notification": {
-          "title": "Check this Mobile (title)",
-          "body": "Rich Notification testing (body)",
+          "title": title,
+          "body": body,
           "mutable_content": true,
           "sound": "default",
           "default_light_setting":true,
@@ -39,8 +41,8 @@ class Notification_Model
 
         "data": {
           "click_action": "FLUTTER_NOTIFICATION_CLICK",
-          "url": "<url of media image>",
-          "dl": "<deeplink action on tap of notification>",
+          // "url": "<url of media image>",
+          // "dl": "<deeplink action on tap of notification>",
           "type":type,
           "value": value
         }

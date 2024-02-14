@@ -51,20 +51,22 @@ ThemeData darkTheme = ThemeData(
           color: Colors.white70,
           height: 1.3
       ),
-    bodyLarge: TextStyle(
-        fontSize: 13.0,
-        fontWeight: FontWeight.w600,
-        color: Colors.white70,
-        height: 1.3
+
+    titleLarge: TextStyle(
+        // fontSize: 13.0,
+        // fontWeight: FontWeight.w600,
+        color: Colors.white,
+        // height: 1.3
     ),
   ),
+  // iconTheme: IconThemeData(color: Colors.white),
 
   fontFamily: 'Jannah',
 
   cardTheme: CardTheme(
     color: Colors.grey.withOpacity(0.2),
     elevation: 0.0,
-    shadowColor: Colors.grey,
+    // shadowColor: Colors.grey,
     surfaceTintColor: Colors.transparent
 
 

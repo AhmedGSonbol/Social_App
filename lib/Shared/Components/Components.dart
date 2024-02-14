@@ -307,6 +307,7 @@ Widget mySendMessageSection(
                 horizontal: 10.0
             ),
             child: TextFormField(
+              style: TextStyle(color: fontColor(context)),
               onChanged: textChange,
               controller: messageController,
               decoration: InputDecoration(
@@ -318,7 +319,11 @@ Widget mySendMessageSection(
           ),
         ),
         Container(
-          color: defaultColor,
+
+          decoration: BoxDecoration(
+              color: defaultColor,
+            borderRadius: BorderRadius.only(topRight: Radius.circular(9.0),bottomRight: Radius.circular(9.0))
+          ),
           child: MaterialButton(
             onPressed: onPressed,
             minWidth: 1.0,

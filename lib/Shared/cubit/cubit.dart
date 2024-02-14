@@ -952,18 +952,21 @@ class AppCubit extends Cubit<AppStates>
         .add(
         model.toMap()).then((value) async
     {
-      await FirebaseFirestore.instance.collection('users').doc(receiverId).get().then((value) async
+      await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) async
       {
-        User_Model uModel = User_Model.fromJson(value.data()!);
+        User_Model receiverModel = User_Model.fromJson(value.data()!);
 
         print('88888888888888888888888888888888');
         print(value.data());
 
-        if (value.data()!['FCM_token'].isNotEmpty) {
+        if (value.data()!['FCM_token'].isNotEmpty)
+        {
           Notification_Model notification_model = Notification_Model(
-            user_FCM_Token: uModel.FCM_token!,
+            user_FCM_Token: receiverModel.FCM_token!,
             type: 'chat',
             value: uId!,
+            title: receiverModel.name!,
+            body: text
 
           );
           print('2222222222222222222222222222222222222');

@@ -15,6 +15,8 @@ class Chat_Details_Screen extends StatelessWidget
 
   var messageController = TextEditingController();
 
+  final ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -24,7 +26,13 @@ class Chat_Details_Screen extends StatelessWidget
         AppCubit.get(context).getMessages(receiverId: receiver_Model.uId!);
 
         return BlocConsumer<AppCubit,AppStates>(
-          listener: (context, state) {},
+          listener: (context, state)
+          {
+            if (state is AppGetMessagesSuccessState)
+            {
+              scrollController.jumpTo(scrollController.position.maxScrollExtent);
+            }
+          },
           builder: (context, state)
           {
 
@@ -53,6 +61,7 @@ class Chat_Details_Screen extends StatelessWidget
                   [
                     if (cubit.messages.isNotEmpty) Expanded(
                       child: ListView.separated(
+                        controller: scrollController,
                         physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index)
                           {
@@ -62,7 +71,7 @@ class Chat_Details_Screen extends StatelessWidget
                             }
                             else
                             {
-                              return buildMyMessages(cubit.messages[index].text!);
+                              return buildMyMessages(cubit.messages[index].text!,context);
                             }
                           },
                           separatorBuilder: (context, index) => SizedBox(height: 15.0,),
@@ -72,7 +81,7 @@ class Chat_Details_Screen extends StatelessWidget
 
                     else Expanded(
                       child: Center(
-                        child: Text('No Messages Yet .',style: Theme.of(context).textTheme.bodyLarge),
+                        child: Text('No Messages Yet .',style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 15.0)),
                       ),
                     ),
 
@@ -106,7 +115,7 @@ class Chat_Details_Screen extends StatelessWidget
     );
   }
 
-  Widget buildMyMessages(String message)
+  Widget buildMyMessages(String message,BuildContext context)
   {
     return Align(
       alignment: AlignmentDirectional.centerEnd,
@@ -117,13 +126,13 @@ class Chat_Details_Screen extends StatelessWidget
                 topRight: Radius.circular(10.0),
                 topLeft: Radius.circular(10.0),
               ),
-              color: defaultColor.withOpacity(0.3)
+              color: defaultColor.withOpacity(0.7)
           ),
           padding: EdgeInsets.symmetric(
               vertical: 5.0,
               horizontal: 10.0
           ),
-          child: Text(message)),
+          child: Text(message,style: Theme.of(context).textTheme.titleMedium,)),
     );
   }
 
