@@ -48,7 +48,7 @@ class AppCubit extends Cubit<AppStates>
 
         getPosts();
     //   }
-    //   else
+    //   elsea
     //   {
     //     print('noooooo coooooection');
     //   }
