@@ -30,6 +30,7 @@ class New_Post_Screen extends StatelessWidget {
               actions:
               [
                 myTextButton(
+                  context: context,
                     text: 'Post',
                     function: ()
                     {
@@ -92,9 +93,9 @@ class New_Post_Screen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('${userModer.name}',
-                                style: TextStyle(
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                     height: 1.4
-                                ),
+                                )
                               ),
 
                             ],
@@ -129,9 +130,11 @@ class New_Post_Screen extends StatelessWidget {
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
 
+
                         decoration: InputDecoration(
                             hintText: 'What is in your mind , ${userModer.name} ?',
-                          border: InputBorder.none
+                          border: InputBorder.none,
+
                         ),
                       ),
                     ),
@@ -193,9 +196,9 @@ class New_Post_Screen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children:
                           [
-                            Icon(IconBroken.Image),
+                            Icon(IconBroken.Image,color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,),
                             SizedBox(width: 5.0,),
-                            Text('Add Photo')
+                            Text('Add Photo',style: Theme.of(context).textTheme.titleMedium,)
                           ],
 
                         ),

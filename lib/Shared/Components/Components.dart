@@ -52,8 +52,9 @@ Widget myButton({
 
 Widget myTextButton({
   required String text,
+  required BuildContext context,
   required void Function() function,
-}) => TextButton(child: Text(text.toUpperCase()) , onPressed: function,);
+}) => TextButton(child: Text(text.toUpperCase() , style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)) , onPressed: function,);
 
 
 
@@ -166,7 +167,7 @@ Widget myCachedNetworkIMG({required String url , double? width , double? height 
 }
 
 
-void myDialog(context,Function() refresh)
+void noInternetDialog(context,Function() refresh)
 {
   showDialog(
     barrierDismissible: false,

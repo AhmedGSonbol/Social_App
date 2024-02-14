@@ -72,7 +72,7 @@ class Chat_Details_Screen extends StatelessWidget
 
                     else Expanded(
                       child: Center(
-                        child: Text('No Messages Yet ;)'),
+                        child: Text('No Messages Yet .',style: Theme.of(context).textTheme.bodyLarge),
                       ),
                     ),
 

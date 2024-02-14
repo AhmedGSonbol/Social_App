@@ -155,7 +155,7 @@ class Login_Screen extends StatelessWidget {
                         children:
                         [
                           Text(langDontHaveAnAccount(context),style: TextStyle(color: fontColor(context)),),
-                          myTextButton(text: langRegister(context), function: ()
+                          myTextButton(context: context,text: langRegister(context), function: ()
                           {
 
                              navTo(context, RegisterScreen());

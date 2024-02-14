@@ -56,7 +56,7 @@ class Edit_profile_screen extends StatelessWidget {
               title: 'Edit Profile',
               actions:
               [
-                myTextButton(text: 'UPDATE', function: ()
+                myTextButton(context: context,text: 'UPDATE', function: ()
                 {
                   cubit.updateUser(name: nameEditController.text, bio: bioEditController.text, phone: phoneEditController.text);
                 }),

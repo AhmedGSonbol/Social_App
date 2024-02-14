@@ -29,7 +29,7 @@ ThemeData darkTheme = ThemeData(
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: defaultColor,
-    unselectedItemColor: Colors.white,
+    unselectedItemColor: Colors.white70,
     selectedLabelStyle: TextStyle(color: Colors.orange, fontSize: 15.0),
     elevation: 20.0,
     backgroundColor: darkColor,
@@ -45,9 +45,36 @@ ThemeData darkTheme = ThemeData(
         color: Colors.white,
         height: 1.3
     ),
+      bodySmall: TextStyle(
+          fontSize: 13.0,
+          fontWeight: FontWeight.w600,
+          color: Colors.white70,
+          height: 1.3
+      ),
+    bodyLarge: TextStyle(
+        fontSize: 13.0,
+        fontWeight: FontWeight.w600,
+        color: Colors.white70,
+        height: 1.3
+    ),
   ),
 
-    fontFamily: 'Jannah',
+  fontFamily: 'Jannah',
+
+  cardTheme: CardTheme(
+    color: Colors.grey.withOpacity(0.2),
+    elevation: 0.0,
+    shadowColor: Colors.grey,
+    surfaceTintColor: Colors.transparent
+
+
+  ),
+
+  useMaterial3: true,
+
+  hintColor: Colors.white
+
+
 
 );
 

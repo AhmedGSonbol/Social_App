@@ -60,9 +60,7 @@ class UsersScreen extends StatelessWidget {
               width: 15.0,
             ),
             Text('${model.name}',
-              style: TextStyle(
-                  height: 1.4
-              ),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
             ),
 
           ],

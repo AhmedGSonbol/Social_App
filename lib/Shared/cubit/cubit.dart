@@ -20,10 +20,11 @@ import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
 import 'package:social_app/Modules/chats/chat_Screen.dart';
 import 'package:social_app/Modules/feeds/feeds_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
-import 'package:social_app/Modules/settings/settings_Screen.dart';
+import 'package:social_app/Modules/profile/profile_Screen.dart';
 import 'package:social_app/Modules/users/users_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
+import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 import 'package:social_app/Shared/Network/Remote/dio_Helper.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -44,15 +45,17 @@ class AppCubit extends Cubit<AppStates>
     // {
     //   if(value == true)
     //   {
+    checkInternerConnection();
         getUserData();
 
         getPosts();
-    //   }
-    //   elsea
-    //   {
-    //     print('noooooo coooooection');
-    //   }
-    //
+      // }
+      // else
+      // {
+      //   noInternetDialog(context, () => null)
+      //   print('noooooo coooooection');
+      // }
+
     // });
 
 
@@ -64,20 +67,71 @@ class AppCubit extends Cubit<AppStates>
 
   }
 
-  // Future<bool?> checkInternerConnection()async
-  // {
-  //   print('check for connection');
-  //   try {
-  //     final result = await InternetAddress.lookup('www.google.com');
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //       print('connected');
-  //       return true;
-  //     }
-  //   } on SocketException catch (_) {
-  //     print('not connected');
-  //     return false;
-  //   }
-  // }
+  bool isOnline = true;
+
+  void checkInternerConnection()async
+  {
+    myTimer = Timer.periodic(Duration(seconds: 10), (timer)async
+    {
+      print('check for connection');
+      try {
+        final result = await InternetAddress.lookup('www.google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          print('connected');
+          if(!isOnline)
+          {
+            isOnline = true;
+          }
+          emit(AppInternetConnectionSuccessState());
+
+        }
+      } on SocketException catch (_) {
+        print('not connected');
+        if(isOnline)
+        {
+          isOnline = false;
+          timer.cancel();
+        }
+        emit(AppInternetConnectionFaildState());
+
+      }
+    });
+
+  }
+
+  bool isDarkMode = false;
+
+  void changeMode()
+  {
+    isDarkMode = !isDarkMode;
+    CachHelper.saveData(key: 'isdarkmode', value: isDarkMode).then((value)
+    {
+      emit(AppChangeAppModeState());
+
+    });
+  }
+
+  String lang = 'en';
+
+  void changeLang()
+  {
+    if(lang == 'en')
+    {
+      lang = 'ar';
+
+    }else
+    {
+      lang = 'en';
+    }
+
+    CachHelper.saveData(key: 'lang', value: lang).then((value)
+    {
+      emit(AppChangeAppLangState());
+
+      // refresh();
+
+    });
+  }
 
   User_Model? user_model;
 
@@ -140,7 +194,7 @@ class AppCubit extends Cubit<AppStates>
     FeedsScreen(),
     ChatsScreen(),
     UsersScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   List<String> titles =

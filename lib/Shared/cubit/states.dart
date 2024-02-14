@@ -153,3 +153,13 @@ class AppSendMessageSuccessState extends AppStates{}
 class AppSendMessageErrorState extends AppStates{}
 
 class AppGetMessagesSuccessState extends AppStates{}
+
+
+class AppInternetConnectionSuccessState extends AppStates{}
+
+class AppInternetConnectionFaildState extends AppStates{}
+
+
+class AppChangeAppLangState extends AppStates{}
+
+class AppChangeAppModeState extends AppStates{}

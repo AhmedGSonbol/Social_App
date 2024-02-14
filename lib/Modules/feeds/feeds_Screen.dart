@@ -7,7 +7,7 @@ import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/message_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Modules/post_Details/post_Details_Screen.dart';
-import 'package:social_app/Modules/user_Profile/user_Profile_Screen.dart';
+import 'package:social_app/Modules/view_User_Profile/view_User_Profile_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
@@ -95,6 +95,7 @@ class FeedsScreen extends StatelessWidget {
     var commentController = TextEditingController();
 
     return Card(
+
       margin: const EdgeInsets.all(8.0),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
@@ -125,9 +126,7 @@ class FeedsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('${model.name}',
-                              style: const TextStyle(
-                                  height: 1.4
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
                             ),
                             const SizedBox(width: 3,),
                             const Icon(Icons.check_circle,
@@ -167,7 +166,7 @@ class FeedsScreen extends StatelessWidget {
 
                   }else
                   {
-                    navTo(context, User_Profile_Screen(userModel: value));
+                    navTo(context, View_User_Profile_Screen(userModel: value));
                   }
 
 
@@ -425,7 +424,7 @@ class FeedsScreen extends StatelessWidget {
                       ),
                       Text(model.isLiked! ? 'Liked' : 'Like',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: model.isLiked! ? Colors.red : Colors.grey
+                            color: model.isLiked! ? Colors.red : AppCubit.get(context).isDarkMode ? Colors.white : Colors.grey
                         ),),
                     ],
                   ),

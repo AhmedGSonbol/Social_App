@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
 import 'package:social_app/Modules/search/search_Screen.dart';
+import 'package:social_app/Modules/settings/settings_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
@@ -25,10 +26,6 @@ class Home_Screen extends StatelessWidget
   {
 
     AppCubit.get(context).getAppData();
-
-    print('bbbbbbbbbbboooooooooooooooooooooooooooooooooooooooooooooooo');
-    print(FirebaseAuth.instance.currentUser!.emailVerified);
-    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
 
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
@@ -60,30 +57,13 @@ class Home_Screen extends StatelessWidget
                     ?
                     [
                       IconButton(
-                        icon: Icon(IconBroken.Logout),
+                        icon: Icon(IconBroken.Setting),
                         onPressed: ()
                         {
-                          FirebaseMessaging.instance.deleteToken().then((TokenValue)
-                          {
-                            FirebaseFirestore.instance.collection('users').doc(uId).update(
-                                {
-                                  'FCM_token':''
-                                }
-                            ).then((val)
-                            {
-                              CachHelper.removeData(key: 'uId').then((value)
-                              {
-                                navAndFinishTo(context, Login_Screen());
-                                Future.delayed(Duration(seconds: 3),()
-                                {
-                                  cubit.currentNavIndex = 0;
-                                });
-
-                              });
-                            });
-                          });
+                          navTo(context, Settings_Screen());
                         },
                       ),
+
                     ]
                     :
                 [
@@ -112,6 +92,33 @@ class Home_Screen extends StatelessWidget
               return Column(
                 children:
                 [
+                  if(!cubit.isOnline)
+                    Container(
+                      color: Colors.redAccent.withOpacity(0.6),
+                      height: 50.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children:
+                          [
+                            Icon(Icons.info_outline,color: Colors.white,),
+
+                            SizedBox(width: 15,),
+
+                            Expanded(child: Text('You are offline !',style: TextStyle(color: Colors.white),)),
+
+                            myTextButton(context: context,text: 'retry', function: ()
+                            {
+                             cubit.checkInternerConnection();
+                            })
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    SizedBox(),
+
+
                   if(!cubit.user_model!.isEmailVrified!)
                     Container(
                       color: Colors.amber.withOpacity(0.6),
@@ -127,7 +134,7 @@ class Home_Screen extends StatelessWidget
 
                             Expanded(child: Text('Please verify your email !')),
 
-                            myTextButton(text: 'Send', function: ()
+                            myTextButton(context: context,text: 'Send', function: ()
                             {
                               FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
                               {
@@ -174,12 +181,12 @@ class Home_Screen extends StatelessWidget
                   icon: Icon(
                       IconBroken.Chat,
                   ),
-                    label: 'Chat'
+                    label: 'Chats'
                 ),
                 BottomNavigationBarItem(
                     icon: Icon(
                       IconBroken.Paper_Upload,
-                      color: Colors.black,
+                      color: cubit.isDarkMode ? Colors.white : Colors.black,
                     ),
                     label: 'Post',
                   backgroundColor: Colors.red
@@ -192,9 +199,9 @@ class Home_Screen extends StatelessWidget
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                      IconBroken.Setting
+                      IconBroken.Profile
                   ),
-                    label: 'Settings'
+                    label: 'Profile'
                 ),
               ],
 

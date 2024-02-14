@@ -43,12 +43,14 @@ void main() async
 
 
   Widget startScreen;
+  bool isDark = false;
+  String lang = 'en';
+
 
   uId = CachHelper.getData(key: 'uId');
 
   if (uId != null)
   {
-    print('2222222222222222222222222222222222222222222222222222222');
     startScreen = Home_Screen();
   }
   else
@@ -56,8 +58,21 @@ void main() async
     startScreen = Login_Screen();
   }
 
+
+  if(CachHelper.getData(key: 'isdarkmode')!= null)
+  {
+    isDark = CachHelper.getData(key: 'isdarkmode');
+  }
+
+  if(CachHelper.getData(key: 'lang')!= null)
+  {
+    lang = CachHelper.getData(key: 'lang');
+  }
+
   runApp(MainScreen(
     startScreen: startScreen,
+    lang: lang,
+    isDark: isDark,
   ));
 }
 
@@ -67,14 +82,16 @@ class MainScreen extends StatelessWidget
 {
 
   Widget startScreen;
+  bool isDark;
+  String lang;
 
-  MainScreen({required this.startScreen});
+  MainScreen({required this.startScreen , required this.isDark , required this.lang});
 
   @override
   Widget build(BuildContext context)
   {
     return BlocProvider(
-      create: (context) => AppCubit(),
+      create: (context) => AppCubit()..lang = lang..isDarkMode = isDark,
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -82,10 +99,13 @@ class MainScreen extends StatelessWidget
 
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
-            themeMode: ThemeMode.light,
+            themeMode: AppCubit.get(context).isDarkMode ? ThemeMode.dark : ThemeMode.light,
             theme: lightTheme,
             darkTheme: darkTheme,
-            home: startScreen,
+            home: Directionality(
+              child: startScreen,
+              textDirection: AppCubit.get(context).lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
+          ),
           );
         },
       )

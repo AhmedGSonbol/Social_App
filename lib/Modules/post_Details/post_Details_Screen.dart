@@ -73,10 +73,9 @@ class Post_Details_Screen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('${model.name}',
-                                  style: const TextStyle(
-                                      height: 1.4
+                                  style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),
                                   ),
-                                ),
+
                                 const SizedBox(width: 3,),
                                 const Icon(Icons.check_circle,
                                   color: defaultColor,
@@ -439,7 +438,7 @@ class Post_Details_Screen extends StatelessWidget {
              }
              else
              {
-               return Center(child: Text('No comments yet !'));
+               return Center(child: Text('No comments yet !',style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),));
              }
            }())
 
