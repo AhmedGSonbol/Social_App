@@ -3,13 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/Modules/chats/chat_Screen.dart';
+import 'package:social_app/Modules/feeds/feeds_Screen.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
+import 'package:social_app/Modules/profile/profile_Screen.dart';
 import 'package:social_app/Modules/search/search_Screen.dart';
 import 'package:social_app/Modules/settings/settings_Screen.dart';
+import 'package:social_app/Modules/users/users_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
@@ -24,6 +29,13 @@ class Home_Screen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    List<Widget> navScreens =
+    [
+      FeedsScreen(),
+      ChatsScreen(),
+      UsersScreen(),
+      ProfileScreen(userModel: AppCubit.get(context).user_model!,),
+    ];
 
     AppCubit.get(context).getAppData();
 
@@ -41,6 +53,16 @@ class Home_Screen extends StatelessWidget
       },
       builder: (context, state)
       {
+        appLang lang = appLang(context);
+
+        List<String> titles =
+        [
+          lang.feedsHeader(),
+          lang.chats(),
+          lang.users(),
+          lang.profile()
+        ];
+
 
 
         var cubit = AppCubit.get(context);
@@ -49,7 +71,7 @@ class Home_Screen extends StatelessWidget
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                cubit.titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
+                titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
             ),
 
             actions:
@@ -152,7 +174,7 @@ class Home_Screen extends StatelessWidget
                     SizedBox(),
 
                   Expanded(
-                    child: cubit.navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
+                    child: navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
                   ),
                 ],
               );
@@ -175,33 +197,33 @@ class Home_Screen extends StatelessWidget
                     icon: Icon(
                       IconBroken.Home
                     ),
-                  label: 'Feeds'
+                  label: lang.feeds()
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                       IconBroken.Chat,
                   ),
-                    label: 'Chats'
+                    label: lang.chats()
                 ),
                 BottomNavigationBarItem(
                     icon: Icon(
                       IconBroken.Paper_Upload,
                       color: cubit.isDarkMode ? Colors.white : Colors.black,
                     ),
-                    label: 'Post',
+                    label: lang.post(),
                   backgroundColor: Colors.red
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                       IconBroken.User
                   ),
-                    label: 'Users'
+                    label: lang.users()
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                       IconBroken.Profile
                   ),
-                    label: 'Profile'
+                    label: lang.profile()
                 ),
               ],
 

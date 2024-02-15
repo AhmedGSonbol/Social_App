@@ -1,4 +1,115 @@
 
+import 'package:flutter/material.dart';
+import 'package:social_app/Shared/cubit/cubit.dart';
+
+class appLang
+{
+
+  // Initializations
+  BuildContext context;
+  late bool isEn;
+
+  appLang(this.context)
+  {
+    isEn = AppCubit.get(context).lang == 'en' ? true : false;
+  }
+
+
+  //Get languages
+
+  String verifyYourEmail()
+  {
+    return isEn ? 'Please verify your email first !' : 'برجاء التحقق من البريد الألكتروني اولاً !';
+  }
+
+  String feedsHeader()
+  {
+    return isEn ? 'News Feed' : 'الصفحة الرئيسية';
+  }
+
+  String feeds()
+  {
+    return isEn ? 'Feed' : 'رئيسية';
+  }
+
+  String chats()
+  {
+    return isEn ? 'Chats' : 'محادثات';
+  }
+
+  String post()
+  {
+    return isEn ? 'Post' : 'منشور';
+  }
+
+  String users()
+  {
+    return isEn ? 'Users' : 'مستخدمين';
+  }
+
+  String profile()
+  {
+    return isEn ? 'Profile' : 'بروفايل';
+  }
+
+  String communicate()
+  {
+    return isEn ? 'Communicate With Friends' : 'تواصل مع اصدقائك';
+  }
+
+  String comments()
+  {
+    return isEn ? 'comments' : 'تعليقات';
+  }
+
+  String noComments()
+  {
+    return isEn ? 'No comments !' : 'لا يوجد تعليقات !';
+  }
+
+  String like()
+  {
+    return isEn ? 'Like' : 'إعجاب';
+  }
+
+  String liked()
+  {
+    return isEn ? 'liked' : 'اعجبني';
+  }
+
+  String writeAComment()
+  {
+    return isEn ? 'Write a comment ...' : 'اكتب تعليقاً ...';
+  }
+
+  String posts()
+  {
+    return isEn ? 'Posts' : 'المنشورات';
+  }
+
+  String photos()
+  {
+    return isEn ? 'Photos' : 'الصور';
+  }
+
+  String followers()
+  {
+    return isEn ? 'Followers' : 'المتابعين';
+  }
+
+  String following()
+  {
+    return isEn ? 'Following' : 'أتابعهم';
+  }
+
+
+
+
+
+
+
+
+}
 
 
 

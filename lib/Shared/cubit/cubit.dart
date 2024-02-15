@@ -189,21 +189,9 @@ class AppCubit extends Cubit<AppStates>
 
   int currentNavIndex = 0;
 
-  List<Widget> navScreens =
-  [
-    FeedsScreen(),
-    ChatsScreen(),
-    UsersScreen(),
-    ProfileScreen(),
-  ];
 
-  List<String> titles =
-  [
-    'News Feed',
-    'Chat',
-    'Users',
-    'Settings'
-  ];
+
+
 
   void changeBottomNav(int index)
   {
