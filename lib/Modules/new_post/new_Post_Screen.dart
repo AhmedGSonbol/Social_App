@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
@@ -21,28 +22,30 @@ class New_Post_Screen extends StatelessWidget {
 
         var cubit = AppCubit.get(context);
 
+        AppLang lang = AppLang(context);
+
         User_Model userModer = cubit.user_model!;
 
         return Scaffold(
           appBar: defaultAppBar(
               context: context,
-              title: 'Create Post',
+              title: lang.addPost(),
               actions:
               [
                 myTextButton(
                   context: context,
-                    text: 'Post',
+                    text: lang.post(),
                     function: ()
                     {
                       if(!AppCubit.get(context).user_model!.isEmailVrified!)
                       {
-                        myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+                        myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                       }
                       else
                       {
                         if(cubit.postImage == null && postTextController.text.trim().isEmpty)
                         {
-                          myToast(msg: 'Please add text or image to your post before posting !', state: ToastStates.ERROR);
+                          myToast(msg: lang.addPostTextOrImage(), state: ToastStates.ERROR);
                           return;
 
                         }
@@ -54,7 +57,7 @@ class New_Post_Screen extends StatelessWidget {
                         {
                           postTextController.text = "";
                           cubit.cancelUploadedPostImage();
-                          myToast(msg: 'Post has been published succesfully !', state: ToastStates.SUCCESS);
+                          myToast(msg: lang.publishPost(), state: ToastStates.SUCCESS);
                         });
                       }
 
@@ -100,7 +103,7 @@ class New_Post_Screen extends StatelessWidget {
 
                             ],
                           ),
-                          Text('Public',
+                          Text(lang.publicPost(),
                               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   height: 1.4
                               )
@@ -118,7 +121,7 @@ class New_Post_Screen extends StatelessWidget {
                       vertical: 10.0
                     ),
                     decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Colors.grey.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(10.0)
                     ),
                     child: Padding(
@@ -129,11 +132,17 @@ class New_Post_Screen extends StatelessWidget {
                         controller: postTextController,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
+                        style: TextStyle(
+                          color: fontColor(context)
+                        ),
+                        
 
 
                         decoration: InputDecoration(
-                            hintText: 'What is in your mind , ${userModer.name} ?',
+                            hintText: '${lang.whatIsInYourMind()} , ${userModer.name} ?',
                           border: InputBorder.none,
+                          fillColor: Colors.black,
+
 
                         ),
                       ),

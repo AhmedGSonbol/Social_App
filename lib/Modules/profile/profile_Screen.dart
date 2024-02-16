@@ -16,9 +16,10 @@ import 'package:social_app/Shared/cubit/states.dart';
 
 class ProfileScreen extends StatelessWidget
 {
-  ProfileScreen({Key? key ,required this.userModel}) : super(key: key);
+  ProfileScreen({Key? key ,this.userModel}) : super(key: key);
 
-  User_Model userModel;
+  User_Model? userModel;
+
   @override
   Widget build(BuildContext context)
   {
@@ -26,9 +27,16 @@ class ProfileScreen extends StatelessWidget
       listener: (context, state) {},
       builder: (context, state)
       {
-        var userModel = AppCubit.get(context).user_model;
+        var cubit = AppCubit.get(context);
 
-        appLang lang = appLang(context);
+        userModel = userModel ?? cubit.user_model!;
+
+        if(cubit.allPostsLoaded)
+        {
+          cubit.getUserPosts(userModel!.uId!);
+        }
+
+        AppLang lang = AppLang(context);
 
         return Padding(
           padding: const EdgeInsets.all(10.0),
@@ -72,10 +80,10 @@ class ProfileScreen extends StatelessWidget
                     ],
                   ),
                 ),
-                Text('${userModel.name}',
+                Text('${userModel!.name}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                Text('${userModel.bio}',
+                Text('${userModel!.bio}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Padding(
@@ -162,19 +170,19 @@ class ProfileScreen extends StatelessWidget
                   ),
                 ),
 
-                userModel.uId == uId
+                userModel!.uId == uId
                     ?
                   Row(
                   children:
                   [
                     Expanded(
                         child: OutlinedButton(
-                          child: Text('Add Post',style: Theme.of(context).textTheme.titleMedium,),
+                          child: Text(lang.addPost(),style: Theme.of(context).textTheme.titleMedium,),
                           onPressed: ()
                           {
                             if(!AppCubit.get(context).user_model!.isEmailVrified!)
                             {
-                              myToast(msg: 'Please verify your email first !', state: ToastStates.WARNING);
+                              myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                             }
                             else {
                               navTo(context, New_Post_Screen());
@@ -201,7 +209,10 @@ class ProfileScreen extends StatelessWidget
                     :
                 myDivider(),
 
-
+                cubit.allPostsLoaded
+                    ?
+                cubit.userPosts.isNotEmpty
+                    ?
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -212,6 +223,16 @@ class ProfileScreen extends StatelessWidget
                   } ,
                   itemCount: AppCubit.get(context).userPosts.length,
                 )
+                :
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Text(lang.noPosts(),style: Theme.of(context).textTheme.titleMedium,),
+                    )
+                    :
+                    Padding(
+                      padding: const EdgeInsets.only(top:15.0 ),
+                      child: const CircularProgressIndicator(),
+                    )
 
               ],
             ),

@@ -172,94 +172,97 @@ Widget myCachedNetworkIMG({required String url , double? width , double? height 
 }
 
 
-void noInternetDialog(context,Function() refresh)
-{
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context)
-    {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-
-        child: Stack(
-          children: [
-            Container(
-              // padding: EdgeInsets.only(top: 200),
-              height: 300,
-              color: Colors.transparent,
-
-            ),
-
-            Container(
-              margin: EdgeInsets.only(top: 50),
-              padding: EdgeInsets.only(top: 70.0,left: 20,right: 20),
-
-              height: 240,
-              width: 300,
-              decoration: BoxDecoration(
-                // color: AppCubit.get(context).isDarkMode ? darkColor : Colors.white,
-                borderRadius: BorderRadius.circular(25.0),
-                shape: BoxShape.rectangle,
-                boxShadow:
-                [
-                  BoxShadow(color: Colors.black,blurRadius: 10.0,offset: Offset(0,10))
-                ]
-              ),
-              child: Column(
-                children:
-                [
-                Center(
-                  child: Text(
-                    langConnectionError(context),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: fontColor(context)),
-              ),
-                ),
-
-                  Center(
-                    child: Text(
-                      langConnectionErrorDescription(context),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16.0,color: Colors.grey),
-                    ),
-                  ),
-                  
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: TextButton(
-                      child: Text(langreTry(context)),
-                      onPressed: refresh
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            Positioned.fill(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircleAvatar(
-                    radius: 60.0,
-                    child: Image(image: AssetImage('assets/images/offline.png')),
-                    backgroundColor: Colors.transparent,
-                  ),
-                ),
-            )
-
-
-          ],
-
-
-        ),
-
-      );
-    },
-  );
-}
+// void noInternetDialog(context,Function() refresh)
+// {
+//
+//
+//
+//   showDialog(
+//     barrierDismissible: false,
+//     context: context,
+//     builder: (context)
+//     {
+//       return Dialog(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(25.0),
+//         ),
+//         elevation: 0,
+//         backgroundColor: Colors.transparent,
+//
+//         child: Stack(
+//           children: [
+//             Container(
+//               // padding: EdgeInsets.only(top: 200),
+//               height: 300,
+//               color: Colors.transparent,
+//
+//             ),
+//
+//             Container(
+//               margin: EdgeInsets.only(top: 50),
+//               padding: EdgeInsets.only(top: 70.0,left: 20,right: 20),
+//
+//               height: 240,
+//               width: 300,
+//               decoration: BoxDecoration(
+//                 // color: AppCubit.get(context).isDarkMode ? darkColor : Colors.white,
+//                 borderRadius: BorderRadius.circular(25.0),
+//                 shape: BoxShape.rectangle,
+//                 boxShadow:
+//                 [
+//                   BoxShadow(color: Colors.black,blurRadius: 10.0,offset: Offset(0,10))
+//                 ]
+//               ),
+//               child: Column(
+//                 children:
+//                 [
+//                 Center(
+//                   child: Text(
+//                     langConnectionError(context),
+//                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: fontColor(context)),
+//               ),
+//                 ),
+//
+//                   Center(
+//                     child: Text(
+//                       langConnectionErrorDescription(context),
+//                       textAlign: TextAlign.center,
+//                       style: TextStyle(fontSize: 16.0,color: Colors.grey),
+//                     ),
+//                   ),
+//
+//                   Align(
+//                     alignment: Alignment.bottomRight,
+//                     child: TextButton(
+//                       child: Text(langreTry(context)),
+//                       onPressed: refresh
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//
+//             Positioned.fill(
+//                 child: Align(
+//                   alignment: Alignment.topCenter,
+//                   child: CircleAvatar(
+//                     radius: 60.0,
+//                     child: Image(image: AssetImage('assets/images/offline.png')),
+//                     backgroundColor: Colors.transparent,
+//                   ),
+//                 ),
+//             )
+//
+//
+//           ],
+//
+//
+//         ),
+//
+//       );
+//     },
+//   );
+// }
 
 PreferredSizeWidget defaultAppBar({
   required BuildContext context,
@@ -269,7 +272,7 @@ PreferredSizeWidget defaultAppBar({
 {
   return AppBar(
     leading: IconButton(
-      icon: Icon(IconBroken.Arrow___Left_2),
+      icon: AppLang(context).isEn ? Icon(IconBroken.Arrow___Left_2) : Icon(IconBroken.Arrow___Right_2),
       onPressed: () => Navigator.of(context).pop(),
     ),
 
@@ -292,50 +295,53 @@ Widget mySendMessageSection(
       ),
     })
 {
-  return Container(
-    decoration: BoxDecoration(
-      border: Border.all(
-          color: Colors.grey[300]!,
-          width: 1.0
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(10.0),
-      ),
+  return Padding(
+    padding: const EdgeInsets.only(top: 10.0),
+    child: Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+            color: Colors.grey[300]!,
+            width: 1.0
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(10.0),
+        ),
 
-    ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    child: Row(
-      children:
-      [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 10.0
-            ),
-            child: TextFormField(
-              style: TextStyle(color: fontColor(context)),
-              onChanged: textChange,
-              controller: messageController,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Type your message here ...',
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Row(
+        children:
+        [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0
+              ),
+              child: TextFormField(
+                style: TextStyle(color: fontColor(context)),
+                onChanged: textChange,
+                controller: messageController,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: AppCubit.get(context).lang == 'en' ? 'Type your message here ...' : 'أكتب هنا ...',
 
+                ),
               ),
             ),
           ),
-        ),
-        Container(
+          Container(
 
-          decoration: BoxDecoration(
-              color: defaultColor,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(9.0),bottomRight: Radius.circular(9.0))
-          ),
-          child: MaterialButton(
-            onPressed: onPressed,
-            minWidth: 1.0,
-            child: icon
-          ),
-        )
-      ],
+            decoration: BoxDecoration(
+                color: defaultColor,
+              borderRadius: BorderRadius.circular(9.0)
+            ),
+            child: MaterialButton(
+              onPressed: onPressed,
+              minWidth: 1.0,
+              child: icon
+            ),
+          )
+        ],
+      ),
     ),
   );
 }
@@ -361,7 +367,8 @@ Future<User_Model> getUserDataByUid({
 
 }
 
-Widget buildPostItem(Post_Model model,context , appLang lang)
+Widget buildPostItem(Post_Model model,context , AppLang lang ,
+    {bool isOnHomeScreen = false})
 {
   var commentController = TextEditingController();
 
@@ -425,7 +432,7 @@ Widget buildPostItem(Post_Model model,context , appLang lang)
               ],
             ),
             onTap: ()async
-            {
+            { if(isOnHomeScreen)
               await AppCubit.get(context).getUserModelById(model.uId!).then((value)
               {
                 AppCubit.get(context).userPosts = [];
@@ -711,6 +718,40 @@ Widget buildPostItem(Post_Model model,context , appLang lang)
               ),
             ],
           )
+        ],
+      ),
+    ),
+  );
+}
+
+
+Widget buildUserItem(User_Model model,context,AppLang lang)
+{
+  return InkWell(
+    onTap: ()
+    {
+
+      // send model
+      navTo(context, View_User_Profile_Screen(userModel: model,));
+
+    },
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children:
+        [
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: NetworkImage('${model.image}'),
+          ),
+          SizedBox(
+            width: 15.0,
+          ),
+          Text('${model.name}',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
+          ),
+
         ],
       ),
     ),

@@ -14,7 +14,8 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 
 
-class Login_Screen extends StatelessWidget {
+class Login_Screen extends StatelessWidget
+{
 
   var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
@@ -33,8 +34,6 @@ class Login_Screen extends StatelessWidget {
               {
                 uId = state.uId;
 
-                // AppCubit.get(context).getAppData();
-                print('00000000000000000000000000000000000000000000000');
                 navAndFinishTo(context, Home_Screen());
               });
 
@@ -47,10 +46,10 @@ class Login_Screen extends StatelessWidget {
             // myToast(msg: langConnectionError(context),state: ToastStates.ERROR ,);
             if(state.error.contains('The supplied auth credential is incorrect'))
             {
-              myToast(msg: 'Your email or password is incorrect !',state: ToastStates.ERROR ,);
+              myToast(msg: AppLang(context).incorrectEmailOrPass(),state: ToastStates.ERROR ,);
             }else if(state.error.contains('We have blocked all requests from this device due to unusual activity'))
             {
-              myToast(msg: 'Please try again later !',state: ToastStates.ERROR ,);
+              myToast(msg: AppLang(context).tryAgainLater(),state: ToastStates.ERROR ,);
             }
 
             print(state.error);
@@ -58,6 +57,8 @@ class Login_Screen extends StatelessWidget {
         },
         builder: (context, state)
         {
+          AppLang lang = AppLang(context);
+
           var cubit = LoginCubit.get(context);
 
           return Scaffold(
@@ -70,17 +71,17 @@ class Login_Screen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                     [
-                      Image(image: AssetImage('assets/images/shopping.png')),
+                      Center(child: Image(image: AssetImage('assets/images/shopping.png') , height: MediaQuery.of(context).size.height / 3,)),
                       SizedBox(height: 15.0,),
-                      Text(langLogIn(context),
+                      Text(lang.login(),
                         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                             color: fontColor(context)
                         ),),
-                      SizedBox(height: 10,),
-                      Text(langLoginNowToBrowseOurHotOffers(context),
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.grey
-                        ),),
+                      // SizedBox(height: 10,),
+                      // Text(langLoginNowToBrowseOurHotOffers(context),
+                      //   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      //       color: Colors.grey
+                      //   ),),
 
                       SizedBox(height: 30,),
 
@@ -89,13 +90,13 @@ class Login_Screen extends StatelessWidget {
                           context: context,
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
-                          labelText: langEmailAddress(context),
+                          labelText: lang.emailAddress(),
                           prefixIcon: Icons.email_outlined,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
                             {
-                              return langEnterYourEmailAddress(context);
+                              return lang.checkEmailAddressField();
                             }
 
                           }
@@ -105,7 +106,7 @@ class Login_Screen extends StatelessWidget {
                           context: context,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
-                          labelText: langPassword(context),
+                          labelText: lang.password(),
                           isPassword: cubit.isSecure,
                           onFieldSubmitted: (val)
                           {
@@ -128,7 +129,7 @@ class Login_Screen extends StatelessWidget {
                           {
                             if(val!.isEmpty)
                             {
-                              return langEnterYourPassword(context);
+                              return lang.checkPasswordField();
                             }
                           }
                       ),
@@ -136,7 +137,7 @@ class Login_Screen extends StatelessWidget {
 
                       state is! LoginLoadingState
                           ?
-                      myButton(text: langLogIn(context), function: ()
+                      myButton(text: lang.login(), function: ()
                       {
                         if(formKey.currentState!.validate())
                         {
@@ -154,8 +155,8 @@ class Login_Screen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:
                         [
-                          Text(langDontHaveAnAccount(context),style: TextStyle(color: fontColor(context)),),
-                          myTextButton(context: context,text: langRegister(context), function: ()
+                          Text(lang.donotHaveAnAcc(),style: TextStyle(color: fontColor(context)),),
+                          myTextButton(context: context,text: lang.register(), function: ()
                           {
 
                              navTo(context, RegisterScreen());

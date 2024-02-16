@@ -37,12 +37,11 @@ class RegisterScreen extends StatelessWidget
         if(state is CreateUserSuccessState)
         {
 
-          myToast(msg: 'You have been registered successfully !',state: ToastStates.SUCCESS ,);
+          myToast(msg: AppLang(context).registeredSuccessfully(),state: ToastStates.SUCCESS ,);
 
           CachHelper.saveData(key: 'uId', value: state.uId).then((value)
           {
             uId = state.uId;
-            print('11111111111111111111111111111111111111111111111111');
             navAndFinishTo(context, Home_Screen());
           });
 
@@ -52,19 +51,21 @@ class RegisterScreen extends StatelessWidget
         {
 
           if(state.error.contains('The email address is badly formatted'))
-            myToast(msg: 'Your email address is not valid !',state: ToastStates.ERROR ,);
+            myToast(msg: AppLang(context).emailAddressIsNotValid(),state: ToastStates.ERROR ,);
 
           if(state.error.contains('The email address is already in use by another account'))
-            myToast(msg: 'The email address is already in use by another account !',state: ToastStates.ERROR ,);
+            myToast(msg: AppLang(context).emailAlreadyInUse(),state: ToastStates.ERROR ,);
         }
 
         else if(state is CreateUserErrorState)
         {
-          myToast(msg: state.error,state: ToastStates.ERROR ,);
+          myToast(msg: 'Error',state: ToastStates.ERROR ,);
         }
       },
       builder: (context, state)
       {
+        AppLang lang = AppLang(context);
+
         var cubit = RegisterCubit.get(context);
 
         return Scaffold(
@@ -79,7 +80,7 @@ class RegisterScreen extends StatelessWidget
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                     [
-                      Text(langRegister(context),
+                      Text(lang.register(),
                         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                             color: fontColor(context)
                         ),),
@@ -93,13 +94,13 @@ class RegisterScreen extends StatelessWidget
                           context: context,
                           controller: nameController,
                           keyboardType: TextInputType.name,
-                          labelText: langUserName(context),
+                          labelText: lang.userName(),
                           prefixIcon: Icons.person,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
                             {
-                              return langEnterYourUserName(context);
+                              return lang.checkUserName();
                             }
 
                           }
@@ -110,18 +111,18 @@ class RegisterScreen extends StatelessWidget
                           context: context,
                           controller: phoneController,
                           keyboardType: TextInputType.phone,
-                          labelText: langPhone(context),
+                          labelText: lang.phone(),
                           prefixIcon: Icons.phone,
                           validator: (String? val)
                           {
 
                             if(val!.isEmpty)
                             {
-                              return langEnterYourPhone(context);
+                              return lang.checkPhone();
                             }
                             if(val.length < 11)
                             {
-                              return 'Your phone number must be at least 11 number';
+                              return lang.phoneNumber11();
                             }
 
                           }
@@ -132,18 +133,18 @@ class RegisterScreen extends StatelessWidget
                           context: context,
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
-                          labelText: langEmailAddress(context),
+                          labelText: lang.emailAddress(),
                           prefixIcon: Icons.email_outlined,
                           validator: (String? val)
                           {
                             if(val!.isEmpty)
                             {
-                              return langEnterYourEmailAddress(context);
+                              return lang.checkEmailAddressField();
                             }
 
                             if(!checkEmailValidation())
                             {
-                              return "Your email address is not in a correct format !";
+                              return lang.incorrectEmailFormat();
                             }
 
                           }
@@ -154,7 +155,7 @@ class RegisterScreen extends StatelessWidget
                           context: context,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
-                          labelText: langPassword(context),
+                          labelText: lang.password(),
                           isPassword: cubit.isSecure,
                           onFieldSubmitted: (val)
                           {
@@ -177,12 +178,12 @@ class RegisterScreen extends StatelessWidget
                           {
                             if(val!.isEmpty)
                             {
-                              return langEnterYourPassword(context);
+                              return lang.checkPasswordField();
                             }
 
                             if(val.length < 6)
                             {
-                              return 'Your password should be at least 6 characters !';
+                              return lang.password6char();
                             }
                           }
                       ),
@@ -190,7 +191,7 @@ class RegisterScreen extends StatelessWidget
 
                       state is! RegisterLoadingState
                           ?
-                      myButton(text: langRegister(context), function: ()
+                      myButton(text: lang.register(), function: ()
                       {
                         if(formKey.currentState!.validate())
                         {

@@ -28,7 +28,7 @@ class FeedsScreen extends StatelessWidget {
       builder: (context, state)
       {
 
-        appLang lang = appLang(context);
+        AppLang lang = AppLang(context);
 
         var cubit = AppCubit.get(context);
 
@@ -76,7 +76,7 @@ class FeedsScreen extends StatelessWidget {
                   itemBuilder: (context , index)
                   {
 
-                    return buildPostItem(cubit.posts[index],context , lang);
+                    return buildPostItem(cubit.posts[index],context , lang,isOnHomeScreen: true);
                   } ,
                   itemCount: cubit.posts.length,
                 ),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chats/chat_Screen.dart';
 import 'package:social_app/Modules/feeds/feeds_Screen.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
@@ -34,7 +35,7 @@ class Home_Screen extends StatelessWidget
       FeedsScreen(),
       ChatsScreen(),
       UsersScreen(),
-      ProfileScreen(userModel: AppCubit.get(context).user_model!,),
+      ProfileScreen(),
     ];
 
     AppCubit.get(context).getAppData();
@@ -48,12 +49,12 @@ class Home_Screen extends StatelessWidget
         }
         else if(state is AppEmailVerifiedState)
         {
-          myToast(msg: 'Your email has been verified successfully', state: ToastStates.SUCCESS);
+          myToast(msg: AppLang(context).emailVerified(), state: ToastStates.SUCCESS);
         }
       },
       builder: (context, state)
       {
-        appLang lang = appLang(context);
+        AppLang lang = AppLang(context);
 
         List<String> titles =
         [
@@ -127,9 +128,9 @@ class Home_Screen extends StatelessWidget
 
                             SizedBox(width: 15,),
 
-                            Expanded(child: Text('You are offline !',style: TextStyle(color: Colors.white),)),
+                            Expanded(child: Text(lang.offline(),style: TextStyle(color: Colors.white),)),
 
-                            myTextButton(context: context,text: 'retry', function: ()
+                            myTextButton(context: context,text: lang.retry(), function: ()
                             {
                              cubit.checkInternerConnection();
                             })
@@ -154,16 +155,16 @@ class Home_Screen extends StatelessWidget
 
                             SizedBox(width: 15,),
 
-                            Expanded(child: Text('Please verify your email !')),
+                            Expanded(child: Text(lang.verifyYourEmail())),
 
-                            myTextButton(context: context,text: 'Send', function: ()
+                            myTextButton(context: context,text: lang.send(), function: ()
                             {
                               FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
                               {
-                                myToast(msg: 'check your email !', state: ToastStates.WARNING);
+                                myToast(msg: lang.checkYourMail(), state: ToastStates.WARNING);
                               }).catchError((err)
                               {
-                                myToast(msg: 'check your internet connection !', state: ToastStates.ERROR);
+                                myToast(msg: lang.offline(), state: ToastStates.ERROR);
                               });
                             })
                           ],
@@ -210,7 +211,7 @@ class Home_Screen extends StatelessWidget
                       IconBroken.Paper_Upload,
                       color: cubit.isDarkMode ? Colors.white : Colors.black,
                     ),
-                    label: lang.post(),
+                    label: lang.homePost(),
                   backgroundColor: Colors.red
                 ),
                 BottomNavigationBarItem(

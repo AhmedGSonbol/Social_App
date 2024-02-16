@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
+import 'package:social_app/Modules/view_User_Profile/view_User_Profile_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
@@ -20,91 +22,59 @@ class SearchScreen extends StatelessWidget
       listener: (context, state) {},
       builder: (context, state)
       {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Column(
-            children:
-            [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: mySendMessageSection(
-                  icon: Icon(IconBroken.Search,color: Colors.white,),
-                    context: context,
-                    messageController: searchController,
-                    onPressed: ()
-                    {
-                      if(searchController.text.isNotEmpty)
+
+        AppLang lang = AppLang(context);
+
+        return Directionality(
+          textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(lang.search()),
+            ),
+            body: Column(
+              children:
+              [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: mySendMessageSection(
+                    icon: Icon(IconBroken.Search,color: Colors.white,),
+                      context: context,
+                      messageController: searchController,
+                      onPressed: ()
                       {
-                        AppCubit.get(context).searchForUser(searchController.text);
-                      }
-                    },
-                  textChange: (text)
-                  {
+                        if(searchController.text.isNotEmpty)
+                        {
+                          AppCubit.get(context).searchForUser(searchController.text);
+                        }
+                      },
+                    textChange: (text)
+                    {
 
-                      AppCubit.get(context).searchForUser(text);
+                        AppCubit.get(context).searchForUser(text);
 
-                  }
+                    }
+                  ),
                 ),
-              ),
 
-              Expanded(
-                  child:AppCubit.get(context).searchUsersList.isNotEmpty && AppCubit.get(context).user_model != null && searchController.text.isNotEmpty
-                      ?
-                  ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).searchUsersList[index],context),
-                      separatorBuilder: (context, index) => myDivider(),
-                      itemCount: AppCubit.get(context).searchUsersList.length
-                  )
-                      :
-                  Center(child:Text('Search results will be shown here ! :)')),
-              )
-            ],
-          )
+                Expanded(
+                    child:AppCubit.get(context).searchUsersList.isNotEmpty && AppCubit.get(context).user_model != null && searchController.text.isNotEmpty
+                        ?
+                    ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).searchUsersList[index],context,lang),
+                        separatorBuilder: (context, index) => myDivider(),
+                        itemCount: AppCubit.get(context).searchUsersList.length
+                    )
+                        :
+                    Center(child:Text(lang.searchResultWillBeShownHere(),style: Theme.of(context).textTheme.titleMedium,)),
+                )
+              ],
+            )
+          ),
         );
 
       },
     );
   }
 
-  Widget buildUserItem(User_Model model,context)
-  {
-    return InkWell(
-      onTap: () {
-        if (!AppCubit
-            .get(context)
-            .user_model!
-            .isEmailVrified!) {
-          myToast(msg: 'Please verify your email first !',
-              state: ToastStates.WARNING);
-        }
-        else {
-          // send model
-          navTo(context, Chat_Details_Screen(receiver_Model: model,));
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children:
-          [
-            CircleAvatar(
-              radius: 25.0,
-              backgroundImage: NetworkImage('${model.image}'),
-            ),
-            SizedBox(
-              width: 15.0,
-            ),
-            Text('${model.name}',
-              style: TextStyle(
-                  height: 1.4
-              ),
-            ),
-
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 
@@ -12,16 +13,20 @@ ThemeData darkTheme = ThemeData(
 
       systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: darkColor,
-          statusBarIconBrightness: Brightness.light),
+          statusBarIconBrightness: Brightness.light,
+
+      ),
       /////////////////////
       titleSpacing: 20.0,
       backgroundColor: darkColor,
       elevation: 0.0,
+      scrolledUnderElevation: 0.0,
       titleTextStyle:const TextStyle(
         color: Colors.white,
         fontFamily: 'Jannah',
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
+
       ),
 
       iconTheme:const IconThemeData(color: Colors.white)),
@@ -74,7 +79,15 @@ ThemeData darkTheme = ThemeData(
 
   useMaterial3: true,
 
-  hintColor: Colors.white
+  hintColor: Colors.white,
+
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
+    elevation: 10.0,
+  )
+
+
 
 
 
@@ -93,6 +106,7 @@ ThemeData lightTheme = ThemeData(
       titleSpacing: 20.0,
       backgroundColor: Colors.white,
       elevation: 0.0,
+      scrolledUnderElevation: 0.0,
       titleTextStyle: TextStyle(
         color: Colors.black,
         fontFamily: 'Jannah',

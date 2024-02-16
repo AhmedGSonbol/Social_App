@@ -211,11 +211,11 @@ class AppCubit extends Cubit<AppStates>
       emit(AppChangeBottomNavState());
     }
 
-    if(index == 4)
-    {
-      userPosts = [];
-      getUserPosts(uId!);
-    }
+    // if(index == 4)
+    // {
+    //   userPosts = [];
+    //   getUserPosts(uId!);
+    // }
   }
 
 
@@ -504,6 +504,8 @@ class AppCubit extends Cubit<AppStates>
 
   List<Post_Model> posts = [];
 
+  bool allPostsLoaded = false;
+
   Future<void> getPosts() async
   {
 
@@ -517,10 +519,12 @@ class AppCubit extends Cubit<AppStates>
     {
       await Future.forEach(value.docs, (ele) async
       {
+        //get user info who post the post
         await FirebaseFirestore.instance.collection('users')
             .doc(ele['uId'])
             .get()
-            .then((value) {
+            .then((value)
+        {
           postData['name'] = value.data()!['name'];
           postData['image'] = value.data()!['image'];
         });
@@ -528,7 +532,8 @@ class AppCubit extends Cubit<AppStates>
         //likes
         await ele.reference.collection('likes').get().then((likesValues) async
         {
-          if (likesValues.docs.isEmpty) {
+          if (likesValues.docs.isEmpty)
+          {
             postData['likes'] = 0;
             postData['isLiked'] = false;
           }
@@ -537,7 +542,8 @@ class AppCubit extends Cubit<AppStates>
           }
 
 
-          await Future.forEach(likesValues.docs, (likeEle) {
+          await Future.forEach(likesValues.docs, (likeEle)
+          {
             if (likeEle.reference.id == uId) {
               postData['isLiked'] = likeEle.data()['like'];
             } else {
@@ -546,8 +552,7 @@ class AppCubit extends Cubit<AppStates>
           }).then((value) async
           {
             //comments
-            await ele.reference.collection('comments').get().then((
-                commentsValues) async
+            await ele.reference.collection('comments').get().then((commentsValues) async
             {
               postData['commentsCount'] =
               commentsValues.docs.isEmpty ? 0 : commentsValues.docs.length;
@@ -555,13 +560,20 @@ class AppCubit extends Cubit<AppStates>
               postData['postId'] = ele.id;
               postData.addAll(ele.data());
 
+              // if(ele['uId'] == uId)
+              // {
+              //   userPosts.add(Post_Model.fromJson(postData));
+              // }
+
               posts.add(Post_Model.fromJson(postData));
               emit(AppGetPostSuccessState());
               // print(postData);
             });
           });
         });
-      }).then((value) {
+      }).then((value)
+      {
+        allPostsLoaded = true;
         emit(AppGetAllPostsSuccessState());
       });
     }).catchError((err) {
@@ -582,6 +594,9 @@ class AppCubit extends Cubit<AppStates>
         userPosts.add(posts[x]);
       }
     }
+
+    // emit(AppGetUserPostsState());
+
   }
 
 
@@ -893,8 +908,8 @@ class AppCubit extends Cubit<AppStates>
     FirebaseFirestore
         .instance
         .collection('users')
-        .where('name', isGreaterThanOrEqualTo: userName)
-        .where('name', isLessThan: userName +'z')
+        .where('name', isGreaterThanOrEqualTo: userName.capitalize)
+        .where('name', isLessThan: userName.toUpperCase() +'z')
         .get()
         .then((value)
     {
