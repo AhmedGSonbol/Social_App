@@ -81,16 +81,35 @@ class AppCancelUploadedProfileImageState extends AppStates{}
 class AppCancelUploadedCoverImageState extends AppStates{}
 
 
-//Create Post
+//Posts
 class AppUploadPostImageSuccessState extends AppStates{}
 
 class AppUploadPostImageErrorState extends AppStates{}
+
+
+class AppDeletePostImageSuccessState extends AppStates{}
+
+class AppDeletePostImageErrorState extends AppStates{}
+
 
 class AppCreatePostLoadingState extends AppStates{}
 
 class AppCreatePostSuccessState extends AppStates{}
 
 class AppCreatePostErrorState extends AppStates{}
+
+
+class AppUpdatePostLoadingState extends AppStates{}
+
+class AppUpdatePostSuccessState extends AppStates{}
+
+class AppUpdatePostErrorState extends AppStates{}
+
+
+class AppDeletePostSuccessState extends AppStates{}
+
+class AppDeletePostErrorState extends AppStates{}
+
 
 class AppPostImagePickedSuccessState extends AppStates{}
 
@@ -165,4 +184,4 @@ class AppChangeAppLangState extends AppStates{}
 class AppChangeAppModeState extends AppStates{}
 
 
-class AppGetUserPostsState extends AppStates{}
+

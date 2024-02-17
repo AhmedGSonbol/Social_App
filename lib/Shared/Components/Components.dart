@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
+import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
 import 'package:social_app/Modules/post_Details/post_Details_Screen.dart';
 import 'package:social_app/Modules/view_User_Profile/view_User_Profile_Screen.dart';
 import 'package:social_app/Shared/Components/constants.dart';
@@ -421,22 +423,71 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                     ],
                   ),
                 ),
-                // const SizedBox(
-                //   width: 15.0,
-                // ),
-                // IconButton(
-                //   icon: const Icon(Icons.more_horiz,
-                //     size: 18.0,),
-                //   onPressed: (){},
-                // )
+
+                if(!isOnHomeScreen && model.uId == uId)
+                  PopupMenuButton(
+                    color: fontColor(context),
+                  itemBuilder: (context)
+                  {
+                    return
+                      [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children:
+                            [
+                              Icon(IconBroken.Edit,),
+                              SizedBox(width: 10.0,),
+                              Text(lang.edit())
+                            ],
+
+                          ),
+                        ), PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children:
+                          [
+                            Icon(IconBroken.Delete),
+                            SizedBox(width: 10.0,),
+                            Text(lang.delete())
+                          ],
+
+                        ),
+
+                      ),
+
+                      ];
+                  },
+                    onSelected: (item)
+                    {
+                      if(item == 'edit')
+                      {
+                        navTo(context, New_Post_Screen(postModel: model,));
+                      }
+                      else
+                      {
+                        myDialog(
+                            context: context,
+                            title: lang.deletePostHeader(),
+                            desc: lang.deletePostDesc(),
+                            okText: lang.ok(),
+                            cancelText: lang.cancel(),
+                            okOnTap: ()
+                            {
+                              AppCubit.get(context).deletePost(postModel: model);
+                            },
+                        );
+                      }
+                    },
+                )
               ],
             ),
             onTap: ()async
             { if(isOnHomeScreen)
               await AppCubit.get(context).getUserModelById(model.uId!).then((value)
               {
-                AppCubit.get(context).userPosts = [];
-                AppCubit.get(context).getUserPosts(value.uId!);
+                // AppCubit.get(context).userPosts = [];
+                // AppCubit.get(context).getUserPosts(value.uId!);
 
                 if(value.uId == uId!)
                 {
@@ -756,6 +807,37 @@ Widget buildUserItem(User_Model model,context,AppLang lang)
       ),
     ),
   );
+}
+
+Future myDialog({
+  required BuildContext context,
+  required String title,
+  required String desc,
+  required String okText,
+  required String cancelText,
+  required void Function() okOnTap,
+
+})
+{
+  return AwesomeDialog(
+    context: context,
+    dialogType: DialogType.warning,
+    headerAnimationLoop: false,
+    animType: AnimType.bottomSlide,
+    title: title,
+    desc: desc,
+    buttonsTextStyle: const TextStyle(color: Colors.black),
+    showCloseIcon: true,
+    btnCancelColor: Colors.red.withOpacity(0.8),
+    dismissOnBackKeyPress: true,
+    dismissOnTouchOutside: true,
+    btnCancelOnPress: () {},
+    btnOkText: okText,
+    btnCancelText: cancelText,
+
+    btnOkOnPress: okOnTap
+
+  ).show();
 }
 
 

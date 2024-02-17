@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
@@ -21,20 +22,23 @@ class Post_Details_Screen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state)
       {
+
+        AppLang lang = AppLang(context);
+
         return Scaffold(
           appBar: AppBar(
             title: Center(
-              child: Text('${post_model.name}\'s post'),
+              child: Text(lang.postComments()),
             ),
           ),
-          body: buildPostItem(post_model , context),
+          body: buildPostItem(post_model , context,lang),
         );
 
       },
     );
   }
 
-  Widget buildPostItem(Post_Model model,context)
+  Widget buildPostItem(Post_Model model,context,AppLang lang)
   {
     var commentController = TextEditingController();
 
@@ -90,14 +94,7 @@ class Post_Details_Screen extends StatelessWidget {
                             )
                           ],
                         ),
-                        // const SizedBox(
-                        //   width: 15.0,
-                        // ),
-                        // IconButton(
-                        //   icon: const Icon(Icons.more_horiz,
-                        //     size: 18.0,),
-                        //   onPressed: (){},
-                        // )
+
                       ],
                     ),
 
@@ -116,70 +113,6 @@ class Post_Details_Screen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
 
-                    //Tags
-                    // Padding(
-                    //   padding: const EdgeInsets.only(
-                    //       bottom: 10.0,
-                    //       top: 5.0
-                    //   ),
-                    //   child: Container(
-                    //
-                    //     width: double.infinity,
-                    //     child: Wrap(
-                    //       children:
-                    //       [
-                    //         Container(
-                    //           height: 20.0,
-                    //           child: MaterialButton(
-                    //               minWidth: 1.0,
-                    //               padding: EdgeInsets.zero,
-                    //               child: Text('#flutter',
-                    //                 style: TextStyle(
-                    //                     color: defaultColor
-                    //                 ),),
-                    //               onPressed: (){}),
-                    //         ),
-                    //         Container(
-                    //           height: 20.0,
-                    //           child: MaterialButton(
-                    //               minWidth: 1.0,
-                    //               padding: EdgeInsets.zero,
-                    //               child: Text('#dart',
-                    //                 style: TextStyle(
-                    //                     color: Colors.blueAccent
-                    //                 ),),
-                    //               onPressed: (){}),
-                    //         ),
-                    //         Container(
-                    //           height: 20.0,
-                    //           child: MaterialButton(
-                    //               minWidth: 1.0,
-                    //               padding: EdgeInsets.zero,
-                    //               child: Text('#application',
-                    //                 style: TextStyle(
-                    //                     color: Colors.blueAccent
-                    //                 ),),
-                    //               onPressed: (){}),
-                    //         ),
-                    //         Container(
-                    //           height: 20.0,
-                    //           child: MaterialButton(
-                    //               minWidth: 1.0,
-                    //               padding: EdgeInsets.zero,
-                    //               child: Text('#software_developer',
-                    //                 style: TextStyle(
-                    //                     color: Colors.blueAccent
-                    //                 ),),
-                    //               onPressed: (){}),
-                    //         ),
-                    //
-                    //       ],
-                    //       spacing: 5,
-                    //     ),
-                    //   ),
-                    // ),
-
-                    //Post Image
 
                     if(model.postImage != "")
                       Padding(
@@ -246,7 +179,7 @@ class Post_Details_Screen extends StatelessWidget {
                                 Text('${model.commentsCount}',
                                   style: Theme.of(context).textTheme.bodySmall,),
                                 const SizedBox(width: 5,),
-                                Text('comments',
+                                Text(lang.comments(),
                                   style: Theme.of(context).textTheme.bodySmall,),
                               ],
                             ),
@@ -348,7 +281,11 @@ class Post_Details_Screen extends StatelessWidget {
                     //   ],
                     // ),
 
-                    buildCommentsSection(context: context,commentController: commentController,model: post_model)
+                    buildCommentsSection(context: context,
+                        commentController: commentController,
+                        model: post_model,
+                      lang: lang
+                    )
                   ],
                 ),
               ),
@@ -401,7 +338,8 @@ class Post_Details_Screen extends StatelessWidget {
   Widget buildCommentsSection({
     required BuildContext context,
     required Post_Model model,
-    required TextEditingController commentController
+    required TextEditingController commentController,
+    required AppLang lang
 })
   {
     // return state is! AppGetCommentPostLoadingState
@@ -425,7 +363,8 @@ class Post_Details_Screen extends StatelessWidget {
                      return commentItem(
                          context: context,
                          model: AppCubit.get(context).postComments[index],
-                         postId: model.postId!
+                         postId: model.postId!,
+                       lang: lang
                      );
                    },
                    itemCount: AppCubit.get(context).postComments.length,
@@ -438,7 +377,7 @@ class Post_Details_Screen extends StatelessWidget {
              }
              else
              {
-               return Center(child: Text('No comments yet !',style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),));
+               return Center(child: Text(lang.noMessagesYet(),style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),));
              }
            }())
 
@@ -458,6 +397,7 @@ class Post_Details_Screen extends StatelessWidget {
     required BuildContext context,
     required Comment_Model model,
     required String postId,
+    required AppLang lang,
   })
   {
     return Padding(
@@ -486,26 +426,18 @@ class Post_Details_Screen extends StatelessWidget {
                     {
                       if(model.isMyComment!)
                       {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.warning,
-                          headerAnimationLoop: false,
-                          animType: AnimType.bottomSlide,
-                          title: 'Delete comment !',
-                          desc: 'Are you sure , you want to delete your comment ?',
-                          buttonsTextStyle: const TextStyle(color: Colors.black),
-                          showCloseIcon: true,
-                          btnCancelColor: Colors.red.withOpacity(0.8),
-                          dismissOnBackKeyPress: true,
-                          dismissOnTouchOutside: true,
-                          btnCancelOnPress: () {},
-                          btnOkOnPress: ()
-                          {
+                        myDialog(
+                            context: context,
+                            title: lang.deleteCommentHeader(),
+                            desc: lang.deleteCommentDesc(),
+                            okText: lang.ok(),
+                            cancelText: lang.cancel(),
+                            okOnTap: ()
+                            {
+                              AppCubit.get(context).deleteComment(postId: postId, commentId: model.commentId!);
+                            },
+                        );
 
-                            AppCubit.get(context).deleteComment(postId: postId, commentId: model.commentId!);
-                          },
-
-                        ).show();
                       }
                     },
                     child: Container(

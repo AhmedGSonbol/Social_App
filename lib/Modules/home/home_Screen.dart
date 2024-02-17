@@ -47,10 +47,16 @@ class Home_Screen extends StatelessWidget
         {
           navTo(context, New_Post_Screen());
         }
-        else if(state is AppEmailVerifiedState)
+        if(state is AppEmailVerifiedState)
         {
           myToast(msg: AppLang(context).emailVerified(), state: ToastStates.SUCCESS);
         }
+
+        if(state is AppDeletePostSuccessState)
+        {
+          myToast(msg: AppLang(context).deletePostSuccess(), state: ToastStates.SUCCESS);
+        }
+
       },
       builder: (context, state)
       {
@@ -115,31 +121,31 @@ class Home_Screen extends StatelessWidget
               return Column(
                 children:
                 [
-                  if(!cubit.isOnline)
-                    Container(
-                      color: Colors.redAccent.withOpacity(0.6),
-                      height: 50.0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children:
-                          [
-                            Icon(Icons.info_outline,color: Colors.white,),
-
-                            SizedBox(width: 15,),
-
-                            Expanded(child: Text(lang.offline(),style: TextStyle(color: Colors.white),)),
-
-                            myTextButton(context: context,text: lang.retry(), function: ()
-                            {
-                             cubit.checkInternerConnection();
-                            })
-                          ],
-                        ),
-                      ),
-                    )
-                  else
-                    SizedBox(),
+                  // if(!cubit.isOnline)
+                  //   Container(
+                  //     color: Colors.redAccent.withOpacity(0.6),
+                  //     height: 50.0,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                  //       child: Row(
+                  //         children:
+                  //         [
+                  //           Icon(Icons.info_outline,color: Colors.white,),
+                  //
+                  //           SizedBox(width: 15,),
+                  //
+                  //           Expanded(child: Text(lang.offline(),style: TextStyle(color: Colors.white),)),
+                  //
+                  //           // myTextButton(context: context,text: lang.retry(), function: ()
+                  //           // {
+                  //           //  cubit.checkInternerConnection();
+                  //           // })
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   )
+                  // else
+                  //   SizedBox(),
 
 
                   if(!cubit.user_model!.isEmailVrified!)

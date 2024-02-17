@@ -87,6 +87,11 @@ class AppLang
     return isEn ? 'Post was published successfully !' : 'تم نشر المنشور بنجاح !';
   }
 
+  String editPost()
+  {
+    return isEn ? 'Post updated successfully !' : 'تم تعديل المنشور بنجاح !';
+  }
+
   String publicPost()
   {
     return isEn ? 'Public' : 'عام';
@@ -338,6 +343,67 @@ class AppLang
     return isEn ? 'Your password should be at least 6 characters !' : 'يجب أن تتكون كلمة المرور الخاصة بك من 6 أحرف على الأقل!';
   }
 
+  String editPostTitle()
+  {
+    return isEn ? 'Edit Post' : 'تعديل المنشور';
+  }
+
+  String edit()
+  {
+    return isEn ? 'Edit' : 'تعديل';
+  }
+
+  String delete()
+  {
+    return isEn ? 'Delete' : 'حذف';
+  }
+
+  String addPhoto()
+  {
+    return isEn ? 'Add Photo' : 'إضافة صورة';
+  }
+
+  String deleteCommentHeader()
+  {
+    return isEn ? 'Delete comment !' : 'حذف التعليق !';
+  }
+
+  String deleteCommentDesc()
+  {
+    return isEn ? 'Are you sure , you want to delete your comment ?' : 'هل انت متأكد من حذف تعليقك ؟';
+  }
+
+  String deletePostHeader()
+  {
+    return isEn ? 'Delete post !' : 'حذف المنشور !';
+  }
+
+  String deletePostDesc()
+  {
+    return isEn ? 'Are you sure , you want to delete your post ?' : 'هل انت متأكد من حذف منشورك ؟';
+  }
+
+  String ok()
+  {
+    return isEn ? 'Ok' : 'نعم';
+  }
+
+  String cancel()
+  {
+    return isEn ? 'Cancel' : 'لا';
+  }
+
+
+  String postComments()
+  {
+    return isEn ? 'Post Comments' : 'تعليقات المنشور';
+  }
+
+  String deletePostSuccess()
+  {
+    return isEn ? 'The post has been successfully deleted !' : 'تم حذف المنشور بنجاح !';
+  }
+
 
 
 
@@ -347,443 +413,3 @@ class AppLang
 
 
 }
-
-
-
-
-// String langSalla(context)
-// {
-//   if(true)
-//   {
-//     return'Salla';
-//   }
-//   else
-//   {
-//     return'سلة';
-//   }
-//
-// }
-//
-// String langNewProduct(context)
-// {
-//   if(true)
-//   {
-//     return'New Product';
-//   }
-//   else
-//   {
-//     return'منتجات جديدة';
-//   }
-//
-// }
-//
-// String langHome(context)
-// {
-//   if(true)
-//   {
-//     return'Home';
-//   }
-//   else
-//   {
-//     return'الرئيسية';
-//   }
-// }
-//
-// String langCategories(context)
-// {
-//   if(true)
-//   {
-//     return'Categories';
-//   }
-//   else
-//   {
-//     return'المجموعات';
-//   }
-// }
-//
-//
-// String langFavorites(context)
-// {
-//   if(true)
-//   {
-//     return'Favorites';
-//   }
-//   else
-//   {
-//     return'المُفضلة';
-//   }
-// }
-//
-// String langSettings(context)
-// {
-//   if(true)
-//   {
-//     return'Settings';
-//   }
-//   else
-//   {
-//     return'الأعدادات';
-//   }
-// }
-//
-// String langDarkMode(context)
-// {
-//   if(true)
-//   {
-//     return'DarkMode';
-//   }
-//   else
-//   {
-//     return'الوضع الليلي';
-//   }
-// }
-//
-// String langLanguage(context)
-// {
-//   if(true)
-//   {
-//     return'Language';
-//   }
-//   else
-//   {
-//     return'اللغة';
-//   }
-// }
-//
-// String langEditProfile(context)
-// {
-//   if(true)
-//   {
-//     return'Edit Profile';
-//   }
-//   else
-//   {
-//     return'تعديل بيانات الملف الشخصي';
-//   }
-// }
-//
-// String langAboutDeveloper(context)
-// {
-//   if(true)
-//   {
-//     return'About Developer';
-//   }
-//   else
-//   {
-//     return'معلومات عن مطور التطبيق';
-//   }
-// }
-//
-// String langLogOut(context)
-// {
-//   if(true)
-//   {
-//     return'Logout';
-//   }
-//   else
-//   {
-//     return'تسجيل الخروج';
-//   }
-// }
-//
-// String langLogIn(context)
-// {
-//   if(true)
-//   {
-//     return'Login';
-//   }
-//   else
-//   {
-//     return'تسجيل الدخول';
-//   }
-// }
-//
-// String langUserName(context)
-// {
-//   if(true)
-//   {
-//     return'User Name';
-//   }
-//   else
-//   {
-//     return'اسم المُستخدم';
-//   }
-// }
-//
-// String langEnterYourUserName(context)
-// {
-//   if(true)
-//   {
-//     return'Please enter your user name';
-//   }
-//   else
-//   {
-//     return'برجاء ادخال اسم المستخدم';
-//   }
-// }
-//
-//
-// String langPhone(context)
-// {
-//   if(true)
-//   {
-//     return'Phone';
-//   }
-//   else
-//   {
-//     return'رقم الهاتف';
-//   }
-// }
-//
-// String langEnterYourPhone(context)
-// {
-//   if(true)
-//   {
-//     return'Please enter your phone';
-//   }
-//   else
-//   {
-//     return'برجاء ادخال رقم المستخدم';
-//   }
-// }
-//
-// String langEmailAddress(context)
-// {
-//   if(true)
-//   {
-//     return'Email Address';
-//   }
-//   else
-//   {
-//     return'عنوان البريد الألكتروني';
-//   }
-// }
-//
-// String langEnterYourEmailAddress(context)
-// {
-//   if(true)
-//   {
-//     return'Please enter your Email Address';
-//   }
-//   else
-//   {
-//     return'برجاء ادخال عنوان البريد الألكتروني';
-//   }
-// }
-//
-// String langPassword(context)
-// {
-//   if(true)
-//   {
-//     return'Password';
-//   }
-//   else
-//   {
-//     return'كلمة المرور';
-//   }
-// }
-//
-// String langEnterYourPassword(context)
-// {
-//   if(true)
-//   {
-//     return'Please enter your password';
-//   }
-//   else
-//   {
-//     return'برجاء ادخال كلمة المرور';
-//   }
-// }
-//
-// String langInCart(context)
-// {
-//   if(true)
-//   {
-//     return'In Cart';
-//   }
-//   else
-//   {
-//     return'السلة';
-//   }
-// }
-//
-// String langTotal(context)
-// {
-//   if(true)
-//   {
-//     return'Total :';
-//   }
-//   else
-//   {
-//     return'المجموع :';
-//   }
-// }
-//
-// String langRegister(context)
-// {
-//   if(true)
-//   {
-//     return'Register';
-//   }
-//   else
-//   {
-//     return'تسجيل حساب جديد';
-//   }
-// }
-//
-// String langSearch(context)
-// {
-//   if(true)
-//   {
-//     return'Search';
-//   }
-//   else
-//   {
-//     return'بحث';
-//   }
-// }
-//
-// String langUpdate(context)
-// {
-//   if(true)
-//   {
-//     return'Update';
-//   }
-//   else
-//   {
-//     return'تحديث البيانات';
-//   }
-// }
-//
-// String langDiscount(context)
-// {
-//   if(true)
-//   {
-//     return'Discount';
-//   }
-//   else
-//   {
-//     return'خصم لفترة محدودة';
-//   }
-// }
-//
-// String langConnectionError(context)
-// {
-//   if(true)
-//   {
-//     return'Connection Error';
-//   }
-//   else
-//   {
-//     return'لا يوجد اتصال بالأنترنت';
-//   }
-// }
-//
-// String langConnectionErrorDescription(context)
-// {
-//   if(true)
-//   {
-//     return'Please check your internet connection !';
-//   }
-//   else
-//   {
-//     return'برجاء التأكد من اتصالك بالأنترنت و إعادة المحاولة';
-//   }
-// }
-//
-// String langreTry(context)
-// {
-//   if(true)
-//   {
-//     return'RETRY';
-//   }
-//   else
-//   {
-//     return'إعادة المحاولة';
-//   }
-// }
-//
-// String langAddedSuccessfully(context)
-// {
-//   if(true)
-//   {
-//     return'Added Successfully';
-//   }
-//   else
-//   {
-//     return'تم إضافة المُنتج الي السلة';
-//   }
-// }
-//
-//
-// String langPleaseWait(context)
-// {
-//   if(true)
-//   {
-//     return'Please Wait';
-//   }
-//   else
-//   {
-//     return'برجاء الأنتظار';
-//   }
-// }
-//
-// String langThereIsNoItems(context)
-// {
-//   if(true)
-//   {
-//     return'There is no items in your cart !';
-//   }
-//   else
-//   {
-//     return'لا يوجد اصناف';
-//   }
-// }
-//
-// String langLoginNowToBrowseOurHotOffers(context)
-// {
-//   if(true)
-//   {
-//     return'Login now to communicate with friends ';
-//   }
-//   else
-//   {
-//     return'سجل الأن للتواصل مع الأصدقاء';
-//   }
-// }
-//
-// String langDontHaveAnAccount(context)
-// {
-//   if(true)
-//   {
-//     return'Don\'t have an account?';
-//   }
-//   else
-//   {
-//     return'مُستخدم جديد ؟';
-//   }
-// }
-//
-// String langNoFavoritesFound(context)
-// {
-//   if(true)
-//   {
-//     return'No Fevorites Found !';
-//   }
-//   else
-//   {
-//     return'لا يوجد اصناف بالمفضلة !';
-//   }
-// }
-//
-// // String langLoginError(context)
-// // {
-// //   if(true)
-// //   {
-// //     return'Login faild , Please check your email address and password';
-// //   }
-// //   else
-// //   {
-// //     return'فشل تسجيل الدخول , برجاء التأكد من البريد الألكتروني و كلمة المرور و إعادة المحاولة';
-// //   }
-// // }

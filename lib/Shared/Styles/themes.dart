@@ -130,4 +130,5 @@ ThemeData lightTheme = ThemeData(
 
   ),
   fontFamily: 'Jannah',
+  useMaterial3: true,
 );

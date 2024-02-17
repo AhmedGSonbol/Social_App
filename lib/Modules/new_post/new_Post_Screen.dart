@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
@@ -8,19 +10,34 @@ import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 
-class New_Post_Screen extends StatelessWidget {
+class New_Post_Screen extends StatelessWidget
+{
+   New_Post_Screen({this.postModel});
+
+  Post_Model? postModel ;
 
   var postTextController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
+    postTextController.text = postModel?.text ?? '';
+
+    AppCubit.get(context).postImageURL = postModel?.postImage == '' ? null :postModel?.postImage;
+    print(AppCubit.get(context).postImageURL);
+    print('cccccccccccccccccccccccccc');
+
     return BlocConsumer<AppCubit,AppStates>
       (
       listener: (context, state) {},
       builder: (context, state)
       {
 
+
+
         var cubit = AppCubit.get(context);
+
+
 
         AppLang lang = AppLang(context);
 
@@ -29,38 +46,61 @@ class New_Post_Screen extends StatelessWidget {
         return Scaffold(
           appBar: defaultAppBar(
               context: context,
-              title: lang.addPost(),
+              title: postModel == null ? lang.addPost() : lang.editPostTitle(),
               actions:
               [
                 myTextButton(
                   context: context,
-                    text: lang.post(),
-                    function: ()
-                    {
-                      if(!AppCubit.get(context).user_model!.isEmailVrified!)
-                      {
-                        myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                    text: postModel == null ? lang.post() : lang.edit(),
+                    function: () {
+                      if (!AppCubit
+                          .get(context)
+                          .user_model!
+                          .isEmailVrified!) {
+                        myToast(msg: lang.verifyYourEmail(),
+                            state: ToastStates.WARNING);
                       }
-                      else
-                      {
-                        if(cubit.postImage == null && postTextController.text.trim().isEmpty)
-                        {
-                          myToast(msg: lang.addPostTextOrImage(), state: ToastStates.ERROR);
+                      else {
+                        if (cubit.postImage == null && postTextController.text
+                            .trim()
+                            .isEmpty) {
+                          myToast(msg: lang.addPostTextOrImage(),
+                              state: ToastStates.ERROR);
                           return;
-
                         }
 
-                        cubit.createPost(
-                          datetime: DateTime.now().toString(),
-                          text: postTextController.text,
-                        ).then((value)
+                        if (postModel == null)
                         {
-                          postTextController.text = "";
-                          cubit.cancelUploadedPostImage();
-                          myToast(msg: lang.publishPost(), state: ToastStates.SUCCESS);
-                        });
-                      }
+                          cubit.createPost(
 
+                            text: postTextController.text,
+                          ).then((value)
+                          {
+
+                            postTextController.text = "";
+                            cubit.cancelUploadedPostImage();
+                            myToast(msg: lang.publishPost(),
+
+                                state: ToastStates.SUCCESS);
+                          });
+                        }
+                        else
+                        {
+                          cubit.updatePost(
+                              text: postTextController.text,
+                              postModel: postModel!
+                          )
+                              .then((value)
+                          {
+                            postTextController.text = "";
+                            cubit.cancelUploadedPostImage();
+                            myToast(msg: lang.editPost(),
+
+                                state: ToastStates.SUCCESS);
+                          });
+                          Navigator.of(context).pop();
+                        }
+                      }
                     })
               ]
           ),
@@ -70,7 +110,7 @@ class New_Post_Screen extends StatelessWidget {
               children:
               [
                 //Indecator
-                if(state is AppCreatePostLoadingState)
+                if(state is AppCreatePostLoadingState || state is AppUpdatePostLoadingState)
                   LinearProgressIndicator(),
 
                 if(state is AppCreatePostLoadingState)
@@ -151,7 +191,7 @@ class New_Post_Screen extends StatelessWidget {
                 ),
 
                 //Picked Image
-                if(cubit.postImage != null)
+                if(cubit.postImage != null || cubit.postImageURL != null)
                   Container(
                     padding: EdgeInsets.all(2.0),
                     decoration: BoxDecoration(
@@ -168,7 +208,7 @@ class New_Post_Screen extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             image: DecorationImage(
-                              image: FileImage(cubit.postImage!) ,
+                              image:  cubit.postImageURL != null ? NetworkImage(cubit.postImageURL!) : FileImage(cubit.postImage!) as ImageProvider,
                               fit: BoxFit.cover,
 
                             )
@@ -188,7 +228,11 @@ class New_Post_Screen extends StatelessWidget {
                         ),
                         onPressed: ()
                         {
-                          cubit.cancelUploadedPostImage();
+
+
+                            cubit.cancelUploadedPostImage();
+
+
                         },
                       ),
                     ],
@@ -207,7 +251,7 @@ class New_Post_Screen extends StatelessWidget {
                           [
                             Icon(IconBroken.Image,color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,),
                             SizedBox(width: 5.0,),
-                            Text('Add Photo',style: Theme.of(context).textTheme.titleMedium,)
+                            Text(lang.addPhoto(),style: Theme.of(context).textTheme.titleMedium,)
                           ],
 
                         ),

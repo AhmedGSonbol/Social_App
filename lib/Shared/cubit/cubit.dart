@@ -45,19 +45,18 @@ class AppCubit extends Cubit<AppStates>
     // {
     //   if(value == true)
     //   {
-    checkInternerConnection();
-        getUserData();
+    // checkInternerConnection();
+    getUserData();
 
-        getPosts();
-      // }
-      // else
-      // {
-      //   noInternetDialog(context, () => null)
-      //   print('noooooo coooooection');
-      // }
+    getPosts();
+    // }
+    // else
+    // {
+    //   noInternetDialog(context, () => null)
+    //   print('noooooo coooooection');
+    // }
 
     // });
-
 
 
     //     .then((value)
@@ -69,35 +68,35 @@ class AppCubit extends Cubit<AppStates>
 
   bool isOnline = true;
 
-  void checkInternerConnection()async
-  {
-    myTimer = Timer.periodic(Duration(seconds: 10), (timer)async
-    {
-      print('check for connection');
-      try {
-        final result = await InternetAddress.lookup('www.google.com');
-        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          print('connected');
-          if(!isOnline)
-          {
-            isOnline = true;
-          }
-          emit(AppInternetConnectionSuccessState());
-
-        }
-      } on SocketException catch (_) {
-        print('not connected');
-        if(isOnline)
-        {
-          isOnline = false;
-          timer.cancel();
-        }
-        emit(AppInternetConnectionFaildState());
-
-      }
-    });
-
-  }
+  // void checkInternerConnection()async
+  // {
+  //   myTimer = Timer.periodic(Duration(seconds: 10), (timer)async
+  //   {
+  //     print('check for connection');
+  //     try {
+  //       final result = await InternetAddress.lookup('www.google.com');
+  //       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //         print('connected');
+  //         if(!isOnline)
+  //         {
+  //           isOnline = true;
+  //         }
+  //         emit(AppInternetConnectionSuccessState());
+  //
+  //       }
+  //     } on SocketException catch (_) {
+  //       print('not connected');
+  //       if(isOnline)
+  //       {
+  //         isOnline = false;
+  //         timer.cancel();
+  //       }
+  //       emit(AppInternetConnectionFaildState());
+  //
+  //     }
+  //   });
+  //
+  // }
 
   bool isDarkMode = false;
 
@@ -401,7 +400,6 @@ class AppCubit extends Cubit<AppStates>
 
   // ==========> 3 - Posts Section <==========
 
-  // 3.1 - Create Post
 
   File? postImage;
 
@@ -410,7 +408,8 @@ class AppCubit extends Cubit<AppStates>
     final XFile? pickedImage = await picker.pickImage(
         source: ImageSource.gallery);
 
-    if (pickedImage != null) {
+    if (pickedImage != null)
+    {
       postImage = File(pickedImage.path);
 
       emit(AppPostImagePickedSuccessState());
@@ -423,6 +422,7 @@ class AppCubit extends Cubit<AppStates>
 
   void cancelUploadedPostImage() {
     postImage = null;
+    postImageURL = null;
     emit(AppCancelUploadedPostImageState());
   }
 
@@ -450,17 +450,17 @@ class AppCubit extends Cubit<AppStates>
   }
 
 
-  // posts
+  // 3.1 - Create Post
 
   Future<void> createPost({
-    required String datetime,
     required String text,
 
   }) async
   {
     emit(AppCreatePostLoadingState());
 
-    if (postImage != null) {
+    if (postImage != null)
+    {
       await uploadPostImage();
     }
 
@@ -468,7 +468,7 @@ class AppCubit extends Cubit<AppStates>
       // name: user_model!.name,
       // image: user_model!.image,
       uId: uId,
-      datetime: datetime,
+      datetime: DateTime.now().toString(),
       text: text,
       postImage: postImageURL ?? '',
 
@@ -479,7 +479,7 @@ class AppCubit extends Cubit<AppStates>
       Post_Model newPost = Post_Model(
           uId: uId,
           postId: value.id,
-          datetime: datetime,
+          datetime: DateTime.now().toString(),
           text: text,
           image: user_model!.image,
           name: user_model!.name,
@@ -491,6 +491,8 @@ class AppCubit extends Cubit<AppStates>
       );
 
       posts.insert(0, newPost);
+      postImage = null;
+      postImageURL = null;
       // myPosts.insert(0, newPost);
 
       emit(AppCreatePostSuccessState());
@@ -499,6 +501,91 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
+
+  //update post
+  Future<void> updatePost({
+    required String text,
+    required Post_Model postModel
+
+  }) async
+  {
+    emit(AppUpdatePostLoadingState());
+    print(postImageURL);
+    if (postImage != null)
+    {
+      await uploadPostImage();
+    }
+
+    postModel.text = text;
+    postModel.postImage = postImageURL ?? '';
+
+    print(postImageURL);
+    print(postModel.toMap());
+
+
+
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postModel.postId)
+        .update(postModel.toMap())
+        .then((value)
+    {
+
+
+      // posts.insert(0, newPost);
+      postImage = null;
+      postImageURL = null;
+      // myPosts.insert(0, newPost);
+
+      emit(AppUpdatePostSuccessState());
+    }).catchError((err) {
+      emit(AppUpdatePostErrorState());
+    });
+  }
+
+  //delete post
+  Future<void> deletePost({
+
+    required Post_Model postModel
+
+  }) async
+  {
+    // emit(AppUpdatePostLoadingState());
+
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postModel.postId)
+        .delete()
+        .then((value)async
+    {
+      if(postModel.postImage != '')
+      {
+        await deletePostImage(url: postModel.postImage!);
+      }
+
+      deleteUserPostsLocally(postModel.postId);
+
+      emit(AppDeletePostSuccessState());
+    }).catchError((err) {
+      emit(AppDeletePostErrorState());
+    });
+  }
+
+  //Delete post image from firebase
+
+  Future<void> deletePostImage({required String url}) async
+  {
+    await firebase_storage.FirebaseStorage.instance.
+    refFromURL(url).delete().then((value) async
+    {
+
+        emit(AppDeletePostImageErrorState());
+
+    }).catchError((err)
+    {
+      emit(AppDeletePostImageErrorState());
+    });
+  }
 
   //Get Posts 3.2
 
@@ -584,6 +671,7 @@ class AppCubit extends Cubit<AppStates>
 
   List<Post_Model> userPosts = [];
 
+
   void getUserPosts(String uid)
   {
     userPosts = [];
@@ -595,7 +683,19 @@ class AppCubit extends Cubit<AppStates>
       }
     }
 
-    // emit(AppGetUserPostsState());
+  }
+
+  void deleteUserPostsLocally(postId)
+  {
+
+    for(int x = 0 ; x < posts.length ; x++)
+    {
+      if(posts[x].postId == postId)
+      {
+        userPosts.remove(posts[x]);
+        print('bbbbbbb');
+      }
+    }
 
   }
 
