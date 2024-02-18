@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -46,9 +46,17 @@ class AppCubit extends Cubit<AppStates>
     //   if(value == true)
     //   {
     // checkInternerConnection();
-    getUserData();
 
-    getPosts();
+    if(uId.isNotEmpty)
+    {
+      getUserData();
+
+      getPosts();
+      print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+    }
+
+
+
     // }
     // else
     // {
@@ -368,7 +376,8 @@ class AppCubit extends Cubit<AppStates>
     FirebaseFirestore.instance.collection('users').doc(uId).
     update(model.toMap()).then((value) {
       if (name != user_model!.name || profile_image != null) {
-        posts.forEach((ele) {
+        posts.forEach((ele)
+        {
           if (ele.name == user_model!.name) {
             if (name != user_model!.name) {
               ele.name = name ?? ele.name;
@@ -513,9 +522,7 @@ class AppCubit extends Cubit<AppStates>
   {
 
     emit(AppUpdatePostLoadingState());
-    print('333333333333333333333');
-    print(oldPostModel.toMap());
-    print('333333333333333333333');
+
 
     if (postImage != null)
     {
@@ -526,11 +533,6 @@ class AppCubit extends Cubit<AppStates>
       text: text,
       postImage: postImageURL ?? ''
     );
-
-    // postModel.text = text;
-    // postModel.postImage = postImageURL ?? '';
-
-    // print(postModel.toMap());
 
 
 
@@ -543,11 +545,10 @@ class AppCubit extends Cubit<AppStates>
 
       if(oldPostModel.postImage! != '' && oldPostModel.postImage! != postImageURL)
       {
-        print('heeeeeeeheeeeeeeee');
-        print(oldPostModel.postImage!);
-        print('heeeeeeeheeeeeeeee');
         await deletePostImage(url: oldPostModel.postImage!);
       }
+      updatedPostModel.postId  = oldPostModel.postId;
+      updateUserPostsLocally(updatedPostModel);
 
 
       // posts.insert(0, newPost);
@@ -581,7 +582,7 @@ class AppCubit extends Cubit<AppStates>
         await deletePostImage(url: postModel.postImage!);
       }
 
-      deleteUserPostsLocally(postModel.postId);
+      deleteUserPostsLocally(postModel.postId!);
 
       emit(AppDeletePostSuccessState());
     }).catchError((err)
@@ -630,6 +631,7 @@ class AppCubit extends Cubit<AppStates>
 
         postData.addAll(ele.data());
         postData['postId'] = ele.id;
+
         //get user info who post the post
         await FirebaseFirestore.instance.collection('users')
             .doc(ele['uId'])
@@ -715,17 +717,38 @@ class AppCubit extends Cubit<AppStates>
 
   }
 
-  void deleteUserPostsLocally(postId)
+  void deleteUserPostsLocally(String postId)
   {
 
     for(int x = 0 ; x < posts.length ; x++)
     {
       if(posts[x].postId == postId)
       {
-        userPosts.remove(posts[x]);
+        posts.removeAt(x);
+        // userPosts.remove(posts[x]);
         print('bbbbbbb');
       }
     }
+
+  }
+
+  void updateUserPostsLocally(Post_Model pModel)
+  {
+    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+    posts.forEach((ele)
+    {
+      if(ele.postId == pModel.postId)
+      {
+        ele.text = pModel.text;
+        ele.postImage = pModel.postImage;
+        print('/////////////////////////////////');
+      }
+    });
+
+    // for(int x = 0 ; x < posts.length ; x++)
+    // {
+    //
+    // }
 
   }
 

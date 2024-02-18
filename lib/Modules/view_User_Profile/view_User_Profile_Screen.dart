@@ -34,9 +34,7 @@ class View_User_Profile_Screen extends StatelessWidget
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text('${userModel.name}'),
-            ),
+            appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
             body: ProfileScreen(userModel: userModel,),
             floatingActionButton: FloatingActionButton(
               child: Icon(IconBroken.Message,size: 25.0),

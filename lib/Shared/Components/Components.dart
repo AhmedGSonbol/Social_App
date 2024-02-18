@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:readmore/readmore.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
@@ -269,7 +270,7 @@ Widget myCachedNetworkIMG({required String url , double? width , double? height 
 
 PreferredSizeWidget defaultAppBar({
   required BuildContext context,
-  String? title,
+  Widget? title,
   List<Widget>? actions,
 })
 {
@@ -279,7 +280,7 @@ PreferredSizeWidget defaultAppBar({
       onPressed: () => Navigator.of(context).pop(),
     ),
 
-    title: Text(title ?? ''),
+    title: title ?? const Text(''),
     actions: actions,
     titleSpacing: 5.0,
   );
@@ -413,8 +414,12 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${model.name}',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
+                          Flexible(
+                            child: Text('${model.name}',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
                           const SizedBox(width: 3,),
                           const Icon(Icons.check_circle,
@@ -434,7 +439,9 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 
                 if(!isOnHomeScreen && model.uId == uId)
                   PopupMenuButton(
-                    color: Colors.grey,
+                    child: Icon(Icons.adaptive.more,color: Colors.grey,),
+                    color: Color.fromRGBO(99, 99, 99, 1),
+
                   itemBuilder: (context)
                   {
                     return
@@ -451,7 +458,9 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                             ],
 
                           ),
-                        ), PopupMenuItem(
+                        ),
+
+                        PopupMenuItem(
                         value: 'delete',
                         child: Row(
                           children:
@@ -523,8 +532,10 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
           ),
 
           //Post Content
-          Text('${model.text}',
-            style: Theme.of(context).textTheme.titleMedium,
+
+          ReadMoreText('${model.text}',
+          style: Theme.of(context).textTheme.titleMedium,
+
           ),
 
           //Tags
@@ -785,7 +796,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 }
 
 
-Widget buildUserItem(User_Model model,context,AppLang lang)
+Widget buildUserItem(User_Model model,context,AppLang lang,{isSmallImg = false})
 {
   return InkWell(
     onTap: ()
@@ -802,14 +813,18 @@ Widget buildUserItem(User_Model model,context,AppLang lang)
         children:
         [
           CircleAvatar(
-            radius: 25.0,
+            radius: isSmallImg ? 20.0 : 25.0,
             backgroundImage: NetworkImage('${model.image}'),
           ),
           SizedBox(
             width: 15.0,
           ),
-          Text('${model.name}',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)
+          Expanded(
+            child: Text('${model.name}',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
 
         ],

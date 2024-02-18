@@ -58,7 +58,7 @@ class Edit_profile_screen extends StatelessWidget {
           child: Scaffold(
             appBar: defaultAppBar(
                 context: context,
-                title: lang.editProfile(),
+                title: Text(lang.editProfile()),
                 actions:
                 [
                   myTextButton(context: context,text: lang.update(), function: ()

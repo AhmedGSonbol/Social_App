@@ -42,6 +42,9 @@ class RegisterScreen extends StatelessWidget
           CachHelper.saveData(key: 'uId', value: state.uId).then((value)
           {
             uId = state.uId;
+
+            AppCubit.get(context).getAppData();
+
             navAndFinishTo(context, Home_Screen());
           });
 

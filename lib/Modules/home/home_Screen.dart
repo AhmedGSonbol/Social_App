@@ -38,7 +38,9 @@ class Home_Screen extends StatelessWidget
       ProfileScreen(),
     ];
 
-    AppCubit.get(context).getAppData();
+    // AppCubit.get(context).getAppData();
+    // print('###############################################################################');
+
 
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
@@ -67,7 +69,7 @@ class Home_Screen extends StatelessWidget
           lang.feedsHeader(),
           lang.chats(),
           lang.users(),
-          lang.profile()
+          lang.profileHeader()
         ];
 
 

@@ -47,7 +47,7 @@ class Settings_Screen extends StatelessWidget
           Directionality(
             textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
             child: Scaffold(
-              appBar: AppBar(),
+              appBar: defaultAppBar(context: context),
               body: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -71,83 +71,88 @@ class Settings_Screen extends StatelessWidget
                       Row(
                         children:
                         [
-                          Text(
-                            lang.darkmode() ,
-                            style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                            fontSize: 25.0
-                          ),
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Switch(
-                                // activeColor: defaultColor,
-                                  activeTrackColor: defaultColor,
-                                  // inactiveTrackColor: Colors.grey,
-                                  inactiveThumbColor: Colors.black,
-                                  // activeColor: Colors.yellowAccent,
-
-                                  value: cubit.isDarkMode,
-                                  onChanged: (val)
-                                  {
-                                    cubit.changeMode();
-                                  }
+                          Column(
+                            children:
+                            [
+                              Text(
+                                lang.darkmode() ,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                    fontSize: 25.0
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20.0,),
-
-                      Row(
-                        children:
-                        [
-                          Text(
-                            lang.language() ,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                fontSize: 25.0
-                            ),
+                              SizedBox(height: 20.0,),
+                              Text(
+                                lang.language() ,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                    fontSize: 25.0
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: Center(
-                                child: DropdownButton(
-                                  value:  langs[0] ,
-                                  onChanged: (val)
-                                  {
-                                    if(val == 'Arabic')
+
+                          SizedBox(width: 30.0,),
+
+                          Column(
+                            children:
+                            [
+                              Center(
+                                child: Switch(
+                                  // activeColor: defaultColor,
+                                    activeTrackColor: defaultColor,
+                                    inactiveTrackColor: Colors.grey.withOpacity(0.5),
+                                    inactiveThumbColor: Colors.black,
+                                    // activeColor: Colors.yellowAccent,
+
+                                    value: cubit.isDarkMode,
+                                    onChanged: (val)
                                     {
-                                      if(cubit.lang == 'en')
-                                      {
-                                        cubit.changeLang();
-                                      }
+                                      cubit.changeMode();
                                     }
-                                    else
+                                ),
+                              ),
+                              SizedBox(height: 20.0,),
+                              Center(
+                                  child: DropdownButton(
+                                    value:  langs[0] ,
+                                    onChanged: (val)
                                     {
-                                      if(!(cubit.lang == 'en') && val == 'الأنجليزية')
+                                      if(val == 'Arabic')
                                       {
-                                        cubit.changeLang();
+                                        if(cubit.lang == 'en')
+                                        {
+                                          cubit.changeLang();
+                                        }
                                       }
-                                    }
-                                  },
-                                  items:
-                                  [
-                                    DropdownMenuItem(child: Text(langs[0]),value: langs[0],),
-                                    DropdownMenuItem(child: Text(langs[1]) , value: langs[1],),
-                                  ],
-                                  style: TextStyle(fontSize: 17.0,color: fontColor(context)),
-                                  dropdownColor: cubit.isDarkMode ? darkColor : Colors.white,
-                                  iconEnabledColor: defaultColor,
-                                  borderRadius: BorderRadius.circular(15.0),
+                                      else
+                                      {
+                                        if(!(cubit.lang == 'en') && val == 'الأنجليزية')
+                                        {
+                                          cubit.changeLang();
+                                        }
+                                      }
+                                    },
+                                    items:
+                                    [
+                                      DropdownMenuItem(child: Text(langs[0]),value: langs[0],),
+                                      DropdownMenuItem(child: Text(langs[1]) , value: langs[1],),
+                                    ],
+                                    style: TextStyle(fontSize: 17.0,color: fontColor(context)),
+                                    dropdownColor: cubit.isDarkMode ? darkColor : Colors.white,
+                                    iconEnabledColor: defaultColor,
+                                    borderRadius: BorderRadius.circular(15.0),
 
 
-                                )
-                            ),
-                          )
+                                  )
+                              ),
+                            ],
+                          ),
+
                         ],
                       ),
                       SizedBox(height: 20.0,),
@@ -161,6 +166,7 @@ class Settings_Screen extends StatelessWidget
                           {
                              navTo(context, About_Debeloper_Screen());
                           }),
+
                       SizedBox(height: 20.0,),
 
                       myButton(
@@ -177,6 +183,7 @@ class Settings_Screen extends StatelessWidget
                               {
                                 CachHelper.removeData(key: 'uId').then((value)
                                 {
+                                  uId = '';
                                   navAndFinishTo(context, Login_Screen());
 
                                   cubit.currentNavIndex = 0;

@@ -44,21 +44,31 @@ class Chat_Details_Screen extends StatelessWidget
             return Directionality(
               textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: Scaffold(
-                appBar: AppBar(
-                  titleSpacing: 0.0,
-
-                  title: Row(
-                    children:
-                    [
-                      CircleAvatar(
-                        radius: 20.0,
-                        backgroundImage: NetworkImage('${receiver_Model.image}'),
-                      ),
-                      SizedBox(width: 15.0,),
-                      Text('${receiver_Model.name}')
-                    ],
-                  ),
+                appBar:defaultAppBar(
+                    context: context,
+                    title: buildUserItem(
+                      receiver_Model,
+                        context,
+                        lang,
+                      isSmallImg: true
+                    ),
                 ),
+
+                // AppBar(
+                //   titleSpacing: 0.0,
+                //
+                //   title: Row(
+                //     children:
+                //     [
+                //       CircleAvatar(
+                //         radius: 20.0,
+                //         backgroundImage: NetworkImage('${receiver_Model.image}'),
+                //       ),
+                //       SizedBox(width: 15.0,),
+                //       Text('${receiver_Model.name}')
+                //     ],
+                //   ),
+                // ),
                 body:
                 Padding(
                   padding: const EdgeInsets.all(20.0),

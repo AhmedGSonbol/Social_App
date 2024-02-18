@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:readmore/readmore.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
 import 'package:social_app/Modules/view_User_Profile/view_User_Profile_Screen.dart';
@@ -18,6 +19,7 @@ class UsersScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state)
       {
+
 
         AppLang lang = AppLang(context);
 

@@ -34,6 +34,8 @@ class Login_Screen extends StatelessWidget
               {
                 uId = state.uId;
 
+                AppCubit.get(context).getAppData();
+
                 navAndFinishTo(context, Home_Screen());
               });
 

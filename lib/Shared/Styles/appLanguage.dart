@@ -114,7 +114,12 @@ class AppLang
 
   String profile()
   {
-    return isEn ? 'Profile' : 'بروفايل';
+    return isEn ? 'Profile' : 'صفحتي';
+  }
+
+  String profileHeader()
+  {
+    return isEn ? 'My Profile' : 'صفحتي الشخصية';
   }
 
   String communicate()

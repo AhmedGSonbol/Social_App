@@ -5,4 +5,4 @@ import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 
 // String token = '';
 
- String? uId;
+ String uId = '';

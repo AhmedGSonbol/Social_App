@@ -93,10 +93,13 @@ class MainScreen extends StatelessWidget
   Widget build(BuildContext context)
   {
     return BlocProvider(
-      create: (context) => AppCubit()..lang = lang..isDarkMode = isDark,
+      create: (context) => AppCubit()..lang = lang..isDarkMode = isDark..getAppData(),
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context, state) {},
-        builder: (context, state) {
+        builder: (context, state)
+        {
+          // print('###############################################################################');
+
           return MaterialApp(
 
             navigatorKey: navigatorKey,
