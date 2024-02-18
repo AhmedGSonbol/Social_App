@@ -75,8 +75,15 @@ class FeedsScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context , index)
                   {
+                    //  getUserDataByUid(userId: cubit.posts[index].uId!).then((value)
+                    // {
+                    //   print('ssssssssssssssssssssssssssssssssss');
+                    //   print(value!.toMap());
+                    // });
+                     return buildPostItem(cubit.posts[index],context , lang,isOnHomeScreen: true);
 
-                    return buildPostItem(cubit.posts[index],context , lang,isOnHomeScreen: true);
+
+
                   } ,
                   itemCount: cubit.posts.length,
                 ),

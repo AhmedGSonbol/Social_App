@@ -25,10 +25,11 @@ class Notification_Model
     return
       {
         "to": user_FCM_Token,
-        "android":{
-          "priority":"HIGH"
-
-        },
+        "priority":"high",
+        // "android":{
+        //
+        //
+        // },
         "notification": {
           "title": title,
           "body": body,

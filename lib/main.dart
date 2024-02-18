@@ -27,7 +27,9 @@ import 'Modules/new_post/new_Post_Screen.dart';
 void main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    
+  );
   Bloc.observer = MyBlocObserver();
   await CachHelper.init();
   DioHelper.init();

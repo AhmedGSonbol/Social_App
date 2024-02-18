@@ -475,7 +475,9 @@ class AppCubit extends Cubit<AppStates>
     );
 
     await FirebaseFirestore.instance.collection('posts').
-    add(model.toMap()).then((value) {
+    add(model.toMap()).then((value)
+    {
+
       Post_Model newPost = Post_Model(
           uId: uId,
           postId: value.id,
@@ -505,31 +507,47 @@ class AppCubit extends Cubit<AppStates>
   //update post
   Future<void> updatePost({
     required String text,
-    required Post_Model postModel
+    required Post_Model oldPostModel
 
   }) async
   {
+
     emit(AppUpdatePostLoadingState());
-    print(postImageURL);
+    print('333333333333333333333');
+    print(oldPostModel.toMap());
+    print('333333333333333333333');
+
     if (postImage != null)
     {
       await uploadPostImage();
     }
 
-    postModel.text = text;
-    postModel.postImage = postImageURL ?? '';
+    Post_Model updatedPostModel = Post_Model(
+      text: text,
+      postImage: postImageURL ?? ''
+    );
 
-    print(postImageURL);
-    print(postModel.toMap());
+    // postModel.text = text;
+    // postModel.postImage = postImageURL ?? '';
+
+    // print(postModel.toMap());
 
 
 
     await FirebaseFirestore.instance
         .collection('posts')
-        .doc(postModel.postId)
-        .update(postModel.toMap())
-        .then((value)
+        .doc(oldPostModel.postId)
+        .update(updatedPostModel.toMap())
+        .then((value)async
     {
+
+      if(oldPostModel.postImage! != '' && oldPostModel.postImage! != postImageURL)
+      {
+        print('heeeeeeeheeeeeeeee');
+        print(oldPostModel.postImage!);
+        print('heeeeeeeheeeeeeeee');
+        await deletePostImage(url: oldPostModel.postImage!);
+      }
 
 
       // posts.insert(0, newPost);
@@ -566,7 +584,9 @@ class AppCubit extends Cubit<AppStates>
       deleteUserPostsLocally(postModel.postId);
 
       emit(AppDeletePostSuccessState());
-    }).catchError((err) {
+    }).catchError((err)
+    {
+
       emit(AppDeletePostErrorState());
     });
   }
@@ -583,6 +603,7 @@ class AppCubit extends Cubit<AppStates>
 
     }).catchError((err)
     {
+      print(err.toString());
       emit(AppDeletePostImageErrorState());
     });
   }
@@ -606,6 +627,9 @@ class AppCubit extends Cubit<AppStates>
     {
       await Future.forEach(value.docs, (ele) async
       {
+
+        postData.addAll(ele.data());
+        postData['postId'] = ele.id;
         //get user info who post the post
         await FirebaseFirestore.instance.collection('users')
             .doc(ele['uId'])
@@ -614,6 +638,8 @@ class AppCubit extends Cubit<AppStates>
         {
           postData['name'] = value.data()!['name'];
           postData['image'] = value.data()!['image'];
+          print('xxxxxxxxxxxxxxxxxxxxxxxx');
+
         });
 
         //likes
@@ -638,14 +664,17 @@ class AppCubit extends Cubit<AppStates>
             }
           }).then((value) async
           {
+
             //comments
             await ele.reference.collection('comments').get().then((commentsValues) async
             {
               postData['commentsCount'] =
               commentsValues.docs.isEmpty ? 0 : commentsValues.docs.length;
-            }).then((value) {
-              postData['postId'] = ele.id;
-              postData.addAll(ele.data());
+            }).then((value)
+            {
+
+
+
 
               // if(ele['uId'] == uId)
               // {
@@ -653,6 +682,7 @@ class AppCubit extends Cubit<AppStates>
               // }
 
               posts.add(Post_Model.fromJson(postData));
+              print(postData);
               emit(AppGetPostSuccessState());
               // print(postData);
             });

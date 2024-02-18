@@ -8,6 +8,8 @@ ThemeData darkTheme = ThemeData(
 
   primarySwatch: defaultColor,
 
+  colorScheme: ColorScheme.fromSwatch(),
+
   appBarTheme: AppBarTheme(
     //Control Status bar
 
@@ -85,6 +87,11 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
     elevation: 10.0,
+  ),
+
+  popupMenuTheme: PopupMenuThemeData(
+    color: Colors.grey,
+
   )
 
 
@@ -96,6 +103,7 @@ ThemeData darkTheme = ThemeData(
 
 ThemeData lightTheme = ThemeData(
   primarySwatch: defaultColor,
+  colorScheme: ColorScheme.fromSwatch(),
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(
     //Control Status bar
@@ -114,12 +122,25 @@ ThemeData lightTheme = ThemeData(
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(color: Colors.black)),
-  bottomNavigationBarTheme:const BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       selectedItemColor: defaultColor,
       selectedLabelStyle:
       TextStyle(color: Colors.orange, fontSize: 15.0),
-      elevation: 20.0),
+      elevation: 20.0,
+    backgroundColor: Colors.white54
+  ),
+
+  cardTheme: CardTheme(
+      color: Colors.grey.withOpacity(0.1),
+
+      shadowColor:  Colors.grey.withOpacity(0.1),
+
+      surfaceTintColor: Colors.transparent,
+
+
+  ),
+
   textTheme:const TextTheme(
     titleMedium: TextStyle(
         fontSize: 14.0,

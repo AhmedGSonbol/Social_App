@@ -218,9 +218,8 @@ class ProfileScreen extends StatelessWidget
                   shrinkWrap: true,
                   itemBuilder: (context , index)
                   {
-
-                    return buildPostItem(AppCubit.get(context).userPosts[index],context,lang);
-                  } ,
+                    return buildPostItem(AppCubit.get(context).userPosts[index],context , lang);
+                    } ,
                   itemCount: AppCubit.get(context).userPosts.length,
                 )
                 :

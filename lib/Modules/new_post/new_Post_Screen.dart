@@ -29,7 +29,13 @@ class New_Post_Screen extends StatelessWidget
 
     return BlocConsumer<AppCubit,AppStates>
       (
-      listener: (context, state) {},
+      listener: (context, state)
+      {
+        if(state is AppUpdatePostSuccessState)
+        {
+          Navigator.of(context).pop();
+        }
+      },
       builder: (context, state)
       {
 
@@ -55,51 +61,61 @@ class New_Post_Screen extends StatelessWidget
                     function: () {
                       if (!AppCubit
                           .get(context)
-                          .user_model!
-                          .isEmailVrified!) {
+                          .user_model!.isEmailVrified!)
+                      {
                         myToast(msg: lang.verifyYourEmail(),
                             state: ToastStates.WARNING);
                       }
-                      else {
-                        if (cubit.postImage == null && postTextController.text
-                            .trim()
-                            .isEmpty) {
+                      else
+                      {
+                        if (cubit.postImage == null && postTextController.text.trim().isEmpty)
+                        {
                           myToast(msg: lang.addPostTextOrImage(),
                               state: ToastStates.ERROR);
-                          return;
-                        }
 
-                        if (postModel == null)
+                        }else
                         {
-                          cubit.createPost(
-
-                            text: postTextController.text,
-                          ).then((value)
+                          if (postModel == null)
                           {
+                            cubit.createPost(
 
-                            postTextController.text = "";
-                            cubit.cancelUploadedPostImage();
-                            myToast(msg: lang.publishPost(),
-
-                                state: ToastStates.SUCCESS);
-                          });
-                        }
-                        else
-                        {
-                          cubit.updatePost(
                               text: postTextController.text,
-                              postModel: postModel!
-                          )
-                              .then((value)
-                          {
-                            postTextController.text = "";
-                            cubit.cancelUploadedPostImage();
-                            myToast(msg: lang.editPost(),
+                            ).then((value)
+                            {
 
-                                state: ToastStates.SUCCESS);
-                          });
-                          Navigator.of(context).pop();
+                              postTextController.text = "";
+                              cubit.cancelUploadedPostImage();
+                              myToast(msg: lang.publishPost(),
+
+                                  state: ToastStates.SUCCESS);
+                            });
+                          }
+                          else
+                          {
+
+                            print('2222222222222222222');
+                            print(postModel!.toMap());
+                            print('2222222222222222222');
+                            cubit.updatePost(
+                                text: postTextController.text,
+                                oldPostModel: postModel!
+                            )
+                                .then((value)async
+                            {
+                              // print('mmmmmmmmmmmmmmmmmmmmmm');
+                              // print(postModel!.postImage!);
+
+                              postTextController.text = "";
+                              cubit.cancelUploadedPostImage();
+                              myToast(msg: lang.editPost(),
+
+                                  state: ToastStates.SUCCESS);
+                            });
+
+                          }
                         }
+
+
                       }
                     })
               ]

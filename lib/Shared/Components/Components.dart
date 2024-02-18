@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -349,22 +350,27 @@ Widget mySendMessageSection(
 }
 
 Future<User_Model> getUserDataByUid({
-  required String uId
+  required String userId
 })async
 {
-  await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value)
+  User_Model uModel = User_Model();
+  await FirebaseFirestore.instance.collection('users').doc(userId).get().then((value)
   {
-    User_Model uModel = User_Model.fromJson(value.data()!);
+    uModel = User_Model.fromJson(value.data()!);
 
     print('88888888888888888888888888888888');
-    print(value.data());
-    return uModel;
+    print(uModel.toMap());
+    print('88888888888888888888888888888888');
+
+
 
 
   });
-  print('NULLLLLLLLLLLLLLLLLLLLLLLLLLLL');
 
-  return User_Model.fromJson({});
+  return uModel;
+  // print('NULLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+  //
+  // return User_Model.fromJson({});
 
 
 }
@@ -373,6 +379,8 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
     {bool isOnHomeScreen = false})
 {
   var commentController = TextEditingController();
+
+
 
   return Card(
 
@@ -426,19 +434,20 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 
                 if(!isOnHomeScreen && model.uId == uId)
                   PopupMenuButton(
-                    color: fontColor(context),
+                    color: Colors.grey,
                   itemBuilder: (context)
                   {
                     return
                       [
                         PopupMenuItem(
+
                           value: 'edit',
                           child: Row(
                             children:
                             [
-                              Icon(IconBroken.Edit,),
+                              Icon(IconBroken.Edit,color: fontColor(context),),
                               SizedBox(width: 10.0,),
-                              Text(lang.edit())
+                              Text(lang.edit(),style: TextStyle(color: fontColor(context)),)
                             ],
 
                           ),
@@ -447,9 +456,9 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                         child: Row(
                           children:
                           [
-                            Icon(IconBroken.Delete),
+                            Icon(IconBroken.Delete,color: fontColor(context),),
                             SizedBox(width: 10.0,),
-                            Text(lang.delete())
+                            Text(lang.delete(),style: TextStyle(color: fontColor(context)),)
                           ],
 
                         ),
