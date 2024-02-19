@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Models/user_Model.dart';
+import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
 import 'package:social_app/Modules/post_Details/post_Details_Screen.dart';
 import 'package:social_app/Modules/view_User_Profile/view_User_Profile_Screen.dart';
@@ -100,7 +101,11 @@ Widget myTextFormField({
         //   icon: suffixIcon!,
         //   onPressed: SuffixOnPressed,
         // ),
-        border: OutlineInputBorder()
+        enabledBorder: const OutlineInputBorder(
+          // width: 0.0 produces a thin "hairline" border
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        // border: const OutlineInputBorder()
     ),
 
     validator: validator,
@@ -128,7 +133,7 @@ void myToast({
       toastLength: toastLength,
       gravity: gravity,
       timeInSecForIosWeb: timeInSecForIosWeb,
-      backgroundColor: backgroundColor(state),
+      backgroundColor: toastBackgroundColor(state),
       textColor: textColor,
       fontSize: fontSize,
   );
@@ -136,7 +141,7 @@ void myToast({
 
 enum ToastStates {SUCCESS , ERROR , WARNING}
 
-Color backgroundColor(ToastStates state) {
+Color toastBackgroundColor(ToastStates state) {
   Color color;
 
   switch (state) {
@@ -171,7 +176,7 @@ Widget myCachedNetworkIMG({required String url , double? width , double? height 
     errorWidget: (context, url, error) => Container(
       height: height,
       width: width,
-      child: Center(child: Icon(Icons.error,color: Colors.grey,size: 40.0,),),),
+      child: const Center(child: Icon(Icons.error,color: Colors.grey,size: 40.0,),),),
   );
 }
 
@@ -276,7 +281,7 @@ PreferredSizeWidget defaultAppBar({
 {
   return AppBar(
     leading: IconButton(
-      icon: AppLang(context).isEn ? Icon(IconBroken.Arrow___Left_2) : Icon(IconBroken.Arrow___Right_2),
+      icon: AppLang(context).isEn ? const Icon(IconBroken.Arrow___Left_2) : const Icon(IconBroken.Arrow___Right_2),
       onPressed: () => Navigator.of(context).pop(),
     ),
 
@@ -307,7 +312,7 @@ Widget mySendMessageSection(
             color: Colors.grey[300]!,
             width: 1.0
         ),
-        borderRadius: BorderRadius.all(Radius.circular(10.0),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0),
         ),
 
       ),
@@ -432,15 +437,29 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               height: 1.4
                           )
-                      )
+                      ),
+                      if(model.uId == uId && !isOnHomeScreen)
+                        Row(
+                          children:
+                          [
+                            Icon(model.type! == 'private' ? IconBroken.Lock : IconBroken.User , color: Colors.grey,size: 18.0,),
+                            const SizedBox(width: 4.0,),
+                            Text(model.type! == 'private' ? lang.privatePost() : lang.publicPost(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  height: 1.4
+                              )
+                      ),
+
+                          ],
+                        )
                     ],
                   ),
                 ),
 
-                if(!isOnHomeScreen && model.uId == uId)
+                if(model.uId == uId && !isOnHomeScreen)
                   PopupMenuButton(
                     child: Icon(Icons.adaptive.more,color: Colors.grey,),
-                    color: Color.fromRGBO(99, 99, 99, 1),
+                    color: const Color.fromRGBO(99, 99, 99, 1),
 
                   itemBuilder: (context)
                   {
@@ -453,7 +472,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                             children:
                             [
                               Icon(IconBroken.Edit,color: fontColor(context),),
-                              SizedBox(width: 10.0,),
+                              const SizedBox(width: 10.0,),
                               Text(lang.edit(),style: TextStyle(color: fontColor(context)),)
                             ],
 
@@ -466,7 +485,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                           children:
                           [
                             Icon(IconBroken.Delete,color: fontColor(context),),
-                            SizedBox(width: 10.0,),
+                            const SizedBox(width: 10.0,),
                             Text(lang.delete(),style: TextStyle(color: fontColor(context)),)
                           ],
 
@@ -480,6 +499,14 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                     {
                       if(item == 'edit')
                       {
+                        if(model.type == 'private')
+                        {
+                          AppCubit.get(context).postType = 'private';
+                        }
+                        else
+                        {
+                          AppCubit.get(context).postType = 'public';
+                        }
                         navTo(context, New_Post_Screen(postModel: model,));
                       }
                       else
@@ -501,23 +528,26 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
               ],
             ),
             onTap: ()async
-            { if(isOnHomeScreen)
-              await AppCubit.get(context).getUserModelById(model.uId!).then((value)
+            {
+              if(isOnHomeScreen)
               {
-                // AppCubit.get(context).userPosts = [];
-                // AppCubit.get(context).getUserPosts(value.uId!);
 
-                if(value.uId == uId!)
+                if(model.uId == uId)
                 {
                   AppCubit.get(context).changeBottomNav(4);
 
                 }else
                 {
-                  navTo(context, View_User_Profile_Screen(userModel: value));
+                  await AppCubit.get(context)
+                      .getUserModelById(model.uId!)
+                      .then((value) {
+                    navTo(context, View_User_Profile_Screen(userModel: value));
+                  });
                 }
 
 
-              });
+
+              }
             },
           ),
 
@@ -637,7 +667,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Container(
                           child: const Icon(
                             IconBroken.Heart,
@@ -760,20 +790,17 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
               InkWell(
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundColor: model.isLiked! ? Colors.red : Colors.transparent,
-                        radius: 18.0,
-                        child: Icon(
-                          IconBroken.Heart,
-                          color: model.isLiked! ? Colors.white :  Colors.redAccent,
-                        ),
+                    CircleAvatar(
+                      backgroundColor: model.isLiked! ? Colors.red : Colors.transparent,
+                      radius: 18.0,
+                      child: Icon(
+                        IconBroken.Heart,
+                        color: model.isLiked! ? Colors.white :  Colors.redAccent,
                       ),
                     ),
                     Text(model.isLiked! ? lang.liked() : lang.like(),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: model.isLiked! ? Colors.red : AppCubit.get(context).isDarkMode ? Colors.white : Colors.grey
+                          color: model.isLiked! ? Colors.red : Colors.grey
                       ),),
                   ],
                 ),
@@ -796,38 +823,53 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 }
 
 
-Widget buildUserItem(User_Model model,context,AppLang lang,{isSmallImg = false})
+Widget buildUserItem(User_Model model,context,AppLang lang,{isSmallImg = false , isChatScreen = false})
 {
   return InkWell(
     onTap: ()
     {
 
       // send model
-      navTo(context, View_User_Profile_Screen(userModel: model,));
+      if(isChatScreen)
+      {
+        navTo(context, Chat_Details_Screen(receiver_Model: model,));
+      }
+      else
+      {
+        navTo(context, View_User_Profile_Screen(userModel: model,));
+      }
+
 
     },
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children:
-        [
-          CircleAvatar(
-            radius: isSmallImg ? 20.0 : 25.0,
-            backgroundImage: NetworkImage('${model.image}'),
-          ),
-          SizedBox(
-            width: 15.0,
-          ),
-          Expanded(
-            child: Text('${model.name}',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ),
+    child: Container(
 
-        ],
+      color: backgroundColor(context),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children:
+            [
+              CircleAvatar(
+                radius: isSmallImg ? 20.0 : 25.0,
+                backgroundImage: NetworkImage('${model.image}'),
+              ),
+              const SizedBox(
+                width: 15.0,
+              ),
+              Expanded(
+                child: Text('${model.name}',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+
+            ],
+          ),
+        ),
       ),
     ),
   );

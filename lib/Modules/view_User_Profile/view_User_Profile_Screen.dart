@@ -34,6 +34,7 @@ class View_User_Profile_Screen extends StatelessWidget
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
+            backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  Color.fromRGBO(240, 240, 240, 1),
             appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
             body: ProfileScreen(userModel: userModel,),
             floatingActionButton: FloatingActionButton(

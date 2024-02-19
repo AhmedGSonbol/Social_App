@@ -56,6 +56,7 @@ class Edit_profile_screen extends StatelessWidget {
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
+
             appBar: defaultAppBar(
                 context: context,
                 title: Text(lang.editProfile()),

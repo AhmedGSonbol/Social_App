@@ -16,6 +16,7 @@ import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
+import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
@@ -78,6 +79,7 @@ class Home_Screen extends StatelessWidget
 
 
         return Scaffold(
+          backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  Color.fromRGBO(240, 240, 240, 1),
           appBar: AppBar(
             title: Text(
                 titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
@@ -152,18 +154,18 @@ class Home_Screen extends StatelessWidget
 
                   if(!cubit.user_model!.isEmailVrified!)
                     Container(
-                      color: Colors.amber.withOpacity(0.6),
+                      color: defaultColor,
                       height: 50.0,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           children:
                           [
-                            Icon(Icons.info_outline),
+                            Icon(Icons.info_outline,color: fontColor(context),),
 
                             SizedBox(width: 15,),
 
-                            Expanded(child: Text(lang.verifyYourEmail())),
+                            Expanded(child: Text(lang.verifyYourEmail(),style: Theme.of(context).textTheme.titleMedium,)),
 
                             myTextButton(context: context,text: lang.send(), function: ()
                             {

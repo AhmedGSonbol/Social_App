@@ -51,6 +51,8 @@ class AppCubit extends Cubit<AppStates>
     {
       getUserData();
 
+      getUsersChatWith();
+
       getPosts();
       print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
     }
@@ -202,11 +204,7 @@ class AppCubit extends Cubit<AppStates>
 
   void changeBottomNav(int index)
   {
-    if (index == 1)
-    {
-      getUsersChatWith();
-    }
-    else if (index == 3)
+    if (index == 3)
     {
       getUsers();
     }
@@ -376,7 +374,7 @@ class AppCubit extends Cubit<AppStates>
     FirebaseFirestore.instance.collection('users').doc(uId).
     update(model.toMap()).then((value) {
       if (name != user_model!.name || profile_image != null) {
-        posts.forEach((ele)
+        allPosts.forEach((ele)
         {
           if (ele.name == user_model!.name) {
             if (name != user_model!.name) {
@@ -458,6 +456,22 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
+  String postType = 'public';
+
+  void changePostType()
+  {
+    if(postType == 'public')
+    {
+      postType = 'private';
+
+    }else
+    {
+      postType = 'public';
+    }
+
+
+    emit(AppChangePostTypeState());
+  }
 
   // 3.1 - Create Post
 
@@ -480,6 +494,7 @@ class AppCubit extends Cubit<AppStates>
       datetime: DateTime.now().toString(),
       text: text,
       postImage: postImageURL ?? '',
+      type: postType,
 
     );
 
@@ -497,11 +512,16 @@ class AppCubit extends Cubit<AppStates>
           postImage: postImageURL ?? '',
           likes: 0,
           isLiked: false,
-          commentsCount: 0
+          commentsCount: 0,
+          type: postType,
 
       );
 
-      posts.insert(0, newPost);
+      allPosts.insert(0, newPost);
+      if(postType == 'public')
+      {
+        homePosts.insert(0, newPost);
+      }
       postImage = null;
       postImageURL = null;
       // myPosts.insert(0, newPost);
@@ -531,7 +551,8 @@ class AppCubit extends Cubit<AppStates>
 
     Post_Model updatedPostModel = Post_Model(
       text: text,
-      postImage: postImageURL ?? ''
+      postImage: postImageURL ?? '',
+      type: postType
     );
 
 
@@ -611,16 +632,18 @@ class AppCubit extends Cubit<AppStates>
 
   //Get Posts 3.2
 
-  List<Post_Model> posts = [];
+
+  List<Post_Model> allPosts = [];
+  List<Post_Model> homePosts = [];
 
   bool allPostsLoaded = false;
 
   Future<void> getPosts() async
   {
 
+    allPosts = [];
+    homePosts = [];
 
-
-    posts = [];
     Map<String, dynamic> postData = {};
 
     await FirebaseFirestore.instance.collection('posts').orderBy(
@@ -640,7 +663,7 @@ class AppCubit extends Cubit<AppStates>
         {
           postData['name'] = value.data()!['name'];
           postData['image'] = value.data()!['image'];
-          print('xxxxxxxxxxxxxxxxxxxxxxxx');
+          // print('xxxxxxxxxxxxxxxxxxxxxxxx');
 
         });
 
@@ -674,17 +697,18 @@ class AppCubit extends Cubit<AppStates>
               commentsValues.docs.isEmpty ? 0 : commentsValues.docs.length;
             }).then((value)
             {
+              // print(postData);
+
+              allPosts.add(Post_Model.fromJson(postData));
+
+              if(postData['type'] == 'public')
+              {
+                homePosts.add(Post_Model.fromJson(postData));
+              }
 
 
 
-
-              // if(ele['uId'] == uId)
-              // {
-              //   userPosts.add(Post_Model.fromJson(postData));
-              // }
-
-              posts.add(Post_Model.fromJson(postData));
-              print(postData);
+              // print(postData);
               emit(AppGetPostSuccessState());
               // print(postData);
             });
@@ -692,10 +716,12 @@ class AppCubit extends Cubit<AppStates>
         });
       }).then((value)
       {
+
         allPostsLoaded = true;
         emit(AppGetAllPostsSuccessState());
       });
-    }).catchError((err) {
+    }).catchError((err)
+    {
       emit(AppGetPostsErrorState(error: err.toString()));
       print(err.toString());
     });
@@ -707,11 +733,23 @@ class AppCubit extends Cubit<AppStates>
   void getUserPosts(String uid)
   {
     userPosts = [];
-    for(int x = 0 ; x < posts.length ; x++)
+    for(int x = 0 ; x < allPosts.length ; x++)
     {
-      if(posts[x].uId == uid)
+      if(allPosts[x].uId == uid)
       {
-        userPosts.add(posts[x]);
+        if(uid != uId)
+        {
+          if(allPosts[x].type == 'public')
+          {
+            userPosts.add(allPosts[x]);
+          }
+
+
+        }else
+        {
+          userPosts.add(allPosts[x]);
+        }
+
       }
     }
 
@@ -720,12 +758,13 @@ class AppCubit extends Cubit<AppStates>
   void deleteUserPostsLocally(String postId)
   {
 
-    for(int x = 0 ; x < posts.length ; x++)
+    for(int x = 0 ; x < allPosts.length ; x++)
     {
-      if(posts[x].postId == postId)
+      if(allPosts[x].postId == postId)
       {
-        posts.removeAt(x);
-        // userPosts.remove(posts[x]);
+        homePosts.removeWhere((element) => element.postId == allPosts[x].postId);
+        allPosts.removeAt(x);
+
         print('bbbbbbb');
       }
     }
@@ -735,15 +774,38 @@ class AppCubit extends Cubit<AppStates>
   void updateUserPostsLocally(Post_Model pModel)
   {
     print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-    posts.forEach((ele)
+    allPosts.forEach((ele)
     {
       if(ele.postId == pModel.postId)
       {
+
+        if(ele.type == 'public' && pModel.type == 'private')
+        {
+          homePosts.removeWhere((element) => element.postId == ele.postId);
+        }
+        else if(ele.type == 'private' && pModel.type == 'public')
+        {
+          homePosts.add(ele);
+          homePosts.sort((a, b) => DateTime.parse(b.datetime!).compareTo(DateTime.parse(a.datetime!)));
+        }
+
         ele.text = pModel.text;
         ele.postImage = pModel.postImage;
-        print('/////////////////////////////////');
+        ele.type = pModel.type;
       }
     });
+
+
+
+    // homePosts.forEach((ele)
+    // {
+    //   if(ele.postId == pModel.postId)
+    //   {
+    //     ele.text = pModel.text;
+    //     ele.postImage = pModel.postImage;
+    //     ele.type = pModel.type;
+    //   }
+    // });
 
     // for(int x = 0 ; x < posts.length ; x++)
     // {
@@ -759,17 +821,17 @@ class AppCubit extends Cubit<AppStates>
     bool isLike = true;
     int eleIndex = 0;
 
-    for (int x = 0; x < posts.length; x ++) {
-      if (posts[x].postId == postID) {
+    for (int x = 0; x < allPosts.length; x ++) {
+      if (allPosts[x].postId == postID) {
         eleIndex = x;
 
-        if (posts[x].isLiked == false) {
-          posts[x].likes = posts[x].likes! + 1;
-          posts[x].isLiked = true;
+        if (allPosts[x].isLiked == false) {
+          allPosts[x].likes = allPosts[x].likes! + 1;
+          allPosts[x].isLiked = true;
         }
         else {
-          posts[x].likes = posts[x].likes! - 1;
-          posts[x].isLiked = false;
+          allPosts[x].likes = allPosts[x].likes! - 1;
+          allPosts[x].isLiked = false;
           isLike = false;
         }
       }
@@ -786,13 +848,13 @@ class AppCubit extends Cubit<AppStates>
       'like': isLike
     })
         .then((value) {}).catchError((err) {
-      if (posts[eleIndex].isLiked == false) {
-        posts[eleIndex].likes = posts[eleIndex].likes! + 1;
-        posts[eleIndex].isLiked = true;
+      if (allPosts[eleIndex].isLiked == false) {
+        allPosts[eleIndex].likes = allPosts[eleIndex].likes! + 1;
+        allPosts[eleIndex].isLiked = true;
       }
       else {
-        posts[eleIndex].likes = posts[eleIndex].likes! - 1;
-        posts[eleIndex].isLiked = false;
+        allPosts[eleIndex].likes = allPosts[eleIndex].likes! - 1;
+        allPosts[eleIndex].isLiked = false;
         isLike = false;
       }
 
@@ -887,7 +949,7 @@ class AppCubit extends Cubit<AppStates>
     required String postId,
     required bool isIncrease,
   }) {
-    posts.forEach((postEle) {
+    allPosts.forEach((postEle) {
       if (postEle.postId == postId) {
         print('ttttttttttttttttttttttt');
         if (isIncrease) {
@@ -972,60 +1034,126 @@ class AppCubit extends Cubit<AppStates>
 
 
 
-  Future<void> getUsersChatWith() async {
-    await FirebaseFirestore.instance.collection("Orders/$uId/Products").get()
+  // Future<void> getUsersChatWitht() async {
+  //   await FirebaseFirestore.instance.collection("Orders/$uId/Products").get()
+  //
+  //       .then((QuerySnapshot snapshot) {
+  //     final docs = snapshot.docs;
+  //     for (var data in docs) {
+  //       print(data.data());
+  //       print(data.reference);
+  //     }
+  //   }).catchError((err)
+  //   {
+  //     print(err.toString());
+  //   });
+  // }
 
-        .then((QuerySnapshot snapshot) {
-      final docs = snapshot.docs;
-      for (var data in docs) {
-        print(data.data());
-        print(data.reference);
-      }
-    }).catchError((err)
-    {
-      print(err.toString());
-    });
-  }
+
+  // Future<int> getNestedCollectionCount() async {
+  //   final parentCollectionRef = FirebaseFirestore.instance.collection('users');
+  //   final nestedCollectionRef = parentCollectionRef.doc(uId).collection('chat');
+  //
+  //   final querySnapshot = await nestedCollectionRef.get();
+  //   final count = querySnapshot.docs.length;
+  //
+  //   return count;
+  // }
+
   //Get Users that i chats with only
+
+  // Future<void> getUsersChatWitha() async
+  // {
+  //   CollectionReference collectionRef = FirebaseFirestore.instance.collection('users').doc(uId).collection('chat');
+  //   QuerySnapshot querySnapshot = await collectionRef.get();
+  //
+  //   List<String> emptyDocumentIds = [];
+  //
+  //   querySnapshot.docs.forEach((documentSnapshot) {
+  //     emptyDocumentIds.add(documentSnapshot.id);
+  //
+  //   });
+  //
+  //   print('Empty document IDs: $emptyDocumentIds');
+  // }
+
   List<User_Model> usersChatWith = [];
 
-  Future<void> getUsersChatWitht() async
+  Future<void> getUsersChatWith() async
   {
-    // if (users.isEmpty) {
-    print('x');
-    print(uId);
+    // // if (users.isEmpty) {
+    // print('x');
+    // print(uId);
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc)
-      {
+    usersChatWith = [];
 
-        FirebaseFirestore.instance
-            .doc(doc.id)
-            .collection("chat")
-            .get()
-            .then((val)
-        {
-          print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-          print(val.docs.length);
-        });
-      });
-    });
+   await FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').snapshots().listen((value)async
+   {
 
-    await FirebaseFirestore.instance.collection('users')
-        .doc(uId)
-        .collection('chat').get().then((value)
-    {
-      print('f');
-      print(value.docs.length);
-      value.docs.forEach((element)
-      {
-        print(element);
-      });
-    });
-    print('u');
+
+     await Future.forEach(value.docs,(ele)async
+     {
+
+       await getUserDataByUid(userId: ele.id).then((userValue)
+       {
+         usersChatWith.add(userValue);
+       });
+     }).then((value)
+     {
+
+       emit(AppGetUsersChatWithSuccessState());
+     });
+
+
+
+
+
+   });
+
+   //////////////////////////////////////////////////
+
+    // FirebaseFirestore.instance
+    //     .collection('users')
+    //     .get()
+    //     .then((QuerySnapshot querySnapshot) {
+    //   querySnapshot.docs.forEach((doc)
+    //   {
+    //
+    //     FirebaseFirestore.instance
+    //         .doc(doc.id)
+    //         .collection("chat")
+    //         .get()
+    //         .then((val)
+    //     {
+    //       print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+    //       print(val.docs.length);
+    //     });
+    //   });
+    // });
+
+    // await FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').doc('7l8NUIbcivc01EfpAvi51pbIZe82').get().then((value)
+    // {
+    //   // print(value.docs.length);
+    //   // print(value.size);
+    //   print(value.toString());
+    //   // print(value.isBlank);
+    //   print(value.exists);
+    //   print(value.data());
+    //   // print(value.reference.collection(''));
+    // });
+
+    // await FirebaseFirestore.instance.collection('users')
+    //     .doc(uId)
+    //     .collection('chat').get().then((value)
+    // {
+    //   print('f');
+    //   print(value.docs.length);
+    //   value.docs.forEach((element)
+    //   {
+    //     print(element);
+    //   });
+    // });
+    // print('u');
       // FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').get().then((value)
       // {
       //   value.docs.forEach((ele)
@@ -1108,19 +1236,21 @@ class AppCubit extends Cubit<AppStates>
         .add(
         model.toMap()).then((value) async
     {
-      await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) async
+      //Send notification
+      await getUserDataByUid(userId: receiverId).then((receiverModel) async
       {
-        User_Model receiverModel = User_Model.fromJson(value.data()!);
+        // User_Model receiverModel = User_Model.fromJson(value.data()!);
 
-        print('88888888888888888888888888888888');
-        print(value.data());
+        // print('88888888888888888888888888888888');
+        // print(receiverModel.toMap());
 
-        if (value.data()!['FCM_token'].isNotEmpty)
+
+        if (receiverModel.FCM_token != '' || receiverModel.FCM_token != null)
         {
           Notification_Model notification_model = Notification_Model(
             user_FCM_Token: receiverModel.FCM_token!,
             type: 'chat',
-            value: uId!,
+            value: uId,
             title: receiverModel.name!,
             body: text
 
@@ -1134,15 +1264,9 @@ class AppCubit extends Cubit<AppStates>
       });
 
 
-      // await getUserDataByUid(uId: uId!).then((value) async
-      //  {
-      //    print('99999999999999999999999999999999');
-      //    print(value!.toMap());
-      //
-      //
 
 
-      emit(AppSendMessageSuccessState());
+      // emit(AppSendMessageSuccessState());
       // });
 
 
@@ -1159,11 +1283,22 @@ class AppCubit extends Cubit<AppStates>
         .doc(uId)
         .collection('messages')
         .add(
-        model.toMap()).then((value) {
+        model.toMap()).then((value)
+    {
       emit(AppSendMessageSuccessState());
-    }).catchError((err) {
+    }).catchError((err)
+    {
       emit(AppSendMessageErrorState());
     });
+
+    // print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+    print(messages.length);
+    if(messages.length == 1)
+    {
+      FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').doc(receiverId).set({'uId':receiverId});
+      FirebaseFirestore.instance.collection('users').doc(receiverId).collection('chat').doc(uId).set({'uId':uId});
+      // print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+    }
   }
 
 

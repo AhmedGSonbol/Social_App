@@ -47,6 +47,7 @@ class Settings_Screen extends StatelessWidget
           Directionality(
             textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
             child: Scaffold(
+
               appBar: defaultAppBar(context: context),
               body: SingleChildScrollView(
                 child: Padding(

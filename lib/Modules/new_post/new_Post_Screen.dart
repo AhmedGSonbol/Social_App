@@ -47,11 +47,12 @@ class New_Post_Screen extends StatelessWidget
 
         AppLang lang = AppLang(context);
 
-        User_Model userModer = cubit.user_model!;
+        User_Model userModer = cubit.user_model ?? User_Model();
 
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
+
             appBar: defaultAppBar(
                 context: context,
                 title: Text(postModel == null ? lang.addPost() : lang.editPostTitle()),
@@ -126,7 +127,7 @@ class New_Post_Screen extends StatelessWidget
                   if(state is AppCreatePostLoadingState || state is AppUpdatePostLoadingState)
                     LinearProgressIndicator(),
 
-                  if(state is AppCreatePostLoadingState)
+                  if(state is AppCreatePostLoadingState || state is AppUpdatePostLoadingState)
                     SizedBox(height: 10.0,),
 
                   //User Card
@@ -135,7 +136,7 @@ class New_Post_Screen extends StatelessWidget
                     [
                       CircleAvatar(
                         radius: 25.0,
-                        backgroundImage: NetworkImage('${userModer.image!.replaceAll('"', '')}'),
+                        backgroundImage: NetworkImage('${userModer.image?.replaceAll('"', '')}'),
                       ),
                       SizedBox(
                         width: 15.0,
@@ -156,11 +157,29 @@ class New_Post_Screen extends StatelessWidget
 
                               ],
                             ),
-                            Text(lang.publicPost(),
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    height: 1.4
-                                )
-                            )
+                            DropdownButton(
+                              value:  cubit.postType ,
+                              onChanged: (val)
+                              {
+                                cubit.changePostType();
+                              },
+                              items:
+                              [
+                                DropdownMenuItem(child: Text(lang.publicPost()),value: 'public',),
+                                DropdownMenuItem(child: Text(lang.privatePost()) , value: 'private',),
+                              ],
+                              style: TextStyle(fontSize: 17.0,color: fontColor(context)),
+                              dropdownColor: cubit.isDarkMode ? darkColor : Colors.white,
+                              iconEnabledColor: defaultColor,
+                              borderRadius: BorderRadius.circular(15.0),
+
+
+                            ),
+                            // Text(lang.publicPost(),
+                            //     style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            //         height: 1.4
+                            //     )
+                            // )
                           ],
                         ),
                       ),

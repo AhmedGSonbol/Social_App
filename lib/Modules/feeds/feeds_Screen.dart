@@ -32,15 +32,14 @@ class FeedsScreen extends StatelessWidget {
 
         var cubit = AppCubit.get(context);
 
-        if (cubit.posts.isNotEmpty && cubit.user_model != null)
+        if (cubit.homePosts.isNotEmpty && cubit.user_model != null)
         {
           return RefreshIndicator(
             onRefresh: ()
             {
-
               return cubit.getPosts();
-
             },
+            backgroundColor: Colors.white,
             child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -80,12 +79,12 @@ class FeedsScreen extends StatelessWidget {
                     //   print('ssssssssssssssssssssssssssssssssss');
                     //   print(value!.toMap());
                     // });
-                     return buildPostItem(cubit.posts[index],context , lang,isOnHomeScreen: true);
+                     return buildPostItem(cubit.homePosts[index],context , lang,isOnHomeScreen: true);
 
 
 
                   } ,
-                  itemCount: cubit.posts.length,
+                  itemCount: cubit.homePosts.length,
                 ),
 
 

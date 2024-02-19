@@ -10,6 +10,7 @@ class Post_Model
   int? likes;
   bool? isLiked;
   int? commentsCount;
+  String? type;
 
 
 
@@ -23,7 +24,8 @@ class Post_Model
     this.postId,
     this.likes,
     this.isLiked,
-    this.commentsCount
+    this.commentsCount,
+    this.type,
   });
 
   Post_Model.fromJson(Map<String,dynamic> json)
@@ -35,10 +37,10 @@ class Post_Model
     text = json['text'];
     postImage = json['postImage'];
     postId = json['postId'];
-
     likes = json['likes'];
     isLiked = json['isLiked'];
     commentsCount = json['commentsCount'];
+    type = json['type'];
 
   }
 
@@ -74,6 +76,9 @@ class Post_Model
 
       if(commentsCount != null)
         'commentsCount':commentsCount,
+
+      if(type != null)
+        'type':type,
 
     };
   }

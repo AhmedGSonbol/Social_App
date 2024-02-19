@@ -18,3 +18,15 @@ Color fontColor(context)
     return Colors.black;
   }
 }
+
+Color backgroundColor(context)
+{
+  if(AppCubit.get(context).isDarkMode)
+  {
+    return darkColor;
+  }
+  else
+  {
+    return Colors.white;
+  }
+}

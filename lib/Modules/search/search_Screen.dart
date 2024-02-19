@@ -28,6 +28,7 @@ class SearchScreen extends StatelessWidget
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
+
             appBar: AppBar(
               title: Text(lang.search()),
             ),

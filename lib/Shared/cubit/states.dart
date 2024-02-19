@@ -181,6 +181,8 @@ class AppInternetConnectionFaildState extends AppStates{}
 
 class AppChangeAppLangState extends AppStates{}
 
+class AppChangePostTypeState extends AppStates{}
+
 class AppChangeAppModeState extends AppStates{}
 
 

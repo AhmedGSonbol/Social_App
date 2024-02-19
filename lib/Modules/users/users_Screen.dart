@@ -9,7 +9,8 @@ import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 
-class UsersScreen extends StatelessWidget {
+class UsersScreen extends StatelessWidget
+{
   const UsersScreen({Key? key}) : super(key: key);
 
   @override
@@ -29,7 +30,8 @@ class UsersScreen extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).users[index],context,lang),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: AppCubit.get(context).users.length
+            itemCount: AppCubit.get(context).users.length,
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :
         Center(child: CircularProgressIndicator())

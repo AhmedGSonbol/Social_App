@@ -16,7 +16,7 @@ class Chat_Details_Screen extends StatelessWidget
 
   var messageController = TextEditingController();
 
-  final ScrollController scrollController = ScrollController();
+  // final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class Chat_Details_Screen extends StatelessWidget
           {
             if (state is AppGetMessagesSuccessState)
             {
-              scrollController.jumpTo(scrollController.position.maxScrollExtent);
+              // scrollController.jumpTo(scrollController.position.maxScrollExtent);
             }
           },
           builder: (context, state)
@@ -44,6 +44,7 @@ class Chat_Details_Screen extends StatelessWidget
             return Directionality(
               textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: Scaffold(
+
                 appBar:defaultAppBar(
                     context: context,
                     title: buildUserItem(
@@ -53,22 +54,6 @@ class Chat_Details_Screen extends StatelessWidget
                       isSmallImg: true
                     ),
                 ),
-
-                // AppBar(
-                //   titleSpacing: 0.0,
-                //
-                //   title: Row(
-                //     children:
-                //     [
-                //       CircleAvatar(
-                //         radius: 20.0,
-                //         backgroundImage: NetworkImage('${receiver_Model.image}'),
-                //       ),
-                //       SizedBox(width: 15.0,),
-                //       Text('${receiver_Model.name}')
-                //     ],
-                //   ),
-                // ),
                 body:
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -77,7 +62,7 @@ class Chat_Details_Screen extends StatelessWidget
                     [
                       if (cubit.messages.isNotEmpty) Expanded(
                         child: ListView.separated(
-                          controller: scrollController,
+                          // controller: scrollController,
                           physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index)
                             {
@@ -112,10 +97,8 @@ class Chat_Details_Screen extends StatelessWidget
                                 receiverId: receiver_Model.uId!,
                                 datetime: DateTime.now().toString(),
                                 text: messageController.text,
-                              ).then((value)
-                              {
-                                messageController.text = '';
-                              });
+                              );
+                              messageController.text = '';
                             }
 
                           })
@@ -149,7 +132,7 @@ class Chat_Details_Screen extends StatelessWidget
               vertical: 5.0,
               horizontal: 10.0
           ),
-          child: Text(message,style: Theme.of(context).textTheme.titleMedium,)),
+          child: Text(message,style: TextStyle(color: Colors.white),)),
     );
   }
 
@@ -170,7 +153,7 @@ class Chat_Details_Screen extends StatelessWidget
               vertical: 5.0,
               horizontal: 10.0
           ),
-          child: Text(message)),
+          child: Text(message,style: TextStyle(color: Colors.black),)),
     );
   }
 }

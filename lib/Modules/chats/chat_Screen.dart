@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
@@ -17,16 +18,20 @@ class ChatsScreen extends StatelessWidget {
         listener: (context, state) {},
       builder: (context, state)
       {
+
+        AppLang lang = AppLang(context);
+
         return AppCubit.get(context).usersChatWith.isNotEmpty && AppCubit.get(context).user_model != null
             ?
         ListView.separated(
             physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildChatItem(AppCubit.get(context).usersChatWith[index],context),
+            itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).usersChatWith[index],context,lang,isChatScreen: true),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: AppCubit.get(context).users.length
+            itemCount: AppCubit.get(context).usersChatWith.length,
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :
-            Center(child: CircularProgressIndicator())
+            Center(child: Text(lang.noChats(),style: Theme.of(context).textTheme.titleMedium,))
         ;
 
       },

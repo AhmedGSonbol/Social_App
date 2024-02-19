@@ -22,8 +22,8 @@ class DioHelper {
     required Map<String, dynamic> data,
   }) async
   {
-    print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
-    print(data);
+    // print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
+    // print(data);
     return await dio.post(
       '',
       data: data

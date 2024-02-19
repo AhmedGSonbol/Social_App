@@ -97,6 +97,11 @@ class AppLang
     return isEn ? 'Public' : 'عام';
   }
 
+  String privatePost()
+  {
+    return isEn ? 'Private' : 'خاص';
+  }
+
    String noPosts()
   {
     return isEn ? 'No Posts !' : 'لا يوجد منشورات !';
@@ -407,6 +412,11 @@ class AppLang
   String deletePostSuccess()
   {
     return isEn ? 'The post has been successfully deleted !' : 'تم حذف المنشور بنجاح !';
+  }
+
+  String noChats()
+  {
+    return isEn ? 'There is no chats yet !' : 'لا يوجد محادثات !';
   }
 
 
