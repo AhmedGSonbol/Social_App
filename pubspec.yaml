@@ -56,6 +56,10 @@ dependencies:
   permission_handler:
 #  connectivity_plus: ^5.0.2
   readmore: ^2.2.0
+  flutter_svg:
+  responsive_builder: ^0.7.0
+  flutter_facebook_auth:
+  google_sign_in: ^6.1.6
 
 
 

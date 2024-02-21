@@ -63,7 +63,7 @@ class Chat_Details_Screen extends StatelessWidget
                       if (cubit.messages.isNotEmpty) Expanded(
                         child: ListView.separated(
                           // controller: scrollController,
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index)
                             {
                               if(cubit.messages[index].receiverId != receiver_Model.uId )
@@ -75,7 +75,7 @@ class Chat_Details_Screen extends StatelessWidget
                                 return buildMyMessages(cubit.messages[index].text!,context);
                               }
                             },
-                            separatorBuilder: (context, index) => SizedBox(height: 15.0,),
+                            separatorBuilder: (context, index) => const SizedBox(height: 15.0,),
                             itemCount: cubit.messages.length,
                         ),
                       )
@@ -121,18 +121,18 @@ class Chat_Details_Screen extends StatelessWidget
       alignment: AlignmentDirectional.centerEnd,
       child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
                 topLeft: Radius.circular(10.0),
               ),
               color: defaultColor.withOpacity(0.7)
           ),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: 5.0,
               horizontal: 10.0
           ),
-          child: Text(message,style: TextStyle(color: Colors.white),)),
+          child: Text(message,style: const TextStyle(color: Colors.white),)),
     );
   }
 
@@ -142,18 +142,18 @@ class Chat_Details_Screen extends StatelessWidget
       alignment: AlignmentDirectional.centerStart,
       child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomRight: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
                 topLeft: Radius.circular(10.0),
               ),
               color: Colors.grey[300]
           ),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: 5.0,
               horizontal: 10.0
           ),
-          child: Text(message,style: TextStyle(color: Colors.black),)),
+          child: Text(message,style: const TextStyle(color: Colors.black),)),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:social_app/Modules/edit_profile/edit_profile_screen.dart';
 import 'package:social_app/Modules/home/home_Screen.dart';
 import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,11 +25,12 @@ import 'Modules/new_post/new_Post_Screen.dart';
 
 
 
+
 void main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    
+
   );
   Bloc.observer = MyBlocObserver();
   await CachHelper.init();
@@ -49,16 +51,18 @@ void main() async
   String lang = 'en';
 
 
-  uId = CachHelper.getData(key: 'uId');
+  uId = CachHelper.getData(key: 'uId') ?? '';
 
-  if (uId != null)
+  if (uId != '')
   {
-    startScreen = Home_Screen();
+    startScreen = const Home_Screen();
   }
   else
   {
     startScreen = Login_Screen();
   }
+
+  // uId = '5qhouenCOFh8dehxpwxGB6dfOdl2';
 
 
   if(CachHelper.getData(key: 'isdarkmode')!= null)

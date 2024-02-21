@@ -45,7 +45,7 @@ class RegisterScreen extends StatelessWidget
 
             AppCubit.get(context).getAppData();
 
-            navAndFinishTo(context, Home_Screen());
+            navAndFinishTo(context, const Home_Screen());
           });
 
         }
@@ -90,7 +90,7 @@ class RegisterScreen extends StatelessWidget
 
 
 
-                      SizedBox(height: 30,),
+                      const SizedBox(height: 30,),
 
 
                       myTextFormField(
@@ -108,7 +108,7 @@ class RegisterScreen extends StatelessWidget
 
                           }
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
 
                       myTextFormField(
                           context: context,
@@ -130,7 +130,7 @@ class RegisterScreen extends StatelessWidget
 
                           }
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
 
                       myTextFormField(
                           context: context,
@@ -152,7 +152,7 @@ class RegisterScreen extends StatelessWidget
 
                           }
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
 
                       myTextFormField(
                           context: context,
@@ -164,7 +164,7 @@ class RegisterScreen extends StatelessWidget
                           {
                             if(formKey.currentState!.validate())
                             {
-                              cubit.userRegister(context,email: emailController.text, Password: passwordController.text ,name:nameController.text,phone:phoneController.text );
+                              cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
                             }
                           },
                           prefixIcon: Icons.lock_outline,
@@ -190,7 +190,7 @@ class RegisterScreen extends StatelessWidget
                             }
                           }
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
 
                       state is! RegisterLoadingState
                           ?
@@ -198,12 +198,12 @@ class RegisterScreen extends StatelessWidget
                       {
                         if(formKey.currentState!.validate())
                         {
-                          cubit.userRegister(context,email: emailController.text, Password: passwordController.text ,name:nameController.text,phone:phoneController.text );
+                          cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
                         }
 
                       })
                           :
-                      Center(
+                      const Center(
                         child: CircularProgressIndicator(),
                       ),
 

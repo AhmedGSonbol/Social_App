@@ -24,7 +24,7 @@ class New_Post_Screen extends StatelessWidget
     postTextController.text = postModel?.text ?? '';
 
     AppCubit.get(context).postImageURL = postModel?.postImage == '' ? null :postModel?.postImage;
-    print(AppCubit.get(context).postImageURL);
+    // print(AppCubit.get(context).postImageURL);
 
 
     return BlocConsumer<AppCubit,AppStates>
@@ -125,10 +125,10 @@ class New_Post_Screen extends StatelessWidget
                 [
                   //Indecator
                   if(state is AppCreatePostLoadingState || state is AppUpdatePostLoadingState)
-                    LinearProgressIndicator(),
+                    const LinearProgressIndicator(),
 
                   if(state is AppCreatePostLoadingState || state is AppUpdatePostLoadingState)
-                    SizedBox(height: 10.0,),
+                    const SizedBox(height: 10.0,),
 
                   //User Card
                   Row(
@@ -138,7 +138,7 @@ class New_Post_Screen extends StatelessWidget
                         radius: 25.0,
                         backgroundImage: NetworkImage('${userModer.image?.replaceAll('"', '')}'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15.0,
                       ),
                       Expanded(
@@ -189,7 +189,7 @@ class New_Post_Screen extends StatelessWidget
                   //Content
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.symmetric(
                         vertical: 10.0
                       ),
                       decoration: BoxDecoration(
@@ -225,7 +225,7 @@ class New_Post_Screen extends StatelessWidget
                   //Picked Image
                   if(cubit.postImage != null || cubit.postImageURL != null)
                     Container(
-                      padding: EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2.0),
                       decoration: BoxDecoration(
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(10.0)
@@ -249,7 +249,7 @@ class New_Post_Screen extends StatelessWidget
                         ),
 
                         IconButton(
-                          icon: CircleAvatar(
+                          icon: const CircleAvatar(
                             backgroundColor: Colors.red,
 
                             child: Icon(
@@ -282,7 +282,7 @@ class New_Post_Screen extends StatelessWidget
                             children:
                             [
                               Icon(IconBroken.Image,color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,),
-                              SizedBox(width: 5.0,),
+                              const SizedBox(width: 5.0,),
                               Text(lang.addPhoto(),style: Theme.of(context).textTheme.titleMedium,)
                             ],
 

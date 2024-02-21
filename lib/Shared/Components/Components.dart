@@ -64,7 +64,13 @@ Widget myTextButton({
   required String text,
   required BuildContext context,
   required void Function() function,
-}) => TextButton(child: Text(text.toUpperCase() , style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4)) , onPressed: function,);
+  Color? color,
+
+}) => TextButton(
+  child: Text(text.toUpperCase() ,
+      style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4,color: color ?? fontColor(context))) ,
+  onPressed: function,
+);
 
 
 
@@ -103,7 +109,7 @@ Widget myTextFormField({
         // ),
         enabledBorder: const OutlineInputBorder(
           // width: 0.0 produces a thin "hairline" border
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide:  BorderSide(color: Colors.grey),
         ),
         // border: const OutlineInputBorder()
     ),
@@ -406,7 +412,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
               [
                 CircleAvatar(
                   radius: 25.0,
-                  backgroundImage: NetworkImage('${model.image!.replaceAll('"', '')}'),
+                  backgroundImage: NetworkImage(model.image!.replaceAll('"', '')),
                 ),
                 const SizedBox(
                   width: 15.0,
@@ -417,7 +423,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                     children:
                     [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Flexible(
                             child: Text('${model.name}',
@@ -644,7 +650,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage('${model.postImage!.replaceAll('"', '')}'),
+                        image: NetworkImage(model.postImage!.replaceAll('"', '')),
                         fit: BoxFit.cover,
 
                       )
@@ -666,14 +672,12 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                 InkWell(
                   child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          child: const Icon(
-                            IconBroken.Heart,
-                            color: Colors.redAccent,
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Icon(
+                          IconBroken.Heart,
+                          color: Colors.redAccent,
 
-                          ),
                         ),
                       ),
                       Text('${model.likes}',
@@ -745,7 +749,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
             [
               CircleAvatar(
                 radius: 20.0,
-                backgroundImage: NetworkImage('${AppCubit.get(context).user_model!.image!.replaceAll('"', '')}'),
+                backgroundImage: NetworkImage(AppCubit.get(context).user_model!.image!.replaceAll('"', '')),
               ),
               const SizedBox(width: 10,),
               Expanded(
@@ -798,7 +802,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                         color: model.isLiked! ? Colors.white :  Colors.redAccent,
                       ),
                     ),
-                    Text(model.isLiked! ? lang.liked() : lang.like(),
+                    Text( lang.like(),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: model.isLiked! ? Colors.red : Colors.grey
                       ),),

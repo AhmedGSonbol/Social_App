@@ -10,7 +10,8 @@ import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 
 
-class Edit_profile_screen extends StatelessWidget {
+class Edit_profile_screen extends StatelessWidget
+{
 
 
   var nameEditController = TextEditingController();
@@ -46,7 +47,7 @@ class Edit_profile_screen extends StatelessWidget {
 
         var userModel = cubit.user_model!;
 
-        nameEditController.text = userModel.name! ;
+        nameEditController.text = userModel.name!;
         bioEditController.text = userModel.bio!;
         phoneEditController.text = userModel.phone!;
 
@@ -66,7 +67,7 @@ class Edit_profile_screen extends StatelessWidget {
                   {
                     cubit.updateUser(name: nameEditController.text, bio: bioEditController.text, phone: phoneEditController.text);
                   }),
-                  SizedBox(width: 10,)
+                  const SizedBox(width: 10,)
                 ]),
 
 
@@ -77,8 +78,10 @@ class Edit_profile_screen extends StatelessWidget {
                   children:
                   [
                     if(state is AppUserUpdatingState)
-                      LinearProgressIndicator(),
-                      SizedBox(height: 10.0,),
+                      const LinearProgressIndicator(),
+                      const SizedBox(height: 10.0,),
+
+
                     // cover and profile images
                     Container(
                       height: 190,
@@ -95,7 +98,7 @@ class Edit_profile_screen extends StatelessWidget {
                                   height: 140,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(4.0),
                                         topRight: Radius.circular(4.0),
                                       ),
@@ -110,7 +113,7 @@ class Edit_profile_screen extends StatelessWidget {
                                 coverImage == null
                                     ?
                                 IconButton(
-                                  icon: CircleAvatar(
+                                  icon: const CircleAvatar(
 
                                     child: Icon(
                                       IconBroken.Camera,
@@ -124,7 +127,7 @@ class Edit_profile_screen extends StatelessWidget {
                                 )
                                     :
                                 IconButton(
-                                  icon: CircleAvatar(
+                                  icon: const CircleAvatar(
                                     backgroundColor: Colors.red,
 
                                       child: Icon(
@@ -156,7 +159,7 @@ class Edit_profile_screen extends StatelessWidget {
                               profileImage == null
                                   ?
                               IconButton(
-                                icon: CircleAvatar(
+                                icon: const CircleAvatar(
 
                                   child: Icon(
                                     IconBroken.Camera,
@@ -170,7 +173,7 @@ class Edit_profile_screen extends StatelessWidget {
                               )
                                   :
                               IconButton(
-                                icon: CircleAvatar(
+                                icon: const CircleAvatar(
                                   backgroundColor: Colors.red,
 
                                   child: Icon(
@@ -189,9 +192,9 @@ class Edit_profile_screen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
 
-                    //edit name
+                    //name field
                     Row(
                       children:
                       [
@@ -213,7 +216,9 @@ class Edit_profile_screen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
+
+                    //bio field
                     Row(
                       children:
                       [
@@ -235,7 +240,9 @@ class Edit_profile_screen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
+
+                    //phone filed
                     Row(
                       children:
                       [
@@ -254,6 +261,74 @@ class Edit_profile_screen extends StatelessWidget {
                             },
                             context: context,
                           ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30,),
+
+                    //link your account with
+                    Center(child: Text(lang.linkYourAccountWith())),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    //facebook || google
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children:
+                          [
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                width: 60,
+                                child: Image.asset(
+                                  'assets/images/facebook.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              lang.linked(),
+                              style: const TextStyle(color: Colors.green),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                width: 60,
+                                child: Image.asset('assets/images/google.png',
+                                    width: 40, height: 40),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              lang.notLinked(),
+                              style: const TextStyle(color: Colors.red),
+                            )
+                          ],
                         ),
                       ],
                     ),

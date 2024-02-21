@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_app/Modules/home/home_Screen.dart';
 import 'package:social_app/Modules/login/cubit/cubit.dart';
 // import 'package:social_app/Modules/login/cubit/cubit.dart';
@@ -36,11 +37,26 @@ class Login_Screen extends StatelessWidget
 
                 AppCubit.get(context).getAppData();
 
-                navAndFinishTo(context, Home_Screen());
+                navAndFinishTo(context, const Home_Screen());
               });
 
 
           }
+
+          else if(state is GoogleLoginSuccessState)
+          {
+            CachHelper.saveData(key: 'uId', value: state.uId).then((value)
+            {
+              uId = state.uId;
+
+              AppCubit.get(context).getAppData();
+
+              navAndFinishTo(context, const Home_Screen());
+            });
+
+
+          }
+
           else if(state is LoginErrorState)
           {
 
@@ -64,109 +80,194 @@ class Login_Screen extends StatelessWidget
           var cubit = LoginCubit.get(context);
 
           return Scaffold(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 50.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                    [
-                      Center(child: Image(image: AssetImage('assets/images/shopping.png') , height: MediaQuery.of(context).size.height / 3,)),
-                      SizedBox(height: 15.0,),
-                      Text(lang.login(),
-                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                            color: fontColor(context)
-                        ),),
-                      // SizedBox(height: 10,),
-                      // Text(langLoginNowToBrowseOurHotOffers(context),
-                      //   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      //       color: Colors.grey
-                      //   ),),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      [
 
-                      SizedBox(height: 30,),
+                        //main picture
+                        Center(child: SvgPicture.asset('assets/images/login.svg' , height: MediaQuery.of(context).size.height / 3, )),
 
+                        //login text
+                        Text(lang.login(),
+                          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                              color: fontColor(context)
+                          ),),
+                        // SizedBox(height: 10,),
+                        // Text(langLoginNowToBrowseOurHotOffers(context),
+                        //   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        //       color: Colors.grey
+                        //   ),),
 
-                      myTextFormField(
-                          context: context,
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          labelText: lang.emailAddress(),
-                          prefixIcon: Icons.email_outlined,
-                          validator: (String? val)
-                          {
-                            if(val!.isEmpty)
+                        const SizedBox(height: 30,),
+
+                        //email field
+                        myTextFormField(
+                            context: context,
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            labelText: lang.emailAddress(),
+                            prefixIcon: Icons.email_outlined,
+                            validator: (String? val)
                             {
-                              return lang.checkEmailAddressField();
-                            }
-
-                          }
-                      ),
-                      SizedBox(height: 15.0),
-                      myTextFormField(
-                          context: context,
-                          controller: passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          labelText: lang.password(),
-                          isPassword: cubit.isSecure,
-                          onFieldSubmitted: (val)
-                          {
-                            if(formKey.currentState!.validate())
-                            {
-                              cubit.userLogin(context,Email: emailController.text, Password: passwordController.text);
-                            }
-                          },
-                          prefixIcon: Icons.lock_outline,
-                          // suffixIcon: Icon(Icons.visibility),
-                          // SuffixOnPressed: (){},
-                          suffixButtonIcon: IconButton(
-                              icon: Icon(cubit.passIcon),
-                              onPressed: ()
+                              if(val!.isEmpty)
                               {
-                                cubit.changePassVisibility();
+                                return lang.checkEmailAddressField();
                               }
-                          ),
-                          validator: (String? val)
-                          {
-                            if(val!.isEmpty)
-                            {
-                              return lang.checkPasswordField();
+
                             }
-                          }
-                      ),
-                      SizedBox(height: 15.0),
+                        ),
+                        const SizedBox(height: 15.0),
 
-                      state is! LoginLoadingState
-                          ?
-                      myButton(text: lang.login(), function: ()
-                      {
-                        if(formKey.currentState!.validate())
+                        //password field
+                        myTextFormField(
+                            context: context,
+                            controller: passwordController,
+                            keyboardType: TextInputType.visiblePassword,
+                            labelText: lang.password(),
+                            isPassword: cubit.isSecure,
+                            onFieldSubmitted: (val)
+                            {
+                              if(formKey.currentState!.validate())
+                              {
+                                cubit.userLogin(context,email: emailController.text, password: passwordController.text);
+                              }
+                            },
+                            prefixIcon: Icons.lock_outline,
+                            // suffixIcon: Icon(Icons.visibility),
+                            // SuffixOnPressed: (){},
+                            suffixButtonIcon: IconButton(
+                                icon: Icon(cubit.passIcon),
+                                onPressed: ()
+                                {
+                                  cubit.changePassVisibility();
+                                }
+                            ),
+                            validator: (String? val)
+                            {
+                              if(val!.isEmpty)
+                              {
+                                return lang.checkPasswordField();
+                              }
+                            }
+                        ),
+                        const SizedBox(height: 15.0),
+
+                        //login button
+                        state is! LoginLoadingState
+                            ?
+                        myButton(text: lang.login(), function: ()
                         {
-                          cubit.userLogin(context,Email: emailController.text, Password: passwordController.text);
-                        }
-
-                      })
-                          :
-                      Center(
-                        child: CircularProgressIndicator(),
-                      ),
-
-                      SizedBox(height: 15.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:
-                        [
-                          Text(lang.donotHaveAnAcc(),style: TextStyle(color: fontColor(context)),),
-                          myTextButton(context: context,text: lang.register(), function: ()
+                          if(formKey.currentState!.validate())
                           {
+                            cubit.userLogin(context,email: emailController.text, password: passwordController.text);
+                          }
 
-                             navTo(context, RegisterScreen());
-                          })
+                        })
+                            :
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ),
 
-                        ],
-                      ),
-                    ],
+                        const SizedBox(height: 15.0),
+
+                        //or continue with
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children:
+                            [
+                              Expanded(
+
+                                child: Container(
+                                  height: 1,
+                                  color: Colors.grey.shade500,
+                                ),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Center(child: Text(lang.orContinueWith() , maxLines: 1,style: TextStyle(color: Colors.grey.shade700),)),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 1,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 20,),
+
+                        //facebook || google
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:
+                          [
+                            InkWell(
+                              onTap: ()
+                              {
+                                cubit.signInWithFacebook();
+                              },
+                              child: SizedBox(
+                                width: 60,
+                                child: Image.asset('assets/images/facebook.png',width: 40,height: 40,),
+                              ),
+                            ),
+
+                            const SizedBox(width: 10,),
+
+                            Container(
+                              width: 1,
+                              height: 25,
+                              color: Colors.grey,
+
+                            ),
+
+                            const SizedBox(width: 10,),
+                            InkWell(
+                              onTap: ()
+                              {
+                                cubit.signInWithGoogle();
+                              },
+                              child: SizedBox(
+                                width: 60,
+                                child: Image.asset('assets/images/google.png',width: 40,height: 40),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        //do not have an account
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:
+                          [
+                            Text(lang.donotHaveAnAcc(),style: TextStyle(color: fontColor(context)),),
+                            myTextButton(context: context,text: lang.register(),color: defaultColor, function: ()
+                            {
+
+                               navTo(context, RegisterScreen());
+                            })
+
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

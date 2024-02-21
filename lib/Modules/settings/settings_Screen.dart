@@ -24,7 +24,13 @@ class Settings_Screen extends StatelessWidget
   {
 
     return BlocConsumer<AppCubit , AppStates>(
-      listener: (context, state) {},
+      listener: (context, state)
+      {
+        if(state is AppLogoutErrorState)
+        {
+          myToast(msg: AppLang(context).connectionError(), state: ToastStates.ERROR);
+        }
+      },
       builder: (context, state)
       {
         AppLang lang = AppLang(context);
@@ -67,7 +73,7 @@ class Settings_Screen extends StatelessWidget
                         ),
                       ),
 
-                      SizedBox(height: 50.0,),
+                      const SizedBox(height: 50.0,),
 
                       Row(
                         children:
@@ -84,7 +90,7 @@ class Settings_Screen extends StatelessWidget
                                     fontSize: 25.0
                                 ),
                               ),
-                              SizedBox(height: 20.0,),
+                              const SizedBox(height: 20.0,),
                               Text(
                                 lang.language() ,
                                 style: Theme.of(context)
@@ -97,7 +103,7 @@ class Settings_Screen extends StatelessWidget
                             ],
                           ),
 
-                          SizedBox(width: 30.0,),
+                          const SizedBox(width: 30.0,),
 
                           Column(
                             children:
@@ -117,7 +123,7 @@ class Settings_Screen extends StatelessWidget
                                     }
                                 ),
                               ),
-                              SizedBox(height: 20.0,),
+                              const SizedBox(height: 20.0,),
                               Center(
                                   child: DropdownButton(
                                     value:  langs[0] ,
@@ -156,7 +162,7 @@ class Settings_Screen extends StatelessWidget
 
                         ],
                       ),
-                      SizedBox(height: 20.0,),
+                      const SizedBox(height: 20.0,),
 
 
 
@@ -168,29 +174,13 @@ class Settings_Screen extends StatelessWidget
                              navTo(context, About_Debeloper_Screen());
                           }),
 
-                      SizedBox(height: 20.0,),
+                      const SizedBox(height: 20.0,),
 
                       myButton(
                           text: lang.logout(),
                           function: ()
                           {
-                            FirebaseMessaging.instance.deleteToken().then((TokenValue)
-                            {
-                              FirebaseFirestore.instance.collection('users').doc(uId).update(
-                                  {
-                                    'FCM_token':''
-                                  }
-                              ).then((val)
-                              {
-                                CachHelper.removeData(key: 'uId').then((value)
-                                {
-                                  uId = '';
-                                  navAndFinishTo(context, Login_Screen());
-
-                                  cubit.currentNavIndex = 0;
-                                });
-                              });
-                            });
+                            cubit.logout(context);
                           }),
                     ],
                   ),

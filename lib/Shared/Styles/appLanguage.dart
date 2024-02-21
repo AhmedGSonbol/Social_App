@@ -144,13 +144,13 @@ class AppLang
 
   String like()
   {
-    return isEn ? 'Like' : 'إعجاب';
+    return isEn ? 'Like' : 'اعجبني';
   }
 
-  String liked()
-  {
-    return isEn ? 'liked' : 'اعجبني';
-  }
+  // String liked()
+  // {
+  //   return isEn ? 'liked' : 'اعجبني';
+  // }
 
   String writeAComment()
   {
@@ -215,7 +215,7 @@ class AppLang
 
   String settings()
   {
-    return isEn ? 'Name' : 'الإعدادات';
+    return isEn ? 'Settings' : 'الإعدادات';
   }
 
   String darkmode()
@@ -419,7 +419,31 @@ class AppLang
     return isEn ? 'There is no chats yet !' : 'لا يوجد محادثات !';
   }
 
+  String connectionError()
+  {
+    return isEn ? 'Connection Error, Please connect to the internet !' : 'خطأ في الإتصال , برجاء الاتصال بالإنترنت !';
+  }
 
+
+  String orContinueWith()
+  {
+    return isEn ? 'or continue with' : 'تسجيل الدخول بواسطة';
+  }
+
+  String linkYourAccountWith()
+  {
+    return isEn ? 'Link your account with' : 'أربط حسابك بـ';
+  }
+
+  String linked()
+  {
+    return isEn ? 'Linked' : 'مُرتبط';
+  }
+
+  String notLinked()
+  {
+    return isEn ? 'Not linked' : 'غير مُرتبط';
+  }
 
 
 

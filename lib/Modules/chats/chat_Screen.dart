@@ -24,7 +24,7 @@ class ChatsScreen extends StatelessWidget {
         return AppCubit.get(context).usersChatWith.isNotEmpty && AppCubit.get(context).user_model != null
             ?
         ListView.separated(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).usersChatWith[index],context,lang,isChatScreen: true),
             separatorBuilder: (context, index) => myDivider(),
             itemCount: AppCubit.get(context).usersChatWith.length,
@@ -56,11 +56,11 @@ class ChatsScreen extends StatelessWidget {
               radius: 25.0,
               backgroundImage: NetworkImage('${model.image}'),
             ),
-            SizedBox(
+            const SizedBox(
               width: 15.0,
             ),
             Text('${model.name}',
-              style: TextStyle(
+              style: const TextStyle(
                   height: 1.4
               ),
             ),

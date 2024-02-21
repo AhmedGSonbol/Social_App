@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/message_Model.dart';
@@ -19,6 +20,7 @@ import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/chat_Details/chat_Details_Screen.dart';
 import 'package:social_app/Modules/chats/chat_Screen.dart';
 import 'package:social_app/Modules/feeds/feeds_Screen.dart';
+import 'package:social_app/Modules/login/login_Screen.dart';
 import 'package:social_app/Modules/new_post/new_Post_Screen.dart';
 import 'package:social_app/Modules/profile/profile_Screen.dart';
 import 'package:social_app/Modules/users/users_Screen.dart';
@@ -173,7 +175,7 @@ class AppCubit extends Cubit<AppStates>
   void checkForEmailVerification()
   {
 
-    myTimer = Timer.periodic(Duration(seconds: 5), (timer)
+    myTimer = Timer.periodic(const Duration(seconds: 5), (timer)
     {
       FirebaseAuth.instance.currentUser!.reload().then((value)
       {
@@ -1338,6 +1340,43 @@ class AppCubit extends Cubit<AppStates>
 
     return model;
 
+  }
+
+  Future<void> logout(BuildContext context)async
+  {
+    emit(AppLogoutLoadingState());
+
+    await FirebaseMessaging.instance.deleteToken().then((tokenValue)
+    {
+      FirebaseFirestore.instance.collection('users').doc(uId).update(
+          {
+            'FCM_token':''
+          }
+      ).then((val)
+      {
+
+        if(FirebaseAuth.instance.currentUser!.providerData[0].providerId == 'google.com')
+        {
+          print('sign out from google');
+          GoogleSignIn().signOut();
+        }
+        // {
+        //
+        // }
+
+        CachHelper.removeData(key: 'uId').then((value)
+        {
+          uId = '';
+          navAndFinishTo(context, Login_Screen());
+
+          currentNavIndex = 0;
+        });
+      });
+    }).catchError((err)
+    {
+      print(err.toString());
+      emit(AppLogoutErrorState());
+    });
   }
 
 

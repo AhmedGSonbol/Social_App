@@ -37,7 +37,7 @@ ThemeData darkTheme = ThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: defaultColor,
     unselectedItemColor: Colors.white70,
-    selectedLabelStyle: TextStyle(color: Colors.orange, fontSize: 15.0),
+    selectedLabelStyle: const TextStyle(color: Colors.orange, fontSize: 15.0),
     elevation: 20.0,
     backgroundColor: darkColor,
 
@@ -76,13 +76,13 @@ ThemeData darkTheme = ThemeData(
 
   hintColor: Colors.white,
 
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
     elevation: 10.0,
   ),
 
-  popupMenuTheme: PopupMenuThemeData(
+  popupMenuTheme: const PopupMenuThemeData(
     color: Colors.grey,
 
   ),
@@ -127,7 +127,7 @@ ThemeData lightTheme = ThemeData(
       ),
       iconTheme: IconThemeData(color: Colors.black)),
 
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       selectedItemColor: defaultColor,
       selectedLabelStyle:

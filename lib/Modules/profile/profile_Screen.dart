@@ -39,11 +39,12 @@ class ProfileScreen extends StatelessWidget
         AppLang lang = AppLang(context);
 
         return SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children:
             [
               Container(
+                // padding: EdgeInsets.symmetric(horizontal: 15.0),
                 color: backgroundColor(context),
                 child: Column(
                   children:
@@ -58,7 +59,7 @@ class ProfileScreen extends StatelessWidget
                               height: 140,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(4.0),
                                     topRight: Radius.circular(4.0),
                                   ),
@@ -83,12 +84,22 @@ class ProfileScreen extends StatelessWidget
                         ],
                       ),
                     ),
-                    Text('${userModel!.name}',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    const SizedBox(height: 15.0,),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(children:
+                      [
+                        Text('${userModel!.name}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Text('${userModel!.bio}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                      ),
                     ),
-                    Text('${userModel!.bio}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 20.0
@@ -194,11 +205,11 @@ class ProfileScreen extends StatelessWidget
                                   }
                                 },
                                 style: OutlinedButton.styleFrom(
-                                  side: BorderSide( color: Colors.grey),
+                                  side: const BorderSide( color: Colors.grey),
                                 ),
                               )
                           ),
-                          SizedBox(width: 10.0,),
+                          const SizedBox(width: 10.0,),
                           OutlinedButton(
 
                             child: Icon(
@@ -211,7 +222,7 @@ class ProfileScreen extends StatelessWidget
                               navTo(context, Edit_profile_screen());
                             },
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide( color: Colors.grey),
+                              side: const BorderSide( color: Colors.grey),
                             ),
                           )
 
@@ -219,7 +230,7 @@ class ProfileScreen extends StatelessWidget
                       ),
                     )
                         :
-                    SizedBox(),
+                    const SizedBox(),
 
                   ],
                 ),
@@ -245,9 +256,9 @@ class ProfileScreen extends StatelessWidget
                     child: Text(lang.noPosts(),style: Theme.of(context).textTheme.titleMedium,),
                   )
                   :
-                  Padding(
-                    padding: const EdgeInsets.only(top:15.0 ),
-                    child: const CircularProgressIndicator(),
+                  const Padding(
+                    padding: EdgeInsets.only(top:15.0 ),
+                    child: CircularProgressIndicator(),
                   )
 
             ],

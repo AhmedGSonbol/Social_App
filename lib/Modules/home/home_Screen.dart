@@ -34,8 +34,8 @@ class Home_Screen extends StatelessWidget
     List<Widget> navScreens =
     [
       FeedsScreen(),
-      ChatsScreen(),
-      UsersScreen(),
+      const ChatsScreen(),
+      const UsersScreen(),
       ProfileScreen(),
     ];
 
@@ -79,7 +79,7 @@ class Home_Screen extends StatelessWidget
 
 
         return Scaffold(
-          backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  Color.fromRGBO(240, 240, 240, 1),
+          backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
           appBar: AppBar(
             title: Text(
                 titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
@@ -90,7 +90,7 @@ class Home_Screen extends StatelessWidget
                     ?
                     [
                       IconButton(
-                        icon: Icon(IconBroken.Setting),
+                        icon: const Icon(IconBroken.Setting),
                         onPressed: ()
                         {
                           navTo(context, Settings_Screen());
@@ -107,10 +107,10 @@ class Home_Screen extends StatelessWidget
               // ),
 
               IconButton(
-                icon: Icon(IconBroken.Search),
+                icon: const Icon(IconBroken.Search),
                 onPressed: ()
                 {
-                  navTo(context,SearchScreen());
+                  navTo(context,const SearchScreen());
                 },
               ),
             ],
@@ -118,7 +118,7 @@ class Home_Screen extends StatelessWidget
           body:  ((){
             if(cubit.user_model == null)
             {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             else
             {
@@ -163,7 +163,7 @@ class Home_Screen extends StatelessWidget
                           [
                             Icon(Icons.info_outline,color: fontColor(context),),
 
-                            SizedBox(width: 15,),
+                            const SizedBox(width: 15,),
 
                             Expanded(child: Text(lang.verifyYourEmail(),style: Theme.of(context).textTheme.titleMedium,)),
 
@@ -182,7 +182,7 @@ class Home_Screen extends StatelessWidget
                       ),
                     )
                   else
-                    SizedBox(),
+                    const SizedBox(),
 
                   Expanded(
                     child: navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
@@ -205,13 +205,13 @@ class Home_Screen extends StatelessWidget
               items: 
               [
                 BottomNavigationBarItem(
-                    icon: Icon(
+                    icon: const Icon(
                       IconBroken.Home
                     ),
                   label: lang.feeds()
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                       IconBroken.Chat,
                   ),
                     label: lang.chats()
@@ -225,13 +225,13 @@ class Home_Screen extends StatelessWidget
                   backgroundColor: Colors.red
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                       IconBroken.User
                   ),
                     label: lang.users()
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                       IconBroken.Profile
                   ),
                     label: lang.profile()

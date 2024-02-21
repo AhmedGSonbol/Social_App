@@ -185,5 +185,9 @@ class AppChangePostTypeState extends AppStates{}
 
 class AppChangeAppModeState extends AppStates{}
 
+class AppLogoutLoadingState extends AppStates{}
+
+class AppLogoutErrorState extends AppStates{}
+
 
 

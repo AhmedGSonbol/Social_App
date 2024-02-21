@@ -34,11 +34,11 @@ class View_User_Profile_Screen extends StatelessWidget
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  Color.fromRGBO(240, 240, 240, 1),
+            backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
             appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
             body: ProfileScreen(userModel: userModel,),
             floatingActionButton: FloatingActionButton(
-              child: Icon(IconBroken.Message,size: 25.0),
+              child: const Icon(IconBroken.Message,size: 25.0),
                 onPressed: ()
                 {
                   if(!AppCubit.get(context).user_model!.isEmailVrified!)

@@ -10,7 +10,7 @@ class About_Debeloper_Screen extends StatelessWidget
     return Scaffold(
       appBar: AppBar(),
       body: ContactUs(
-        logo: AssetImage('assets/images/me.jpg'),
+        logo: const AssetImage('assets/images/me.jpg'),
         email: 'ahmedsonbl9@gmail.com.com',
         companyName: 'Ahmed Sonbol',
         phoneNumber: '+201064410263',

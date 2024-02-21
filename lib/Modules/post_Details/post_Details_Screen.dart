@@ -10,6 +10,7 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'dart:ui' as ui;
 
 class Post_Details_Screen extends StatelessWidget {
   Post_Details_Screen({required this.post_model } );
@@ -22,16 +23,15 @@ class Post_Details_Screen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state)
       {
-
         AppLang lang = AppLang(context);
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Center(
-              child: Text(lang.postComments()),
-            ),
+        return Directionality(
+          textDirection: ui.TextDirection.rtl,
+          child: Scaffold(
+
+            appBar:defaultAppBar(context: context,title:  Text(lang.postComments()),),
+            body: buildPostItem(post_model , context,lang),
           ),
-          body: buildPostItem(post_model , context,lang),
         );
 
       },
@@ -147,14 +147,12 @@ class Post_Details_Screen extends StatelessWidget {
                           InkWell(
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: const Icon(
-                                      IconBroken.Heart,
-                                      color: Colors.redAccent,
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    IconBroken.Heart,
+                                    color: Colors.redAccent,
 
-                                    ),
                                   ),
                                 ),
                                 Text('${model.likes}',
@@ -372,7 +370,7 @@ class Post_Details_Screen extends StatelessWidget {
                }
                else
                {
-                 return Center(child: CircularProgressIndicator());
+                 return const Center(child: CircularProgressIndicator());
                }
              }
              else

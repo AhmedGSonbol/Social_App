@@ -38,7 +38,7 @@ class SearchScreen extends StatelessWidget
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: mySendMessageSection(
-                    icon: Icon(IconBroken.Search,color: Colors.white,),
+                    icon: const Icon(IconBroken.Search,color: Colors.white,),
                       context: context,
                       messageController: searchController,
                       onPressed: ()
@@ -61,7 +61,7 @@ class SearchScreen extends StatelessWidget
                     child:AppCubit.get(context).searchUsersList.isNotEmpty && AppCubit.get(context).user_model != null && searchController.text.isNotEmpty
                         ?
                     ListView.separated(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).searchUsersList[index],context,lang),
                         separatorBuilder: (context, index) => myDivider(),
                         itemCount: AppCubit.get(context).searchUsersList.length
