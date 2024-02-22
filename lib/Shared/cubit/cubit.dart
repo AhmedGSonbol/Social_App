@@ -370,12 +370,14 @@ class AppCubit extends Cubit<AppStates>
       image: profileImageURL,
       cover: coverImageURL,
 
-
     );
 
+    // update current user data remotely
     FirebaseFirestore.instance.collection('users').doc(uId).
-    update(model.toMap()).then((value) {
-      if (name != user_model!.name || profile_image != null) {
+    update(model.toMap()).then((value)
+    {
+      if (name != user_model!.name || profile_image != null)
+      {
         allPosts.forEach((ele)
         {
           if (ele.name == user_model!.name) {
@@ -391,15 +393,39 @@ class AppCubit extends Cubit<AppStates>
       }
 
 
-      getUserData().then((value) {
-        cover_image = null;
-        coverImageURL = null;
-        profile_image = null;
-        profileImageURL = null;
+      //delete images remotely
+      if(profile_image != null && user_model!.image != profileImageURL)
+      {
+        deletePostImage(url: user_model!.image!);
+      }
+
+      if(cover_image != null && user_model!.cover != coverImageURL)
+      {
+        deletePostImage(url: user_model!.cover!);
+      }
 
 
-        emit(AppUserUpdateSuccessState());
-      });
+
+      // update current user data locally
+
+      user_model!.name = name ?? user_model!.name;
+      user_model!.phone = phone ?? user_model!.phone;
+      user_model!.bio = bio ?? user_model!.bio;
+      user_model!.image = profileImageURL ?? user_model!.image;
+      user_model!.cover = coverImageURL ?? user_model!.cover;
+
+      emit(AppUserUpdateSuccessState());
+
+      // getUserData().then((value)
+      // {
+      //   cover_image = null;
+      //   coverImageURL = null;
+      //   profile_image = null;
+      //   profileImageURL = null;
+      //
+      //
+      //   emit(AppUserUpdateSuccessState());
+      // });
     }).catchError((err) {
       emit(AppUserUpdateErrorState());
       print(err.toString());

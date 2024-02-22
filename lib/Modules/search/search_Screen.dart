@@ -23,6 +23,7 @@ class SearchScreen extends StatelessWidget
       builder: (context, state)
       {
 
+        var cubit = AppCubit.get(context);
         AppLang lang = AppLang(context);
 
         return Directionality(
@@ -45,26 +46,26 @@ class SearchScreen extends StatelessWidget
                       {
                         if(searchController.text.isNotEmpty)
                         {
-                          AppCubit.get(context).searchForUser(searchController.text);
+                          cubit.searchForUser(searchController.text);
                         }
                       },
                     textChange: (text)
                     {
 
-                        AppCubit.get(context).searchForUser(text);
+                        cubit.searchForUser(text);
 
                     }
                   ),
                 ),
 
                 Expanded(
-                    child:AppCubit.get(context).searchUsersList.isNotEmpty && AppCubit.get(context).user_model != null && searchController.text.isNotEmpty
+                    child:cubit.searchUsersList.isNotEmpty && cubit.user_model != null && searchController.text.isNotEmpty
                         ?
                     ListView.separated(
                         physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).searchUsersList[index],context,lang),
+                        itemBuilder: (context, index) => buildUserItem(cubit.searchUsersList[index],context,lang),
                         separatorBuilder: (context, index) => myDivider(),
-                        itemCount: AppCubit.get(context).searchUsersList.length
+                        itemCount: cubit.searchUsersList.length
                     )
                         :
                     Center(child:Text(lang.searchResultWillBeShownHere(),style: Theme.of(context).textTheme.titleMedium,)),

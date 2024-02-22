@@ -445,6 +445,11 @@ class AppLang
     return isEn ? 'Not linked' : 'غير مُرتبط';
   }
 
+  String googleCancel()
+  {
+    return isEn ? 'Google registration has been canceled !' : 'تم إلغاء عملية التسجيل عبر جوجل !';
+  }
+
 
 
 

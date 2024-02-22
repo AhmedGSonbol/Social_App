@@ -23,6 +23,7 @@ class Post_Details_Screen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state)
       {
+
         AppLang lang = AppLang(context);
 
         return Directionality(
@@ -41,6 +42,8 @@ class Post_Details_Screen extends StatelessWidget {
   Widget buildPostItem(Post_Model model,context,AppLang lang)
   {
     var commentController = TextEditingController();
+
+    var cubit = AppCubit.get(context);
 
     return Column(
       children:
@@ -185,7 +188,7 @@ class Post_Details_Screen extends StatelessWidget {
                             {
                               if(model.commentsCount != 0)
                               {
-                                AppCubit.get(context).getPostComments(postID: model.postId!);
+                                cubit.getPostComments(postID: model.postId!);
                                 // myBottomSheet(
                                 //     context: context,
                                 //     model: model,
@@ -222,7 +225,7 @@ class Post_Details_Screen extends StatelessWidget {
                     //   [
                     //     CircleAvatar(
                     //       radius: 20.0,
-                    //       backgroundImage: NetworkImage('${AppCubit.get(context).user_model!.image}'),
+                    //       backgroundImage: NetworkImage('${cubit.user_model!.image}'),
                     //     ),
                     //     const SizedBox(width: 10,),
                     //     Expanded(
@@ -238,7 +241,7 @@ class Post_Details_Screen extends StatelessWidget {
                     //         {
                     //           if(model.commentsCount != 0)
                     //           {
-                    //             AppCubit.get(context).getPostComments(postID: model.postId!);
+                    //             cubit.getPostComments(postID: model.postId!);
                     //           }
                     //
                     //           // myBottomSheet(
@@ -273,7 +276,7 @@ class Post_Details_Screen extends StatelessWidget {
                     //       ),
                     //       onTap: ()
                     //       {
-                    //         AppCubit.get(context).likePost(postID: model.postId!);
+                    //         cubit.likePost(postID: model.postId!);
                     //       },
                     //     ),
                     //   ],
@@ -282,6 +285,7 @@ class Post_Details_Screen extends StatelessWidget {
                     buildCommentsSection(context: context,
                         commentController: commentController,
                         model: post_model,
+                      cubit: cubit,
                       lang: lang
                     )
                   ],
@@ -298,24 +302,11 @@ class Post_Details_Screen extends StatelessWidget {
           child: mySendMessageSection(
             context: context,
             messageController: commentController,
-            icon:
-            // state is AppCommentPostLoadingState
-            //     ?
-            // const SizedBox(
-            //     width: 15,
-            //     height: 15,
-            //     child: CircularProgressIndicator(color: Colors.white))
-            //
-            //     :
-            const Icon(
-              IconBroken.Send,
-              color: Colors.white,
-              size: 18.0,
-            ),
+
 
             onPressed: () {
               if (commentController.text.isNotEmpty) {
-                AppCubit.get(context).commentPost(
+                cubit.commentPost(
                     postID: model.postId!,
                     commentText: commentController.text,
                     datetime: DateTime.now().toString()
@@ -337,7 +328,8 @@ class Post_Details_Screen extends StatelessWidget {
     required BuildContext context,
     required Post_Model model,
     required TextEditingController commentController,
-    required AppLang lang
+    required AppLang lang,
+    required AppCubit cubit
 })
   {
     // return state is! AppGetCommentPostLoadingState
@@ -349,9 +341,9 @@ class Post_Details_Screen extends StatelessWidget {
            padding: const EdgeInsets.symmetric(vertical: 10),
            child:
            ((){
-             if(AppCubit.get(context).hasComments)
+             if(cubit.hasComments)
              {
-               if(AppCubit.get(context).postComments.isNotEmpty)
+               if(cubit.postComments.isNotEmpty)
                {
                  return ListView.builder(
                    shrinkWrap: true,
@@ -360,12 +352,13 @@ class Post_Details_Screen extends StatelessWidget {
                    {
                      return commentItem(
                          context: context,
-                         model: AppCubit.get(context).postComments[index],
+                         model: cubit.postComments[index],
                          postId: model.postId!,
+                       cubit: cubit,
                        lang: lang
                      );
                    },
-                   itemCount: AppCubit.get(context).postComments.length,
+                   itemCount: cubit.postComments.length,
                  );
                }
                else
@@ -396,6 +389,7 @@ class Post_Details_Screen extends StatelessWidget {
     required Comment_Model model,
     required String postId,
     required AppLang lang,
+    required AppCubit cubit,
   })
   {
     return Padding(
@@ -432,7 +426,7 @@ class Post_Details_Screen extends StatelessWidget {
                             cancelText: lang.cancel(),
                             okOnTap: ()
                             {
-                              AppCubit.get(context).deleteComment(postId: postId, commentId: model.commentId!);
+                              cubit.deleteComment(postId: postId, commentId: model.commentId!);
                             },
                         );
 

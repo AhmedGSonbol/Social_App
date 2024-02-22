@@ -323,39 +323,42 @@ Widget mySendMessageSection(
 
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Row(
-        children:
-        [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0
-              ),
-              child: TextFormField(
-                style: TextStyle(color: fontColor(context)),
-                onChanged: textChange,
-                controller: messageController,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: AppCubit.get(context).lang == 'en' ? 'Type your message here ...' : 'أكتب هنا ...',
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children:
+          [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0
+                ),
+                child: TextFormField(
+                  style: TextStyle(color: fontColor(context)),
+                  onChanged: textChange,
+                  controller: messageController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: AppCubit.get(context).lang == 'en' ? 'Type your message here ...' : 'أكتب هنا ...',
 
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
+            Container(
 
-            decoration: BoxDecoration(
-                color: defaultColor,
-              borderRadius: BorderRadius.circular(9.0)
-            ),
-            child: MaterialButton(
-              onPressed: onPressed,
-              minWidth: 1.0,
-              child: icon
-            ),
-          )
-        ],
+              decoration: BoxDecoration(
+                  color: defaultColor,
+                borderRadius: BorderRadius.circular(9.0)
+              ),
+              child: MaterialButton(
+                onPressed: onPressed,
+                minWidth: 1.0,
+                child: icon
+              ),
+            )
+          ],
+        ),
       ),
     ),
   );
@@ -392,7 +395,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 {
   var commentController = TextEditingController();
 
-
+  var cubit = AppCubit.get(context);
 
   return Card(
 
@@ -507,11 +510,11 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                       {
                         if(model.type == 'private')
                         {
-                          AppCubit.get(context).postType = 'private';
+                          cubit.postType = 'private';
                         }
                         else
                         {
-                          AppCubit.get(context).postType = 'public';
+                          cubit.postType = 'public';
                         }
                         navTo(context, New_Post_Screen(postModel: model,));
                       }
@@ -525,7 +528,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                             cancelText: lang.cancel(),
                             okOnTap: ()
                             {
-                              AppCubit.get(context).deletePost(postModel: model);
+                              cubit.deletePost(postModel: model);
                             },
                         );
                       }
@@ -540,11 +543,11 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 
                 if(model.uId == uId)
                 {
-                  AppCubit.get(context).changeBottomNav(4);
+                  cubit.changeBottomNav(4);
 
                 }else
                 {
-                  await AppCubit.get(context)
+                  await cubit
                       .getUserModelById(model.uId!)
                       .then((value) {
                     navTo(context, View_User_Profile_Screen(userModel: value));
@@ -710,13 +713,13 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   {
                     if(model.commentsCount != 0)
                     {
-                      AppCubit.get(context).getPostComments(postID: model.postId!);
+                      cubit.getPostComments(postID: model.postId!);
                       // myBottomSheet(
                       //     context: context,
                       //     model: model,
                       //   commentController: commentController
                       // );
-                      AppCubit.get(context).hasComments = true;
+                      cubit.hasComments = true;
                       navTo(context, Post_Details_Screen(post_model: model));
                     }
                     else
@@ -749,7 +752,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
             [
               CircleAvatar(
                 radius: 20.0,
-                backgroundImage: NetworkImage(AppCubit.get(context).user_model!.image!.replaceAll('"', '')),
+                backgroundImage: NetworkImage(cubit.user_model!.image!.replaceAll('"', '')),
               ),
               const SizedBox(width: 10,),
               Expanded(
@@ -763,7 +766,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   ),
                   onTap: ()
                   {
-                    if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                    if(!cubit.user_model!.isEmailVrified!)
                     {
                       myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                     }
@@ -771,13 +774,13 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                     {
                       if(model.commentsCount != 0)
                       {
-                        AppCubit.get(context).getPostComments(postID: model.postId!);
-                        AppCubit.get(context).hasComments = true;
+                        cubit.getPostComments(postID: model.postId!);
+                        cubit.hasComments = true;
                       }
                       else
                       {
-                        AppCubit.get(context).postComments = [];
-                        AppCubit.get(context).hasComments = false;
+                        cubit.postComments = [];
+                        cubit.hasComments = false;
                       }
 
 
@@ -810,11 +813,11 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                 ),
                 onTap: ()
                 {
-                  if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                  if(!cubit.user_model!.isEmailVrified!)
                   {
                     myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                   }else {
-                    AppCubit.get(context).likePost(postID: model.postId!);
+                    cubit.likePost(postID: model.postId!);
                   }
                 },
               ),

@@ -18,16 +18,17 @@ class ChatsScreen extends StatelessWidget {
         listener: (context, state) {},
       builder: (context, state)
       {
+        var cubit = AppCubit.get(context);
 
         AppLang lang = AppLang(context);
 
-        return AppCubit.get(context).usersChatWith.isNotEmpty && AppCubit.get(context).user_model != null
+        return cubit.usersChatWith.isNotEmpty && cubit.user_model != null
             ?
         ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).usersChatWith[index],context,lang,isChatScreen: true),
+            itemBuilder: (context, index) => buildUserItem(cubit.usersChatWith[index],context,lang,isChatScreen: true),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: AppCubit.get(context).usersChatWith.length,
+            itemCount: cubit.usersChatWith.length,
           padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :

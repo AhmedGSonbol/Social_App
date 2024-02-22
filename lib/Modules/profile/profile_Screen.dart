@@ -196,7 +196,7 @@ class ProfileScreen extends StatelessWidget
                                 child: Text(lang.addPost(),style: Theme.of(context).textTheme.titleMedium,),
                                 onPressed: ()
                                 {
-                                  if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                                  if(!cubit.user_model!.isEmailVrified!)
                                   {
                                     myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                                   }
@@ -214,7 +214,7 @@ class ProfileScreen extends StatelessWidget
 
                             child: Icon(
                               IconBroken.Edit,
-                              color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,
+                              color: cubit.isDarkMode ? Colors.white : Colors.black,
                             ),
 
                             onPressed: ()
@@ -245,9 +245,9 @@ class ProfileScreen extends StatelessWidget
                 shrinkWrap: true,
                 itemBuilder: (context , index)
                 {
-                  return buildPostItem(AppCubit.get(context).userPosts[index],context , lang);
+                  return buildPostItem(cubit.userPosts[index],context , lang);
                   } ,
-                itemCount: AppCubit.get(context).userPosts.length,
+                itemCount: cubit.userPosts.length,
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
               )
               :

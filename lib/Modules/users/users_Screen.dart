@@ -20,17 +20,17 @@ class UsersScreen extends StatelessWidget
       listener: (context, state) {},
       builder: (context, state)
       {
-
+        var cubit = AppCubit.get(context);
 
         AppLang lang = AppLang(context);
 
-        return AppCubit.get(context).users.isNotEmpty && AppCubit.get(context).user_model != null
+        return cubit.users.isNotEmpty && cubit.user_model != null
             ?
         ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildUserItem(AppCubit.get(context).users[index],context,lang),
+            itemBuilder: (context, index) => buildUserItem(cubit.users[index],context,lang),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: AppCubit.get(context).users.length,
+            itemCount: cubit.users.length,
           padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :

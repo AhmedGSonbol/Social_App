@@ -23,7 +23,8 @@ class Login_Screen extends StatelessWidget
   var passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return BlocProvider(
       create: (context) => LoginCubit(),
       child: BlocConsumer<LoginCubit , LoginStates>(
@@ -71,6 +72,12 @@ class Login_Screen extends StatelessWidget
             }
 
             print(state.error);
+
+          }else if(state is GoogleLoginErrorState)
+          {
+
+              myToast(msg: AppLang(context).googleCancel(),state: ToastStates.ERROR ,);
+
           }
         },
         builder: (context, state)

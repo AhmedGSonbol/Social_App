@@ -71,59 +71,74 @@ class LoginCubit extends Cubit<LoginStates>{
   {
     // GoogleSignIn().signOut();
     emit(GoogleLoginLoadingState());
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    // try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential).then((value)async
-    {
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      print(value.additionalUserInfo!.profile!['name']);
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      print(value.user!.email);
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      print(value.user!.uid);
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      print(value.user!.photoURL);
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-      if(value.additionalUserInfo!.isNewUser)
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(credential).then((value) async
       {
-        await createUser(
-            uId: value.user!.uid ,
-            name: value.additionalUserInfo!.profile!['name'] ,
-            email: value.user!.email! ,
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.additionalUserInfo!.profile!['name']);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.user!.email);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.user!.uid);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.user!.photoURL);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+        if (value.additionalUserInfo!.isNewUser)
+        {
+          await createUser(
+            uId: value.user!.uid,
+            name: value.additionalUserInfo!.profile!['name'],
+            email: value.user!.email!,
             image: value.user!.photoURL!,
-        );
-      }
+          ).then((val)
+          {
+            emit(GoogleLoginSuccessState(value.user!.uid));
+          });
+        }else
+        {
+          emit(GoogleLoginSuccessState(value.user!.uid));
+        }
 
-      print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      // print(value.credential.);
-      // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      // print(value.additionalUserInfo!.isNewUser);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.credential.);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.additionalUserInfo!.isNewUser);
 
-      // print(value.user!.emailVerified);
-      // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        // print(value.user!.emailVerified);
+        // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
-       // FirebaseAuth.instance.signOut();
+        // FirebaseAuth.instance.signOut();
 
 
-      emit(GoogleLoginSuccessState(value.user!.uid));
-    }).catchError((err)
-    {
-      emit(GoogleLoginErrorState(err.toString()));
-      print(err.toString());
-    });
+
+      }).catchError((err)
+      {
+        emit(GoogleLoginErrorState(err.toString()));
+          print(err.toString());
+      // }
+          });
+
+
+    // }catch(err)
+    // {
+    //   emit(GoogleLoginErrorState(err.toString()));
+    //   print(err.toString());
+    // }
   }
 
 
@@ -136,7 +151,7 @@ class LoginCubit extends Cubit<LoginStates>{
 
   })async
   {
-    await FirebaseMessaging.instance.getToken().then((TokenValue)async
+    await FirebaseMessaging.instance.getToken().then((tokenValue)async
     {
       User_Model model = User_Model(
           uId: uId,
@@ -147,7 +162,7 @@ class LoginCubit extends Cubit<LoginStates>{
           bio: 'write your bio ...',
           image: image,
           cover: 'https://img.freepik.com/free-psd/3d-render-digital-communication-background_23-2150762212.jpg?w=740&t=st=1703180352~exp=1703180952~hmac=2e944def7da0d55bacc74364688bbbffdd81bdfff3eb2d69e7ad41279c484361',
-          FCM_token: TokenValue
+          FCM_token: tokenValue
       );
 
      await FirebaseFirestore.instance.collection('users').doc(uId).set(

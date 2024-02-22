@@ -24,7 +24,7 @@ class New_Post_Screen extends StatelessWidget
     postTextController.text = postModel?.text ?? '';
 
     AppCubit.get(context).postImageURL = postModel?.postImage == '' ? null :postModel?.postImage;
-    // print(AppCubit.get(context).postImageURL);
+
 
 
     return BlocConsumer<AppCubit,AppStates>
@@ -39,11 +39,7 @@ class New_Post_Screen extends StatelessWidget
       builder: (context, state)
       {
 
-
-
-        var cubit = AppCubit.get(context);
-
-
+       var cubit = AppCubit.get(context);
 
         AppLang lang = AppLang(context);
 
@@ -281,7 +277,7 @@ class New_Post_Screen extends StatelessWidget
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:
                             [
-                              Icon(IconBroken.Image,color: AppCubit.get(context).isDarkMode ? Colors.white : Colors.black,),
+                              Icon(IconBroken.Image,color: cubit.isDarkMode ? Colors.white : Colors.black,),
                               const SizedBox(width: 5.0,),
                               Text(lang.addPhoto(),style: Theme.of(context).textTheme.titleMedium,)
                             ],

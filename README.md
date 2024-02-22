@@ -3,9 +3,10 @@
 Is a communication app like Facebook that has been built using (Flutter).<br>
 
 - Project characteristics:-
-  
-  - Login to / create an account.
-  - Login or register with Facebook or Gmail.
+
+  - Responsive layouts ( mobile / tablets ).
+  - Login / create a new account.
+  - Sign in with Facebook or Gmail.
   - Verification is sent to email.
   - Add new posts with or with no images.
   - choose post type ( public /  private ).
@@ -14,9 +15,9 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - Remove user posts.
   - Know the number of comments and likes on a post.
   - Search for a specific user or choose a user from a list of users and chat with him.
-  - Send and receive a real-time chat.
+  - Real-time chat.
   - Choose a user from a group of users you have chatted with.
-  - Notifications are sent to your phone about new messages.
+  - Notifications are sent about new messages.
   - View your profile and check for information and posts that you made.
   - View others profile.
   - Edit and update your information.
@@ -26,7 +27,7 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - Logout.
 
 
-- Techhnologies used :-
+- Technologies used :-
 
   - Flutter
   - Dart

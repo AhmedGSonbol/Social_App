@@ -16,6 +16,7 @@ import 'package:social_app/Shared/Network/Remote/dio_Helper.dart';
 import 'package:social_app/Shared/Styles/themes.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/firebase_options.dart';
 
 import 'Models/notification_Model.dart';
 import 'Models/user_Model.dart';
@@ -29,21 +30,20 @@ import 'Modules/new_post/new_Post_Screen.dart';
 void main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-
-  );
+  await Firebase.initializeApp(options:
+  DefaultFirebaseOptions.currentPlatform);
   Bloc.observer = MyBlocObserver();
   await CachHelper.init();
   DioHelper.init();
-  initNotifications();
+  // initNotifications();
 
-  await Permission.notification.isDenied.then((value)
-  {
-    if (value)
-    {
-      Permission.notification.request();
-    }
-  });
+  // await Permission.notification.isDenied.then((value)
+  // {
+  //   if (value)
+  //   {
+  //     Permission.notification.request();
+  //   }
+  // });
 
 
   Widget startScreen;

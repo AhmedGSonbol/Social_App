@@ -30,18 +30,19 @@ class View_User_Profile_Screen extends StatelessWidget
       {
         AppLang lang = AppLang(context);
 
+        var cubit = AppCubit.get(context);
 
         return Directionality(
           textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
+            backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
             appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
             body: ProfileScreen(userModel: userModel,),
             floatingActionButton: FloatingActionButton(
               child: const Icon(IconBroken.Message,size: 25.0),
                 onPressed: ()
                 {
-                  if(!AppCubit.get(context).user_model!.isEmailVrified!)
+                  if(!cubit.user_model!.isEmailVrified!)
                   {
                     myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
                   }

@@ -39,8 +39,6 @@ class Home_Screen extends StatelessWidget
       ProfileScreen(),
     ];
 
-    // AppCubit.get(context).getAppData();
-    // print('###############################################################################');
 
 
     return BlocConsumer<AppCubit,AppStates>(
@@ -79,7 +77,7 @@ class Home_Screen extends StatelessWidget
 
 
         return Scaffold(
-          backgroundColor: AppCubit.get(context).isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
+          backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
           appBar: AppBar(
             title: Text(
                 titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
