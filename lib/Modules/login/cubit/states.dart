@@ -28,11 +28,18 @@ class GoogleLoginSuccessState extends LoginStates{
   GoogleLoginSuccessState(this.uId);
 }
 
-class GoogleLoginErrorState extends LoginStates{
-  final String error;
+class GoogleLoginErrorState extends LoginStates{}
 
-  GoogleLoginErrorState(this.error);
+
+class FacebookLoginLoadingState extends LoginStates{}
+
+class FacebookLoginSuccessState extends LoginStates{
+  final String uId;
+
+  FacebookLoginSuccessState(this.uId);
 }
+
+class FacebookLoginErrorState extends LoginStates{}
 
 
 class CreateUserSuccessState extends LoginStates{

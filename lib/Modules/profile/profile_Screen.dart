@@ -16,9 +16,9 @@ import 'package:social_app/Shared/cubit/states.dart';
 
 class ProfileScreen extends StatelessWidget
 {
-  ProfileScreen({Key? key ,this.userModel}) : super(key: key);
+  ProfileScreen({Key? key ,this.viewerUserModel}) : super(key: key);
 
-  User_Model? userModel;
+  User_Model? viewerUserModel;
 
   @override
   Widget build(BuildContext context)
@@ -29,7 +29,12 @@ class ProfileScreen extends StatelessWidget
       {
         var cubit = AppCubit.get(context);
 
-        userModel = userModel ?? cubit.user_model!;
+        User_Model userModel = viewerUserModel ?? cubit.user_model!;
+
+        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+        print(userModel!.toMap());
+        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+        print(cubit.user_model!.toMap());
 
         if(cubit.allPostsLoaded)
         {
@@ -55,6 +60,7 @@ class ProfileScreen extends StatelessWidget
                         alignment: AlignmentDirectional.bottomCenter,
                         children: [
                           Align(
+                            alignment: AlignmentDirectional.topCenter,
                             child: Container(
                               height: 140,
                               width: double.infinity,
@@ -71,7 +77,6 @@ class ProfileScreen extends StatelessWidget
                               ),
 
                             ),
-                            alignment: AlignmentDirectional.topCenter,
                           ),
                           CircleAvatar(
                             radius: 64.0,
@@ -193,7 +198,6 @@ class ProfileScreen extends StatelessWidget
                         [
                           Expanded(
                               child: OutlinedButton(
-                                child: Text(lang.addPost(),style: Theme.of(context).textTheme.titleMedium,),
                                 onPressed: ()
                                 {
                                   if(!cubit.user_model!.isEmailVrified!)
@@ -207,15 +211,11 @@ class ProfileScreen extends StatelessWidget
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide( color: Colors.grey),
                                 ),
+                                child: Text(lang.addPost(),style: Theme.of(context).textTheme.titleMedium,),
                               )
                           ),
                           const SizedBox(width: 10.0,),
                           OutlinedButton(
-
-                            child: Icon(
-                              IconBroken.Edit,
-                              color: cubit.isDarkMode ? Colors.white : Colors.black,
-                            ),
 
                             onPressed: ()
                             {
@@ -223,6 +223,11 @@ class ProfileScreen extends StatelessWidget
                             },
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide( color: Colors.grey),
+                            ),
+
+                            child: Icon(
+                              IconBroken.Edit,
+                              color: cubit.isDarkMode ? Colors.white : Colors.black,
                             ),
                           )
 

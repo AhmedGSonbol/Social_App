@@ -12,6 +12,7 @@ import 'package:social_app/Models/user_Model.dart';
 import 'package:social_app/Modules/login/cubit/states.dart';
 // import 'package:social_app/cubit/cubit.dart';
 
+
 class LoginCubit extends Cubit<LoginStates>{
 
   LoginCubit() : super(LoginInitialState());
@@ -54,17 +55,6 @@ class LoginCubit extends Cubit<LoginStates>{
 
   }
 
-  Future<UserCredential> signInWithFacebook() async
-  {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
 
 
   Future<void> signInWithGoogle() async
@@ -72,12 +62,13 @@ class LoginCubit extends Cubit<LoginStates>{
     // GoogleSignIn().signOut();
     emit(GoogleLoginLoadingState());
 
-    // try {
+    try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser
+          ?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -86,7 +77,8 @@ class LoginCubit extends Cubit<LoginStates>{
       );
 
       // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithCredential(credential).then((value) async
+      await FirebaseAuth.instance.signInWithCredential(credential).then((
+          value) async
       {
         // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
         // print(value.additionalUserInfo!.profile!['name']);
@@ -98,21 +90,23 @@ class LoginCubit extends Cubit<LoginStates>{
         // print(value.user!.photoURL);
         // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
-        if (value.additionalUserInfo!.isNewUser)
-        {
+        if (value.additionalUserInfo!.isNewUser) {
           await createUser(
             uId: value.user!.uid,
             name: value.additionalUserInfo!.profile!['name'],
             email: value.user!.email!,
             image: value.user!.photoURL!,
-          ).then((val)
-          {
-            emit(GoogleLoginSuccessState(value.user!.uid));
-          });
-        }else
-        {
-          emit(GoogleLoginSuccessState(value.user!.uid));
+          );
         }
+        //     .then((val)
+        // {
+        //   emit(GoogleLoginSuccessState(value.user!.uid));
+        // });
+        // }else
+        // {
+        //
+        // }
+        emit(GoogleLoginSuccessState(value.user!.uid));
 
         // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
         // print(value.credential.);
@@ -125,13 +119,19 @@ class LoginCubit extends Cubit<LoginStates>{
         // FirebaseAuth.instance.signOut();
 
 
+      });
+      //     .catchError((err)
+      // {
+      //   emit(GoogleLoginErrorState(err.toString()));
+      //     print(err.toString());
+      //
+      // });
+    }catch(err)
+    {
+      emit(GoogleLoginErrorState());
+      print(err.toString());
+    }
 
-      }).catchError((err)
-      {
-        emit(GoogleLoginErrorState(err.toString()));
-          print(err.toString());
-      // }
-          });
 
 
     // }catch(err)
@@ -139,6 +139,47 @@ class LoginCubit extends Cubit<LoginStates>{
     //   emit(GoogleLoginErrorState(err.toString()));
     //   print(err.toString());
     // }
+  }
+
+  Future<void> signInWithFacebook() async
+  {
+    try
+    {
+      emit(FacebookLoginLoadingState());
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider
+          .credential(loginResult.accessToken!.token);
+
+      // Once signed in, return the UserCredential
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential).then((value)async
+      {
+        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        print(value);
+
+        // if (value.additionalUserInfo!.isNewUser) {
+        //   await createUser(
+        //     uId: value.user!.uid,
+        //     name: value.additionalUserInfo!.profile!['name'],
+        //     email: value.user!.email!,
+        //     image: value.user!.photoURL!,
+        //   );
+        // }
+        //
+        //  emit(FacebookLoginSuccessState(value.user!.uid));
+        emit(GoogleLoginErrorState());
+
+      });
+
+
+
+    }catch(err)
+    {
+      emit(FacebookLoginErrorState());
+      print(err.toString());
+    }
   }
 
 

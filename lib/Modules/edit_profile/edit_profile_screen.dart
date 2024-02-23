@@ -22,6 +22,11 @@ class Edit_profile_screen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+
+    nameEditController.text = AppCubit.get(context).user_model!.name!;
+    bioEditController.text = AppCubit.get(context).user_model!.bio!;
+    phoneEditController.text = AppCubit.get(context).user_model!.phone!;
+
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state)
       {
@@ -45,11 +50,8 @@ class Edit_profile_screen extends StatelessWidget
 
         var cubit = AppCubit.get(context);
 
-        var userModel = cubit.user_model!;
 
-        nameEditController.text = userModel.name!;
-        bioEditController.text = userModel.bio!;
-        phoneEditController.text = userModel.phone!;
+
 
         var profileImage = cubit.profile_image;
         var coverImage = cubit.cover_image;
@@ -83,7 +85,7 @@ class Edit_profile_screen extends StatelessWidget
 
 
                     // cover and profile images
-                    Container(
+                    SizedBox(
                       height: 190,
                       child: Stack(
                         alignment: AlignmentDirectional.bottomCenter,
@@ -103,7 +105,7 @@ class Edit_profile_screen extends StatelessWidget
                                         topRight: Radius.circular(4.0),
                                       ),
                                       image: DecorationImage(
-                                        image: coverImage == null ?  NetworkImage('${userModel.cover}') : FileImage(coverImage) as ImageProvider,
+                                        image: coverImage == null ?  NetworkImage('${cubit.user_model!.cover}') : FileImage(coverImage) as ImageProvider,
                                         fit: BoxFit.cover,
 
                                       )
@@ -153,7 +155,7 @@ class Edit_profile_screen extends StatelessWidget
                                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                 child: CircleAvatar(
                                   radius: 60.0,
-                                  backgroundImage: profileImage == null ?  NetworkImage('${userModel.image}') : FileImage(profileImage) as ImageProvider,
+                                  backgroundImage: profileImage == null ?  NetworkImage('${cubit.user_model!.image}') : FileImage(profileImage) as ImageProvider,
                                 ),
                               ),
                               profileImage == null
@@ -264,74 +266,7 @@ class Edit_profile_screen extends StatelessWidget
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30,),
 
-                    //link your account with
-                    Center(child: Text(lang.linkYourAccountWith())),
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    //facebook || google
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children:
-                          [
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                width: 60,
-                                child: Image.asset(
-                                  'assets/images/facebook.png',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              lang.linked(),
-                              style: const TextStyle(color: Colors.green),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Column(
-                          children: [
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                width: 60,
-                                child: Image.asset('assets/images/google.png',
-                                    width: 40, height: 40),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              lang.notLinked(),
-                              style: const TextStyle(color: Colors.red),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -150,8 +151,7 @@ class AppCubit extends Cubit<AppStates>
   {
     emit(AppGetUserLoadingState());
 
-    await FirebaseFirestore.instance.collection('users').doc(uId).get().then((
-        value)
+    await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value)
     {
       // value.data()!['isVerefied'] = FirebaseAuth.instance.currentUser!.emailVerified;
 
@@ -160,8 +160,8 @@ class AppCubit extends Cubit<AppStates>
         checkForEmailVerification();
       }
 
-      emit(AppGetUserSuccessState());
       user_model = User_Model.fromJson(value.data()!);
+      emit(AppGetUserSuccessState());
     }).catchError((err) {
       print(err.toString());
       emit(AppGetUserErrorState(error: err.toString()));
@@ -374,58 +374,76 @@ class AppCubit extends Cubit<AppStates>
 
     // update current user data remotely
     FirebaseFirestore.instance.collection('users').doc(uId).
-    update(model.toMap()).then((value)
+    update(model.toMap()).then((value)async
     {
       if (name != user_model!.name || profile_image != null)
       {
         allPosts.forEach((ele)
         {
-          if (ele.name == user_model!.name) {
-            if (name != user_model!.name) {
+          if (ele.name == user_model!.name)
+          {
+            if (name != user_model!.name)
+            {
               ele.name = name ?? ele.name;
             }
 
-            if (profile_image != null) {
+            if (profile_image != null)
+            {
               ele.image = profileImageURL;
             }
           }
         });
+
+        homePosts.forEach((ele)
+        {
+          if (ele.name == user_model!.name)
+          {
+            if (name != user_model!.name)
+            {
+              ele.name = name ?? ele.name;
+            }
+
+            if (profile_image != null)
+            {
+              ele.image = profileImageURL;
+            }
+          }
+        });
+
+
       }
-
-
-      //delete images remotely
-      if(profile_image != null && user_model!.image != profileImageURL)
-      {
-        deletePostImage(url: user_model!.image!);
-      }
-
-      if(cover_image != null && user_model!.cover != coverImageURL)
-      {
-        deletePostImage(url: user_model!.cover!);
-      }
-
 
 
       // update current user data locally
 
-      user_model!.name = name ?? user_model!.name;
-      user_model!.phone = phone ?? user_model!.phone;
-      user_model!.bio = bio ?? user_model!.bio;
-      user_model!.image = profileImageURL ?? user_model!.image;
-      user_model!.cover = coverImageURL ?? user_model!.cover;
+      //delete images remotely
+      if(profile_image != null && user_model!.image != profileImageURL)
+      {
+        await deleteImageRemotely(url: user_model!.image!);
+      }
 
-      emit(AppUserUpdateSuccessState());
+      if(cover_image != null && user_model!.cover != coverImageURL)
+      {
+        await deleteImageRemotely(url: user_model!.cover!);
+      }
 
-      // getUserData().then((value)
-      // {
-      //   cover_image = null;
-      //   coverImageURL = null;
-      //   profile_image = null;
-      //   profileImageURL = null;
-      //
-      //
-      //   emit(AppUserUpdateSuccessState());
-      // });
+      await getUserData().then((value)
+      {
+        cover_image = null;
+        coverImageURL = null;
+        profile_image = null;
+        profileImageURL = null;
+
+
+        emit(AppUserUpdateSuccessState());
+      });
+
+
+
+
+
+
+
     }).catchError((err) {
       emit(AppUserUpdateErrorState());
       print(err.toString());
@@ -594,7 +612,7 @@ class AppCubit extends Cubit<AppStates>
 
       if(oldPostModel.postImage! != '' && oldPostModel.postImage! != postImageURL)
       {
-        await deletePostImage(url: oldPostModel.postImage!);
+        await deleteImageRemotely(url: oldPostModel.postImage!);
       }
       updatedPostModel.postId  = oldPostModel.postId;
       updateUserPostsLocally(updatedPostModel);
@@ -628,7 +646,7 @@ class AppCubit extends Cubit<AppStates>
     {
       if(postModel.postImage != '')
       {
-        await deletePostImage(url: postModel.postImage!);
+        await deleteImageRemotely(url: postModel.postImage!);
       }
 
       deleteUserPostsLocally(postModel.postId!);
@@ -643,18 +661,18 @@ class AppCubit extends Cubit<AppStates>
 
   //Delete post image from firebase
 
-  Future<void> deletePostImage({required String url}) async
+  Future<void> deleteImageRemotely({required String url}) async
   {
     await firebase_storage.FirebaseStorage.instance.
     refFromURL(url).delete().then((value) async
     {
 
-        emit(AppDeletePostImageErrorState());
+        // emit(AppDeleteImageRemotelySuccessState());
 
     }).catchError((err)
     {
       print(err.toString());
-      emit(AppDeletePostImageErrorState());
+      // emit(AppDeleteImageRemotelyErrorState());
     });
   }
 
@@ -801,7 +819,7 @@ class AppCubit extends Cubit<AppStates>
 
   void updateUserPostsLocally(Post_Model pModel)
   {
-    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+    // print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
     allPosts.forEach((ele)
     {
       if(ele.postId == pModel.postId)
@@ -849,21 +867,40 @@ class AppCubit extends Cubit<AppStates>
     bool isLike = true;
     int eleIndex = 0;
 
-    for (int x = 0; x < allPosts.length; x ++) {
-      if (allPosts[x].postId == postID) {
+    for (int x = 0; x < allPosts.length; x ++)
+    {
+      if (allPosts[x].postId == postID)
+      {
         eleIndex = x;
 
-        if (allPosts[x].isLiked == false) {
+        if (allPosts[x].isLiked == false)
+        {
           allPosts[x].likes = allPosts[x].likes! + 1;
           allPosts[x].isLiked = true;
         }
-        else {
+        else
+        {
           allPosts[x].likes = allPosts[x].likes! - 1;
           allPosts[x].isLiked = false;
           isLike = false;
         }
+
+        homePosts.forEach((ele)
+        {
+          if(ele.postId == postID)
+          {
+            ele.likes = allPosts[x].likes;
+            ele.isLiked = allPosts[x].isLiked;
+            return;
+          }
+        });
+
+        break;
+
       }
     }
+
+
 
     emit(AppLikePostSuccessState());
 
@@ -874,17 +911,29 @@ class AppCubit extends Cubit<AppStates>
         .doc(uId)
         .set({
       'like': isLike
-    })
-        .then((value) {}).catchError((err) {
-      if (allPosts[eleIndex].isLiked == false) {
+    }).then((value) {}).catchError((err)
+    {
+      if (allPosts[eleIndex].isLiked == false)
+      {
         allPosts[eleIndex].likes = allPosts[eleIndex].likes! + 1;
         allPosts[eleIndex].isLiked = true;
       }
-      else {
+      else
+      {
         allPosts[eleIndex].likes = allPosts[eleIndex].likes! - 1;
         allPosts[eleIndex].isLiked = false;
         isLike = false;
       }
+
+      homePosts.forEach((ele)
+      {
+        if(ele.postId == postID)
+        {
+          ele.likes = allPosts[eleIndex].likes;
+          ele.isLiked = allPosts[eleIndex].isLiked;
+          return;
+        }
+      });
 
       emit(AppLikePostErrorState(err.toString()));
     });
@@ -967,8 +1016,10 @@ class AppCubit extends Cubit<AppStates>
         postComments.add(Comment_Model.fromJson(defaultModel));
       }).then((value) {
         emit(AppGetCommentPostSuccessState());
-      }).catchError((err) {
-        emit(AppGetCommentPostErrorState(err.toString()));
+      }).catchError((err)
+      {
+        print(err.toString());
+        emit(AppGetCommentPostErrorState());
       });
     });
   }
@@ -977,7 +1028,25 @@ class AppCubit extends Cubit<AppStates>
     required String postId,
     required bool isIncrease,
   }) {
-    allPosts.forEach((postEle) {
+    allPosts.forEach((postEle)
+    {
+      if (postEle.postId == postId) {
+        print('ttttttttttttttttttttttt');
+        if (isIncrease) {
+          postEle.commentsCount = postEle.commentsCount! + 1;
+        }
+        else {
+          postEle.commentsCount = postEle.commentsCount! - 1;
+        }
+        print('vvvvvvvvvvvvvvvvvvvvvvvvv');
+        print(postEle.commentsCount);
+
+        return;
+      }
+    });
+
+    homePosts.forEach((postEle)
+    {
       if (postEle.postId == postId) {
         print('ttttttttttttttttttttttt');
         if (isIncrease) {
@@ -1113,11 +1182,10 @@ class AppCubit extends Cubit<AppStates>
     // print('x');
     // print(uId);
 
-    usersChatWith = [];
 
-   await FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').snapshots().listen((value)async
+    FirebaseFirestore.instance.collection('users').doc(uId).collection('chat').snapshots().listen((value)async
    {
-
+     usersChatWith = [];
 
      await Future.forEach(value.docs,(ele)async
      {
@@ -1386,6 +1454,11 @@ class AppCubit extends Cubit<AppStates>
           print('sign out from google');
           GoogleSignIn().signOut();
         }
+        else if(FirebaseAuth.instance.currentUser!.providerData[0].providerId == 'facebook.com')
+        {
+          print('sign out from facebook');
+          FacebookAuth.instance.logOut();
+        }
         // {
         //
         // }
@@ -1397,6 +1470,9 @@ class AppCubit extends Cubit<AppStates>
 
           currentNavIndex = 0;
         });
+        users = [];
+
+        emit(AppLogoutSuccessState());
       });
     }).catchError((err)
     {

@@ -27,7 +27,7 @@ class Post_Details_Screen extends StatelessWidget {
         AppLang lang = AppLang(context);
 
         return Directionality(
-          textDirection: ui.TextDirection.rtl,
+          textDirection: lang.isEn ? ui.TextDirection.ltr : ui.TextDirection.rtl,
           child: Scaffold(
 
             appBar:defaultAppBar(context: context,title:  Text(lang.postComments()),),
@@ -146,62 +146,71 @@ class Post_Details_Screen extends StatelessWidget {
                       child: Row(
                         children:
                         [
-
                           InkWell(
                             child: Row(
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                CircleAvatar(
+                                  backgroundColor: model.isLiked! ? Colors.red : Colors.transparent,
+                                  radius: 18.0,
                                   child: Icon(
                                     IconBroken.Heart,
-                                    color: Colors.redAccent,
-
+                                    color: model.isLiked! ? Colors.white :  Colors.redAccent,
                                   ),
                                 ),
-                                Text('${model.likes}',
-                                  style: Theme.of(context).textTheme.bodySmall,),
-                              ],
-                            ),
-                            onTap: (){},
-                          ),
-
-                          const Spacer(),
-
-                          InkWell(
-                            child: Row(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    IconBroken.Chat,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                Text('${model.commentsCount}',
-                                  style: Theme.of(context).textTheme.bodySmall,),
-                                const SizedBox(width: 5,),
-                                Text(lang.comments(),
-                                  style: Theme.of(context).textTheme.bodySmall,),
+                                const SizedBox(width: 5.0,),
+                                Text( '(${model.likes})',
+                                  style: Theme.of(context).textTheme.bodySmall!),
                               ],
                             ),
                             onTap: ()
                             {
-                              if(model.commentsCount != 0)
+                              if(!cubit.user_model!.isEmailVrified!)
                               {
-                                cubit.getPostComments(postID: model.postId!);
-                                // myBottomSheet(
-                                //     context: context,
-                                //     model: model,
-                                //     commentController: commentController
-                                // );
+                                myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                              }else {
+                                cubit.likePost(postID: model.postId!);
                               }
-                              else
-                              {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No comments !')));
-
-                              }
-
                             },
+                          ),
+
+                          // InkWell(
+                          //   child: Row(
+                          //     children: [
+                          //       const Padding(
+                          //         padding: EdgeInsets.all(8.0),
+                          //         child: Icon(
+                          //           IconBroken.Heart,
+                          //           color: Colors.redAccent,
+                          //
+                          //         ),
+                          //       ),
+                          //       Text('${model.likes}',
+                          //         style: Theme.of(context).textTheme.bodySmall,),
+                          //     ],
+                          //   ),
+                          //   onTap: ()
+                          //   {
+                          //
+                          //   },
+                          // ),
+
+                          const Spacer(),
+
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  IconBroken.Chat,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              Text('${model.commentsCount}',
+                                style: Theme.of(context).textTheme.bodySmall,),
+                              const SizedBox(width: 5,),
+                              Text(lang.comments(),
+                                style: Theme.of(context).textTheme.bodySmall,),
+                            ],
                           ),
 
 
@@ -399,6 +408,7 @@ class Post_Details_Screen extends StatelessWidget {
       child: Align(
         alignment: AlignmentDirectional.centerStart,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children:
           [
             CircleAvatar(
@@ -434,12 +444,14 @@ class Post_Details_Screen extends StatelessWidget {
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              bottomRight: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              topLeft: Radius.circular(10.0),
+                            borderRadius:  BorderRadius.only(
+                              bottomRight: Radius.circular(lang.isEn ? 10.0 : 0.0),
+                              bottomLeft: Radius.circular(lang.isEn ? 0.0 : 10.0),
+                              topRight: const Radius.circular(10.0),
+                              topLeft: const Radius.circular(10.0),
+
                             ),
-                            color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey
+                            color: model.isMyComment! ? defaultColor.withOpacity(0.3) : Colors.grey.withOpacity(0.5)
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 5.0,

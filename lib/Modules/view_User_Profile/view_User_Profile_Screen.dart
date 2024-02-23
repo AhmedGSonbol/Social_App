@@ -37,7 +37,7 @@ class View_User_Profile_Screen extends StatelessWidget
           child: Scaffold(
             backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
             appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
-            body: ProfileScreen(userModel: userModel,),
+            body: ProfileScreen(viewerUserModel: userModel,),
             floatingActionButton: FloatingActionButton(
               child: const Icon(IconBroken.Message,size: 25.0),
                 onPressed: ()

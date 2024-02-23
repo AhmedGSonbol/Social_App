@@ -58,6 +58,20 @@ class Login_Screen extends StatelessWidget
 
           }
 
+          else if(state is FacebookLoginSuccessState)
+          {
+            CachHelper.saveData(key: 'uId', value: state.uId).then((value)
+            {
+              uId = state.uId;
+
+              AppCubit.get(context).getAppData();
+
+              navAndFinishTo(context, const Home_Screen());
+            });
+
+
+          }
+
           else if(state is LoginErrorState)
           {
 
@@ -66,9 +80,15 @@ class Login_Screen extends StatelessWidget
             if(state.error.contains('The supplied auth credential is incorrect'))
             {
               myToast(msg: AppLang(context).incorrectEmailOrPass(),state: ToastStates.ERROR ,);
-            }else if(state.error.contains('We have blocked all requests from this device due to unusual activity'))
+            }
+            else if(state.error.contains('We have blocked all requests from this device due to unusual activity'))
             {
               myToast(msg: AppLang(context).tryAgainLater(),state: ToastStates.ERROR ,);
+            }
+            else
+            {
+              myToast(msg: AppLang(context).internetConnectionError(),state: ToastStates.ERROR ,);
+
             }
 
             print(state.error);
@@ -77,6 +97,11 @@ class Login_Screen extends StatelessWidget
           {
 
               myToast(msg: AppLang(context).googleCancel(),state: ToastStates.ERROR ,);
+
+          }else if(state is FacebookLoginErrorState)
+          {
+
+            myToast(msg: AppLang(context).facebookCancel(),state: ToastStates.ERROR ,);
 
           }
         },
@@ -192,17 +217,18 @@ class Login_Screen extends StatelessWidget
                             [
                               Expanded(
 
+                                flex: 1,
+
                                 child: Container(
                                   height: 1,
                                   color: Colors.grey.shade500,
                                 ),
-                                flex: 1,
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Center(child: Text(lang.orContinueWith() , maxLines: 1,style: TextStyle(color: Colors.grey.shade700),)),
+                                  child: Center(child: Text(lang.orContinueWith() , maxLines: 1,style: const TextStyle(color: Colors.grey),)),
                                 ),
                               ),
                               Expanded(
@@ -225,7 +251,10 @@ class Login_Screen extends StatelessWidget
                           mainAxisAlignment: MainAxisAlignment.center,
                           children:
                           [
-                            InkWell(
+                            if(state is FacebookLoginLoadingState)
+                              const CircularProgressIndicator()
+                            else
+                              InkWell(
                               onTap: ()
                               {
                                 cubit.signInWithFacebook();
@@ -246,7 +275,11 @@ class Login_Screen extends StatelessWidget
                             ),
 
                             const SizedBox(width: 10,),
-                            InkWell(
+
+                            if(state is GoogleLoginLoadingState)
+                              const CircularProgressIndicator()
+                            else
+                              InkWell(
                               onTap: ()
                               {
                                 cubit.signInWithGoogle();

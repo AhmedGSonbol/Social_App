@@ -373,13 +373,6 @@ Future<User_Model> getUserDataByUid({
   {
     uModel = User_Model.fromJson(value.data()!);
 
-    print('88888888888888888888888888888888');
-    print(uModel.toMap());
-    print('88888888888888888888888888888888');
-
-
-
-
   });
 
   return uModel;
@@ -805,6 +798,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                         color: model.isLiked! ? Colors.white :  Colors.redAccent,
                       ),
                     ),
+                    const SizedBox(width: 5.0,),
                     Text( lang.like(),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: model.isLiked! ? Colors.red : Colors.grey

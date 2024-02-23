@@ -35,7 +35,7 @@ void main() async
   Bloc.observer = MyBlocObserver();
   await CachHelper.init();
   DioHelper.init();
-  // initNotifications();
+  initNotifications();
 
   // await Permission.notification.isDenied.then((value)
   // {

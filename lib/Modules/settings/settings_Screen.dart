@@ -176,7 +176,10 @@ class Settings_Screen extends StatelessWidget
 
                       const SizedBox(height: 20.0,),
 
-                      myButton(
+                      if(state is AppLogoutLoadingState)
+                        const CircularProgressIndicator()
+                      else
+                        myButton(
                           text: lang.logout(),
                           function: ()
                           {

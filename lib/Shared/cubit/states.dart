@@ -87,9 +87,9 @@ class AppUploadPostImageSuccessState extends AppStates{}
 class AppUploadPostImageErrorState extends AppStates{}
 
 
-class AppDeletePostImageSuccessState extends AppStates{}
+// class AppDeleteImageRemotelySuccessState extends AppStates{}
 
-class AppDeletePostImageErrorState extends AppStates{}
+// class AppDeleteImageRemotelyErrorState extends AppStates{}
 
 
 class AppCreatePostLoadingState extends AppStates{}
@@ -152,11 +152,7 @@ class AppGetCommentPostLoadingState extends AppStates{}
 
 class AppGetCommentPostSuccessState extends AppStates{}
 
-class AppGetCommentPostErrorState extends AppStates{
-  final String error;
-
-  AppGetCommentPostErrorState(this.error);
-}
+class AppGetCommentPostErrorState extends AppStates{}
 
 class AppDeleteCommentPostSuccessState extends AppStates{}
 
@@ -165,6 +161,7 @@ class AppDeleteCommentPostErrorState extends AppStates{
 
   AppDeleteCommentPostErrorState(this.error);
 }
+
 
 //Chat
 class AppSendMessageSuccessState extends AppStates{}
@@ -186,6 +183,8 @@ class AppChangePostTypeState extends AppStates{}
 class AppChangeAppModeState extends AppStates{}
 
 class AppLogoutLoadingState extends AppStates{}
+
+class AppLogoutSuccessState extends AppStates{}
 
 class AppLogoutErrorState extends AppStates{}
 

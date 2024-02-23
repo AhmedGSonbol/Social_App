@@ -248,6 +248,11 @@ class AppLang
     return isEn ? 'Please try again later !' : 'الرجاء معاودة المحاولة في وقت لاحق !';
   }
 
+  String internetConnectionError()
+  {
+    return isEn ? 'Internet Connection Error !' : 'خطأ في الإتصال بالإنترنت !';
+  }
+
   String login()
   {
     return isEn ? 'Login' : 'تسجيل الدخول';
@@ -447,7 +452,12 @@ class AppLang
 
   String googleCancel()
   {
-    return isEn ? 'Google registration has been canceled !' : 'تم إلغاء عملية التسجيل عبر جوجل !';
+    return isEn ? 'Google sign in has been canceled !' : 'تم إلغاء عملية تسجيل الدخول عبر جوجل !';
+  }
+
+  String facebookCancel()
+  {
+    return isEn ? 'Facebook sign in has been canceled !' : 'تم إلغاء عملية تسجيل الدخول عبر فيسبوك !';
   }
 
 
