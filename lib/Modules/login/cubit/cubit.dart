@@ -147,7 +147,7 @@ class LoginCubit extends Cubit<LoginStates>{
     {
       emit(FacebookLoginLoadingState());
       // Trigger the sign-in flow
-      final LoginResult loginResult = await FacebookAuth.instance.login();
+      final LoginResult loginResult = await FacebookAuth.instance.login(loginBehavior: LoginBehavior.nativeWithFallback);
 
       // Create a credential from the access token
       final OAuthCredential facebookAuthCredential = FacebookAuthProvider
@@ -159,17 +159,17 @@ class LoginCubit extends Cubit<LoginStates>{
         print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
         print(value);
 
-        // if (value.additionalUserInfo!.isNewUser) {
-        //   await createUser(
-        //     uId: value.user!.uid,
-        //     name: value.additionalUserInfo!.profile!['name'],
-        //     email: value.user!.email!,
-        //     image: value.user!.photoURL!,
-        //   );
-        // }
-        //
-        //  emit(FacebookLoginSuccessState(value.user!.uid));
-        emit(GoogleLoginErrorState());
+        if (value.additionalUserInfo!.isNewUser) {
+          await createUser(
+            uId: value.user!.uid,
+            name: value.additionalUserInfo!.profile!['name'],
+            email: value.user!.email!,
+            image: value.user!.photoURL!,
+          );
+        }
+
+         emit(FacebookLoginSuccessState(value.user!.uid));
+
 
       });
 

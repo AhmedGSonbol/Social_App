@@ -31,14 +31,14 @@ class ProfileScreen extends StatelessWidget
 
         User_Model userModel = viewerUserModel ?? cubit.user_model!;
 
-        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
-        print(userModel!.toMap());
-        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
-        print(cubit.user_model!.toMap());
+        // print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+        // print(userModel!.toMap());
+        // print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+        // print(cubit.user_model!.toMap());
 
         if(cubit.allPostsLoaded)
         {
-          cubit.getUserPosts(userModel!.uId!);
+          cubit.getUserPosts(userModel.uId!);
         }
 
         AppLang lang = AppLang(context);
@@ -70,7 +70,7 @@ class ProfileScreen extends StatelessWidget
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: NetworkImage('${userModel!.cover}'),
+                                    image: NetworkImage('${userModel.cover}'),
                                     fit: BoxFit.cover,
 
                                   )
@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget
                             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                             child: CircleAvatar(
                               radius: 60.0,
-                              backgroundImage: NetworkImage('${userModel!.image}'),
+                              backgroundImage: NetworkImage('${userModel.image}'),
                             ),
                           ),
                         ],
@@ -94,11 +94,11 @@ class ProfileScreen extends StatelessWidget
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(children:
                       [
-                        Text('${userModel!.name}',
+                        Text('${userModel.name}',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 5.0,),
-                        Text('${userModel!.bio}',
+                        Text('${userModel.bio}',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -189,7 +189,7 @@ class ProfileScreen extends StatelessWidget
                       ),
                     ),
 
-                    userModel!.uId == uId
+                    userModel.uId == uId
                         ?
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),

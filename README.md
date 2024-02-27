@@ -4,7 +4,7 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
 
 - Project characteristics:-
 
-  - Responsive layouts ( mobile / tablets ).
+  - Responsive layouts ( mobile / tablet / desktop ).
   - Login / create a new account.
   - Sign in with Facebook or Gmail.
   - Verification is sent to email.

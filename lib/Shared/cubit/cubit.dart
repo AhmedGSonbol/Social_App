@@ -180,7 +180,7 @@ class AppCubit extends Cubit<AppStates>
       FirebaseAuth.instance.currentUser!.reload().then((value)
       {
         bool isVerefied = FirebaseAuth.instance.currentUser!.emailVerified;
-        print(timer.tick);
+        // print(timer.tick);
         if(isVerefied)
         {
 
@@ -811,7 +811,7 @@ class AppCubit extends Cubit<AppStates>
         homePosts.removeWhere((element) => element.postId == allPosts[x].postId);
         allPosts.removeAt(x);
 
-        print('bbbbbbb');
+        // print('bbbbbbb');
       }
     }
 
@@ -1031,15 +1031,15 @@ class AppCubit extends Cubit<AppStates>
     allPosts.forEach((postEle)
     {
       if (postEle.postId == postId) {
-        print('ttttttttttttttttttttttt');
+        // print('ttttttttttttttttttttttt');
         if (isIncrease) {
           postEle.commentsCount = postEle.commentsCount! + 1;
         }
         else {
           postEle.commentsCount = postEle.commentsCount! - 1;
         }
-        print('vvvvvvvvvvvvvvvvvvvvvvvvv');
-        print(postEle.commentsCount);
+        // print('vvvvvvvvvvvvvvvvvvvvvvvvv');
+        // print(postEle.commentsCount);
 
         return;
       }
@@ -1048,15 +1048,15 @@ class AppCubit extends Cubit<AppStates>
     homePosts.forEach((postEle)
     {
       if (postEle.postId == postId) {
-        print('ttttttttttttttttttttttt');
+        // print('ttttttttttttttttttttttt');
         if (isIncrease) {
           postEle.commentsCount = postEle.commentsCount! + 1;
         }
         else {
           postEle.commentsCount = postEle.commentsCount! - 1;
         }
-        print('vvvvvvvvvvvvvvvvvvvvvvvvv');
-        print(postEle.commentsCount);
+        // print('vvvvvvvvvvvvvvvvvvvvvvvvv');
+        // print(postEle.commentsCount);
 
         return;
       }
@@ -1351,7 +1351,7 @@ class AppCubit extends Cubit<AppStates>
             body: text
 
           );
-          print('2222222222222222222222222222222222222');
+          // print('2222222222222222222222222222222222222');
           print(notification_model.toMap());
           await DioHelper.post(
               data: notification_model.toMap()
