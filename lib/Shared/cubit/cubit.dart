@@ -1469,7 +1469,9 @@ class AppCubit extends Cubit<AppStates>
         {
           uId = '';
           users = [];
-          navAndFinishTo(context, Login_Screen());
+
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              Login_Screen()), (Route<dynamic> route) => false);
 
           currentNavIndex = 0;
         });
