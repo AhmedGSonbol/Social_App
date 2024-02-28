@@ -39,7 +39,8 @@ class SearchScreen extends StatelessWidget
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: mySendMessageSection(
-                    icon: const Icon(IconBroken.Search,color: Colors.white,),
+                    isSearch: true,
+
                       context: context,
                       messageController: searchController,
                       onPressed: ()

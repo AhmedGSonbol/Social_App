@@ -148,6 +148,7 @@ class Login_Screen extends StatelessWidget
                               keyboardType: TextInputType.emailAddress,
                               labelText: lang.emailAddress(),
                               prefixIcon: Icons.email_outlined,
+                              textInputAction: TextInputAction.next,
                               validator: (String? val)
                               {
                                 if(val!.isEmpty)
@@ -166,6 +167,7 @@ class Login_Screen extends StatelessWidget
                               keyboardType: TextInputType.visiblePassword,
                               labelText: lang.password(),
                               isPassword: cubit.isSecure,
+                              textInputAction: TextInputAction.send,
                               onFieldSubmitted: (val)
                               {
                                 if(formKey.currentState!.validate())

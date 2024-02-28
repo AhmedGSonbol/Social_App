@@ -90,7 +90,7 @@ class Chat_Details_Screen extends StatelessWidget
                         messageController: messageController,
                         onPressed: ()
                         {
-                          if(messageController.text.trim().length > 0)
+                          if(messageController.text.trim().isNotEmpty)
                           {
                             cubit.sendMessage(
                               receiverId: receiver_Model.uId!,

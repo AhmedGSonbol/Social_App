@@ -206,6 +206,7 @@ class Edit_profile_screen extends StatelessWidget
                                 keyboardType: TextInputType.name,
                                 labelText: lang.userName(),
                                 prefixIcon: IconBroken.User,
+                              textInputAction: TextInputAction.next,
                                 validator: (val)
                                 {
                                   if(val!.isEmpty)
@@ -230,6 +231,7 @@ class Edit_profile_screen extends StatelessWidget
                             keyboardType: TextInputType.name,
                             labelText: lang.bio(),
                             prefixIcon: IconBroken.Info_Circle,
+                            textInputAction: TextInputAction.next,
                             validator: (val)
                             {
                               if(val!.isEmpty)
@@ -254,6 +256,7 @@ class Edit_profile_screen extends StatelessWidget
                             keyboardType: TextInputType.phone,
                             labelText: lang.phone(),
                             prefixIcon: IconBroken.Call,
+                            textInputAction: TextInputAction.done,
                             validator: (val)
                             {
                               if(val!.isEmpty)

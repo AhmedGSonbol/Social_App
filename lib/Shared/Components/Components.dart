@@ -80,6 +80,7 @@ Widget myTextFormField({
   required IconData prefixIcon,
   required String? Function(String? x) validator,
   required context,
+  required TextInputAction? textInputAction,
 
   void Function(String x)?  onChanged,
   void Function(String x)?  onFieldSubmitted,
@@ -94,6 +95,7 @@ Widget myTextFormField({
     controller: controller,
     keyboardType: keyboardType,
     obscureText: isPassword,
+    textInputAction: textInputAction,
     style: TextStyle(color: fontColor(context)),
     decoration: InputDecoration(
       prefixIconColor: fontColor(context),
@@ -300,13 +302,10 @@ Widget mySendMessageSection(
     {
       required context,
       required TextEditingController messageController,
-      required void Function() onPressed,
+      required Function() onPressed,
       void Function(String text)? textChange,
-      Widget icon = const  Icon(
-        IconBroken.Send,
-        color: Colors.white,
-        size: 18.0,
-      ),
+      bool isSearch = false,
+
     })
 {
   return Padding(
@@ -336,11 +335,17 @@ Widget mySendMessageSection(
                   style: TextStyle(color: fontColor(context)),
                   onChanged: textChange,
                   controller: messageController,
+                  textInputAction: isSearch ? TextInputAction.search : TextInputAction.send,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: AppCubit.get(context).lang == 'en' ? 'Type your message here ...' : 'أكتب هنا ...',
 
                   ),
+                   onFieldSubmitted:(s)
+                   {
+                     onPressed();
+                   },
+
                 ),
               ),
             ),
@@ -353,7 +358,15 @@ Widget mySendMessageSection(
               child: MaterialButton(
                 onPressed: onPressed,
                 minWidth: 1.0,
-                child: icon
+                child: isSearch
+                    ?
+                const Icon(IconBroken.Search,color: Colors.white)
+                    :
+                const Icon(
+                  IconBroken.Send,
+                  color: Colors.white,
+                  size: 18.0,
+                ),
               ),
             )
           ],
