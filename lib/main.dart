@@ -22,7 +22,6 @@ import 'Models/notification_Model.dart';
 import 'Models/user_Model.dart';
 import 'Modules/chat_Details/chat_Details_Screen.dart';
 import 'Modules/new_post/new_Post_Screen.dart';
-// import 'firebase_options.dart';
 
 
 
@@ -127,39 +126,35 @@ class MainScreen extends StatelessWidget
 
 void initNotifications()
 {
-  FirebaseMessaging.instance.getToken().then((value)
-  {
-    print(value);
-  });
 
   FirebaseMessaging.onMessage.listen((event)
   {
-    print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
-    print(event.data.toString() );
-    print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
-    myToast(msg: 'on Message', state: ToastStates.SUCCESS);
+    // print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+    // print(event.data.toString() );
+    // print('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+    // myToast(msg: 'on Message', state: ToastStates.SUCCESS);
     // print(event.notification!.body );
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((event)async
   {
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    print(event.data.toString() );
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    myToast(msg: 'on App Message', state: ToastStates.WARNING);
+    // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    // print(event.data.toString() );
+    // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    // myToast(msg: 'on App Message', state: ToastStates.WARNING);
 
     Notification_Model notification_model = Notification_Model.fromJson(event.data);
 
     // print(notification_model.toMap());
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    print(notification_model.type);
-    print(notification_model.value);
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    // print(notification_model.type);
+    // print(notification_model.value);
+    // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
     if(notification_model.type == 'chat')
     {
 
       // Get.to(New_Post_Screen());
-      print('5555555555555555555555555555555555555555555555555555');
+      // print('5555555555555555555555555555555555555555555555555555');
 
 
 
@@ -167,11 +162,11 @@ void initNotifications()
         {
           User_Model uModel = User_Model.fromJson(value.data()!);
 
-          print('88888888888888888888888888888888');
-          print(value.data());
+          // print('88888888888888888888888888888888');
+          // print(value.data());
 
 
-          myToast(msg: notification_model.value, state: ToastStates.WARNING);
+          // myToast(msg: notification_model.value, state: ToastStates.WARNING);
           navTo(navigatorKey.currentState!.context, Chat_Details_Screen(receiver_Model: uModel));
 
         });
@@ -195,10 +190,10 @@ void initNotifications()
 @pragma('vm:entry-point')
 Future<void> background_Messaging(RemoteMessage message)async
 {
-  print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-  print(message.data.toString() );
-  print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-  myToast(msg: 'on Background Message', state: ToastStates.ERROR);
+  // print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+  // print(message.data.toString() );
+  // print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+  // myToast(msg: 'on Background Message', state: ToastStates.ERROR);
 
   // FirebaseFirestore.instance
   //     .collection('users')

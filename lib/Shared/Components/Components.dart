@@ -25,7 +25,7 @@ void navTo(context , route)
   Navigator.of(context).push(MaterialPageRoute(builder: (context) => route));
 }
 
-void navAndFinishTo(context , route)
+void navAndFinishTo(BuildContext context , route)
 {
   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => route));
 }
@@ -460,7 +460,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                 if(model.uId == uId && !isOnHomeScreen)
                   PopupMenuButton(
                     child: Icon(Icons.adaptive.more,color: Colors.grey,),
-                    color: const Color.fromRGBO(99, 99, 99, 1),
+                    color:cubit.isDarkMode ? const Color.fromRGBO(99, 99, 99, 1) : const Color.fromRGBO(220, 220, 220, 1),
 
                   itemBuilder: (context)
                   {

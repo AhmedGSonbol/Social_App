@@ -76,214 +76,217 @@ class Home_Screen extends StatelessWidget
         var cubit = AppCubit.get(context);
 
 
-        return Scaffold(
-          backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
-          appBar: AppBar(
-            title: Text(
-                titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
-            ),
-
-            actions:
-                cubit.currentNavIndex == 4
-                    ?
-                    [
-                      IconButton(
-                        icon: const Icon(IconBroken.Setting),
-                        onPressed: ()
-                        {
-                          navTo(context, Settings_Screen());
-                        },
-                      ),
-
-                    ]
-                    :
-                [
-
-              // IconButton(
-              //   icon: Icon(IconBroken.Notification),
-              //   onPressed: (){},
-              // ),
-
-              IconButton(
-                icon: const Icon(IconBroken.Search),
-                onPressed: ()
-                {
-                  navTo(context,const SearchScreen());
-                },
+        return Directionality(
+          textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
+          child: Scaffold(
+            backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
+            appBar: AppBar(
+              title: Text(
+                  titles[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex]
               ),
-            ],
-          ),
-          body:  ((){
-            if(cubit.user_model == null)
-            {
-              return const Center(child: CircularProgressIndicator());
-            }
-            else
-            {
-              return Column(
-                children:
-                [
-                  // if(!cubit.isOnline)
-                  //   Container(
-                  //     color: Colors.redAccent.withOpacity(0.6),
-                  //     height: 50.0,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                  //       child: Row(
-                  //         children:
-                  //         [
-                  //           Icon(Icons.info_outline,color: Colors.white,),
-                  //
-                  //           SizedBox(width: 15,),
-                  //
-                  //           Expanded(child: Text(lang.offline(),style: TextStyle(color: Colors.white),)),
-                  //
-                  //           // myTextButton(context: context,text: lang.retry(), function: ()
-                  //           // {
-                  //           //  cubit.checkInternerConnection();
-                  //           // })
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   )
-                  // else
-                  //   SizedBox(),
 
-
-                  if(!cubit.user_model!.isEmailVrified!)
-                    Container(
-                      color: defaultColor,
-                      height: 50.0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children:
-                          [
-                            Icon(Icons.info_outline,color: fontColor(context),),
-
-                            const SizedBox(width: 15,),
-
-                            Expanded(child: Text(lang.verifyYourEmail(),style: Theme.of(context).textTheme.titleMedium,)),
-
-                            myTextButton(context: context,text: lang.send(), function: ()
-                            {
-                              FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
-                              {
-                                myToast(msg: lang.checkYourMail(), state: ToastStates.WARNING);
-                              }).catchError((err)
-                              {
-                                myToast(msg: lang.offline(), state: ToastStates.ERROR);
-                              });
-                            })
-                          ],
+              actions:
+                  cubit.currentNavIndex == 4
+                      ?
+                      [
+                        IconButton(
+                          icon: const Icon(IconBroken.Setting),
+                          onPressed: ()
+                          {
+                            navTo(context, Settings_Screen());
+                          },
                         ),
-                      ),
-                    )
-                  else
-                    const SizedBox(),
 
-                  Expanded(
-                    child: navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
-                  ),
-                ],
-              );
-            }
-          }()),
+                      ]
+                      :
+                  [
 
+                // IconButton(
+                //   icon: Icon(IconBroken.Notification),
+                //   onPressed: (){},
+                // ),
 
-          // )
-
-            bottomNavigationBar: BottomNavigationBar(
-              onTap: (index)
-              {
-                cubit.changeBottomNav(index);
-              },
-
-
-              items: 
-              [
-                BottomNavigationBarItem(
-                    icon: const Icon(
-                      IconBroken.Home
-                    ),
-                  label: lang.feeds()
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                      IconBroken.Chat,
-                  ),
-                    label: lang.chats()
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      IconBroken.Paper_Upload,
-                      color: cubit.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                    label: lang.homePost(),
-                  backgroundColor: Colors.red
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                      IconBroken.User
-                  ),
-                    label: lang.users()
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                      IconBroken.Profile
-                  ),
-                    label: lang.profile()
+                IconButton(
+                  icon: const Icon(IconBroken.Search),
+                  onPressed: ()
+                  {
+                    navTo(context,const SearchScreen());
+                  },
                 ),
               ],
+            ),
+            body:  ((){
+              if(cubit.user_model == null)
+              {
+                return const Center(child: CircularProgressIndicator());
+              }
+              else
+              {
+                return Column(
+                  children:
+                  [
+                    // if(!cubit.isOnline)
+                    //   Container(
+                    //     color: Colors.redAccent.withOpacity(0.6),
+                    //     height: 50.0,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //       child: Row(
+                    //         children:
+                    //         [
+                    //           Icon(Icons.info_outline,color: Colors.white,),
+                    //
+                    //           SizedBox(width: 15,),
+                    //
+                    //           Expanded(child: Text(lang.offline(),style: TextStyle(color: Colors.white),)),
+                    //
+                    //           // myTextButton(context: context,text: lang.retry(), function: ()
+                    //           // {
+                    //           //  cubit.checkInternerConnection();
+                    //           // })
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   )
+                    // else
+                    //   SizedBox(),
 
-              currentIndex: cubit.currentNavIndex > 2 ? cubit.currentNavIndex : cubit.currentNavIndex,
 
-        ),
+                    if(!cubit.user_model!.isEmailVrified!)
+                      Container(
+                        color: defaultColor,
+                        height: 50.0,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children:
+                            [
+                              Icon(Icons.info_outline,color: fontColor(context),),
+
+                              const SizedBox(width: 15,),
+
+                              Expanded(child: Text(lang.verifyYourEmail(),style: Theme.of(context).textTheme.titleMedium,)),
+
+                              myTextButton(context: context,text: lang.send(), function: ()
+                              {
+                                FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
+                                {
+                                  myToast(msg: lang.checkYourMail(), state: ToastStates.WARNING);
+                                }).catchError((err)
+                                {
+                                  myToast(msg: lang.offline(), state: ToastStates.ERROR);
+                                });
+                              })
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(),
+
+                    Expanded(
+                      child: navScreens[cubit.currentNavIndex > 2 ? cubit.currentNavIndex-1 : cubit.currentNavIndex],
+                    ),
+                  ],
+                );
+              }
+            }()),
+
+
+            // )
+
+              bottomNavigationBar: BottomNavigationBar(
+                onTap: (index)
+                {
+                  cubit.changeBottomNav(index);
+                },
+
+
+                items:
+                [
+                  BottomNavigationBarItem(
+                      icon: const Icon(
+                        IconBroken.Home
+                      ),
+                    label: lang.feeds()
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(
+                        IconBroken.Chat,
+                    ),
+                      label: lang.chats()
+                  ),
+                  BottomNavigationBarItem(
+                      icon: Icon(
+                        IconBroken.Paper_Upload,
+                        color: cubit.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                      label: lang.homePost(),
+                    backgroundColor: Colors.red
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(
+                        IconBroken.User
+                    ),
+                      label: lang.users()
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(
+                        IconBroken.Profile
+                    ),
+                      label: lang.profile()
+                  ),
+                ],
+
+                currentIndex: cubit.currentNavIndex > 2 ? cubit.currentNavIndex : cubit.currentNavIndex,
+
+          ),
 
 
 
 
-          // cubit.model != null
-          //     ?
-          // Column(
-          //   children:
-          //   [
-          //     if(!FirebaseAuth.instance.currentUser!.emailVerified)
-          //       Container(
-          //       color: Colors.amber.withOpacity(0.6),
-          //       height: 50.0,
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(horizontal: 20),
-          //         child: Row(
-          //           children:
-          //           [
-          //             Icon(Icons.info_outline),
-          //
-          //             SizedBox(width: 15,),
-          //
-          //             Expanded(child: Text('Please verify your email !')),
-          //
-          //             myTextButton(text: 'Send', function: ()
-          //             {
-          //               FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
-          //               {
-          //                 myToast(msg: 'check your email !', state: ToastStates.WARNING);
-          //               }).catchError((err)
-          //               {
-          //                 myToast(msg: 'check your internet connection !', state: ToastStates.ERROR);
-          //               });
-          //             })
-          //           ],
-          //         ),
-          //       ),
-          //     )
-          //
-          //
-          //   ],
-          // )
-          //     :
-          //     Center(child: CircularProgressIndicator())
+            // cubit.model != null
+            //     ?
+            // Column(
+            //   children:
+            //   [
+            //     if(!FirebaseAuth.instance.currentUser!.emailVerified)
+            //       Container(
+            //       color: Colors.amber.withOpacity(0.6),
+            //       height: 50.0,
+            //       child: Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20),
+            //         child: Row(
+            //           children:
+            //           [
+            //             Icon(Icons.info_outline),
+            //
+            //             SizedBox(width: 15,),
+            //
+            //             Expanded(child: Text('Please verify your email !')),
+            //
+            //             myTextButton(text: 'Send', function: ()
+            //             {
+            //               FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value)
+            //               {
+            //                 myToast(msg: 'check your email !', state: ToastStates.WARNING);
+            //               }).catchError((err)
+            //               {
+            //                 myToast(msg: 'check your internet connection !', state: ToastStates.ERROR);
+            //               });
+            //             })
+            //           ],
+            //         ),
+            //       ),
+            //     )
+            //
+            //
+            //   ],
+            // )
+            //     :
+            //     Center(child: CircularProgressIndicator())
 
+          ),
         );
       },
     );

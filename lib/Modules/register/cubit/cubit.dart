@@ -72,7 +72,7 @@ class RegisterCubit extends Cubit<RegisterStates>{
           uId: uId,
           isEmailVrified: false,
           bio: 'write your bio ...',
-          image: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?w=740&t=st=1703176605~exp=1703177205~hmac=fd901b864e9889ae99f1e28d0e36be32c67a4cf5c792c23f80740c28da7c9e3b',
+          image: 'https://firebasestorage.googleapis.com/v0/b/firstfirebaseproject-304ca.appspot.com/o/users%2FUnknown_person.jpg?alt=media&token=059daf2a-3192-42b5-a1ed-ac45706319d0',
           cover: 'https://img.freepik.com/free-psd/3d-render-digital-communication-background_23-2150762212.jpg?w=740&t=st=1703180352~exp=1703180952~hmac=2e944def7da0d55bacc74364688bbbffdd81bdfff3eb2d69e7ad41279c484361',
           FCM_token: TokenValue
       );

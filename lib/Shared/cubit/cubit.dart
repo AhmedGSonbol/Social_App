@@ -610,6 +610,7 @@ class AppCubit extends Cubit<AppStates>
         .then((value)async
     {
 
+      //deleteImageRemotely
       if(oldPostModel.postImage! != '' && oldPostModel.postImage! != postImageURL)
       {
         await deleteImageRemotely(url: oldPostModel.postImage!);
@@ -820,7 +821,7 @@ class AppCubit extends Cubit<AppStates>
   void updateUserPostsLocally(Post_Model pModel)
   {
     // print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-    allPosts.forEach((ele)
+    for (var ele in allPosts)
     {
       if(ele.postId == pModel.postId)
       {
@@ -838,25 +839,26 @@ class AppCubit extends Cubit<AppStates>
         ele.text = pModel.text;
         ele.postImage = pModel.postImage;
         ele.type = pModel.type;
+
+        break;
       }
-    });
+    }
 
+    if(pModel.type == 'public')
+    {
+      for (var ele in homePosts)
+      {
+        if(ele.postId == pModel.postId)
+        {
+          ele.text = pModel.text;
+          ele.postImage = pModel.postImage;
+          ele.type = pModel.type;
+          break;
+        }
 
+      }
 
-    // homePosts.forEach((ele)
-    // {
-    //   if(ele.postId == pModel.postId)
-    //   {
-    //     ele.text = pModel.text;
-    //     ele.postImage = pModel.postImage;
-    //     ele.type = pModel.type;
-    //   }
-    // });
-
-    // for(int x = 0 ; x < posts.length ; x++)
-    // {
-    //
-    // }
+    }
 
   }
 
@@ -1333,7 +1335,7 @@ class AppCubit extends Cubit<AppStates>
         model.toMap()).then((value) async
     {
       //Send notification
-      await getUserDataByUid(userId: receiverId).then((receiverModel) async
+      await getUserDataByUid(userId: uId).then((receiverModel) async
       {
         // User_Model receiverModel = User_Model.fromJson(value.data()!);
 
@@ -1466,11 +1468,12 @@ class AppCubit extends Cubit<AppStates>
         CachHelper.removeData(key: 'uId').then((value)
         {
           uId = '';
+          users = [];
           navAndFinishTo(context, Login_Screen());
 
           currentNavIndex = 0;
         });
-        users = [];
+
 
         emit(AppLogoutSuccessState());
       });
