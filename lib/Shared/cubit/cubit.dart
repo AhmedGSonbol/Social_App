@@ -1335,7 +1335,7 @@ class AppCubit extends Cubit<AppStates>
         model.toMap()).then((value) async
     {
       //Send notification
-      await getUserDataByUid(userId: uId).then((receiverModel) async
+      await getUserDataByUid(userId: receiverId).then((receiverModel) async
       {
         // User_Model receiverModel = User_Model.fromJson(value.data()!);
 
