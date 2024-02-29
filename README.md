@@ -13,6 +13,7 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - Like a post.
   - Comment on a post and remove your comments.
   - Remove user posts.
+  - Edit user posts.
   - Know the number of comments and likes on a post.
   - Search for a specific user or choose a user from a list of users and chat with him.
   - Real-time chat.
