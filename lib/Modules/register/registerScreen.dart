@@ -11,6 +11,7 @@ import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class RegisterScreen extends StatelessWidget
 {
@@ -28,6 +29,7 @@ class RegisterScreen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    var lang = S.of(context);
 
 
     return BlocProvider(create: (context) => RegisterCubit(),
@@ -37,7 +39,7 @@ class RegisterScreen extends StatelessWidget
         if(state is CreateUserSuccessState)
         {
 
-          myToast(msg: AppLang(context).registeredSuccessfully(),state: ToastStates.SUCCESS ,);
+          myToast(msg: lang.registeredSuccessfully,state: ToastStates.SUCCESS ,);
 
           CachHelper.saveData(key: 'uId', value: state.uId).then((value)
           {
@@ -54,10 +56,10 @@ class RegisterScreen extends StatelessWidget
         {
 
           if(state.error.contains('The email address is badly formatted'))
-            myToast(msg: AppLang(context).emailAddressIsNotValid(),state: ToastStates.ERROR ,);
+            myToast(msg: lang.emailAddressIsNotValid,state: ToastStates.ERROR ,);
 
           if(state.error.contains('The email address is already in use by another account'))
-            myToast(msg: AppLang(context).emailAlreadyInUse(),state: ToastStates.ERROR ,);
+            myToast(msg: lang.emailAlreadyInUse,state: ToastStates.ERROR ,);
         }
 
         else if(state is CreateUserErrorState)
@@ -67,155 +69,151 @@ class RegisterScreen extends StatelessWidget
       },
       builder: (context, state)
       {
-        AppLang lang = AppLang(context);
 
         var cubit = RegisterCubit.get(context);
 
-        return Directionality(
-          textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
-          child: Scaffold(
-            appBar: defaultAppBar(context: context),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                      [
-                        Text(lang.register(),
-                          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                              color: fontColor(context)
-                          ),),
+        return Scaffold(
+          appBar: defaultAppBar(context: context),
+          body: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                    [
+                      Text(lang.register,
+                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                            color: fontColor(context)
+                        ),),
 
 
 
-                        const SizedBox(height: 30,),
+                      const SizedBox(height: 30,),
 
 
-                        myTextFormField(
-                            context: context,
-                            controller: nameController,
-                            keyboardType: TextInputType.name,
-                            labelText: lang.userName(),
-                            prefixIcon: Icons.person,
-                            textInputAction: TextInputAction.next,
-                            validator: (String? val)
-                            {
-                              if(val!.isEmpty)
-                              {
-                                return lang.checkUserName();
-                              }
-
-                            }
-                        ),
-                        const SizedBox(height: 15.0),
-
-                        myTextFormField(
-                            context: context,
-                            controller: phoneController,
-                            keyboardType: TextInputType.phone,
-                            labelText: lang.phone(),
-                            prefixIcon: Icons.phone,
-                            textInputAction: TextInputAction.next,
-                            validator: (String? val)
-                            {
-
-                              if(val!.isEmpty)
-                              {
-                                return lang.checkPhone();
-                              }
-                              if(val.length < 11)
-                              {
-                                return lang.phoneNumber11();
-                              }
-
-                            }
-                        ),
-                        const SizedBox(height: 15.0),
-
-                        myTextFormField(
-                            context: context,
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            labelText: lang.emailAddress(),
-                            prefixIcon: Icons.email_outlined,
-                            textInputAction: TextInputAction.next,
-                            validator: (String? val)
-                            {
-                              if(val!.isEmpty)
-                              {
-                                return lang.checkEmailAddressField();
-                              }
-
-                              if(!checkEmailValidation())
-                              {
-                                return lang.incorrectEmailFormat();
-                              }
-
-                            }
-                        ),
-                        const SizedBox(height: 15.0),
-
-                        myTextFormField(
-                            context: context,
-                            controller: passwordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            labelText: lang.password(),
-                            isPassword: cubit.isSecure,
-                            textInputAction: TextInputAction.send,
-                            onFieldSubmitted: (val)
-                            {
-                              if(formKey.currentState!.validate())
-                              {
-                                cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
-                              }
-                            },
-                            prefixIcon: Icons.lock_outline,
-                            // suffixIcon: Icon(Icons.visibility),
-                            // SuffixOnPressed: (){},
-                            suffixButtonIcon: IconButton(
-                                icon: Icon(cubit.passIcon),
-                                onPressed: ()
-                                {
-                                  cubit.changePassVisibility();
-                                }
-                            ),
-                            validator: (String? val)
-                            {
-                              if(val!.isEmpty)
-                              {
-                                return lang.checkPasswordField();
-                              }
-
-                              if(val.length < 6)
-                              {
-                                return lang.password6char();
-                              }
-                            }
-                        ),
-                        const SizedBox(height: 15.0),
-
-                        state is! RegisterLoadingState
-                            ?
-                        myButton(text: lang.register(), function: ()
-                        {
-                          if(formKey.currentState!.validate())
+                      myTextFormField(
+                          context: context,
+                          controller: nameController,
+                          keyboardType: TextInputType.name,
+                          labelText: lang.userName,
+                          prefixIcon: Icons.person,
+                          textInputAction: TextInputAction.next,
+                          validator: (String? val)
                           {
-                            cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
+                            if(val!.isEmpty)
+                            {
+                              return lang.checkUserName;
+                            }
+
                           }
+                      ),
+                      const SizedBox(height: 15.0),
 
-                        })
-                            :
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      myTextFormField(
+                          context: context,
+                          controller: phoneController,
+                          keyboardType: TextInputType.phone,
+                          labelText: lang.phone,
+                          prefixIcon: Icons.phone,
+                          textInputAction: TextInputAction.next,
+                          validator: (String? val)
+                          {
+
+                            if(val!.isEmpty)
+                            {
+                              return lang.checkPhone;
+                            }
+                            if(val.length < 11)
+                            {
+                              return lang.phoneNumber11;
+                            }
+
+                          }
+                      ),
+                      const SizedBox(height: 15.0),
+
+                      myTextFormField(
+                          context: context,
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          labelText: lang.emailAddress,
+                          prefixIcon: Icons.email_outlined,
+                          textInputAction: TextInputAction.next,
+                          validator: (String? val)
+                          {
+                            if(val!.isEmpty)
+                            {
+                              return lang.checkEmailAddressField;
+                            }
+
+                            if(!checkEmailValidation())
+                            {
+                              return lang.incorrectEmailFormat;
+                            }
+
+                          }
+                      ),
+                      const SizedBox(height: 15.0),
+
+                      myTextFormField(
+                          context: context,
+                          controller: passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          labelText: lang.password,
+                          isPassword: cubit.isSecure,
+                          textInputAction: TextInputAction.send,
+                          onFieldSubmitted: (val)
+                          {
+                            if(formKey.currentState!.validate())
+                            {
+                              cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
+                            }
+                          },
+                          prefixIcon: Icons.lock_outline,
+                          // suffixIcon: Icon(Icons.visibility),
+                          // SuffixOnPressed: (){},
+                          suffixButtonIcon: IconButton(
+                              icon: Icon(cubit.passIcon),
+                              onPressed: ()
+                              {
+                                cubit.changePassVisibility();
+                              }
+                          ),
+                          validator: (String? val)
+                          {
+                            if(val!.isEmpty)
+                            {
+                              return lang.checkPasswordField;
+                            }
+
+                            if(val.length < 6)
+                            {
+                              return lang.password6char;
+                            }
+                          }
+                      ),
+                      const SizedBox(height: 15.0),
+
+                      state is! RegisterLoadingState
+                          ?
+                      myButton(text: lang.register, function: ()
+                      {
+                        if(formKey.currentState!.validate())
+                        {
+                          cubit.userRegister(context,email: emailController.text, password: passwordController.text ,name:nameController.text,phone:phoneController.text );
+                        }
+
+                      })
+                          :
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
 
 
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),

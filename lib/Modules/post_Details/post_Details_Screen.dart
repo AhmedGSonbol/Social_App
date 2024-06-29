@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:social_app/Models/comment_Model.dart';
 import 'package:social_app/Models/post_Model.dart';
 import 'package:social_app/Shared/Components/Components.dart';
+import 'package:social_app/Shared/Components/constants.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
@@ -12,36 +13,39 @@ import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 import 'dart:ui' as ui;
 
-class Post_Details_Screen extends StatelessWidget {
+import 'package:social_app/generated/l10n.dart';
+
+class Post_Details_Screen extends StatelessWidget
+{
   Post_Details_Screen({required this.post_model } );
   Post_Model post_model;
+
+  var commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context)
   {
+
+    var lang = S.of(context);
+
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state) {},
       builder: (context, state)
       {
 
-        AppLang lang = AppLang(context);
+        return Scaffold(
 
-        return Directionality(
-          textDirection: lang.isEn ? ui.TextDirection.ltr : ui.TextDirection.rtl,
-          child: Scaffold(
-
-            appBar:defaultAppBar(context: context,title:  Text(lang.postComments()),),
-            body: buildPostItem(post_model , context,lang),
-          ),
+          appBar:defaultAppBar(context: context,title:  Text(lang.postComments),),
+          body: buildPostItem(post_model , context,lang),
         );
 
       },
     );
   }
 
-  Widget buildPostItem(Post_Model model,context,AppLang lang)
+  Widget buildPostItem(Post_Model model,context, S lang)
   {
-    var commentController = TextEditingController();
+
 
     var cubit = AppCubit.get(context);
 
@@ -166,7 +170,7 @@ class Post_Details_Screen extends StatelessWidget {
                             {
                               if(!cubit.user_model!.isEmailVrified!)
                               {
-                                myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                                myToast(msg: lang.verifyYourEmail, state: ToastStates.WARNING);
                               }else {
                                 cubit.likePost(postID: model.postId!);
                               }
@@ -208,7 +212,7 @@ class Post_Details_Screen extends StatelessWidget {
                               Text('${model.commentsCount}',
                                 style: Theme.of(context).textTheme.bodySmall,),
                               const SizedBox(width: 5,),
-                              Text(lang.comments(),
+                              Text(lang.comments,
                                 style: Theme.of(context).textTheme.bodySmall,),
                             ],
                           ),
@@ -309,6 +313,7 @@ class Post_Details_Screen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: mySendMessageSection(
+            lang: lang,
             context: context,
             messageController: commentController,
 
@@ -337,7 +342,7 @@ class Post_Details_Screen extends StatelessWidget {
     required BuildContext context,
     required Post_Model model,
     required TextEditingController commentController,
-    required AppLang lang,
+    required S lang,
     required AppCubit cubit
 })
   {
@@ -377,7 +382,7 @@ class Post_Details_Screen extends StatelessWidget {
              }
              else
              {
-               return Center(child: Text(lang.noMessagesYet(),style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),));
+               return Center(child: Text(lang.noMessagesYet,style:  Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.4),));
              }
            }())
 
@@ -397,7 +402,7 @@ class Post_Details_Screen extends StatelessWidget {
     required BuildContext context,
     required Comment_Model model,
     required String postId,
-    required AppLang lang,
+    required S lang,
     required AppCubit cubit,
   })
   {
@@ -430,10 +435,10 @@ class Post_Details_Screen extends StatelessWidget {
                       {
                         myDialog(
                             context: context,
-                            title: lang.deleteCommentHeader(),
-                            desc: lang.deleteCommentDesc(),
-                            okText: lang.ok(),
-                            cancelText: lang.cancel(),
+                            title: lang.deleteCommentHeader,
+                            desc: lang.deleteCommentDesc,
+                            okText: lang.ok,
+                            cancelText: lang.cancel,
                             okOnTap: ()
                             {
                               cubit.deleteComment(postId: postId, commentId: model.commentId!);
@@ -445,8 +450,8 @@ class Post_Details_Screen extends StatelessWidget {
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius:  BorderRadius.only(
-                              bottomRight: Radius.circular(lang.isEn ? 10.0 : 0.0),
-                              bottomLeft: Radius.circular(lang.isEn ? 0.0 : 10.0),
+                              bottomRight: Radius.circular(current_lang != 'ar'  ? 10.0 : 0.0),
+                              bottomLeft: Radius.circular(current_lang != 'ar'  ? 0.0 : 10.0),
                               topRight: const Radius.circular(10.0),
                               topLeft: const Radius.circular(10.0),
 

@@ -15,6 +15,7 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class FeedsScreen extends StatelessWidget {
 
@@ -28,7 +29,7 @@ class FeedsScreen extends StatelessWidget {
       builder: (context, state)
       {
 
-        AppLang lang = AppLang(context);
+        var lang = S.of(context);
 
         var cubit = AppCubit.get(context);
 
@@ -61,7 +62,7 @@ class FeedsScreen extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(lang.communicate(),
+                        child: Text(lang.communicate,
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
                         ),
                       )

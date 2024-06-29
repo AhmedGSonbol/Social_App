@@ -123,21 +123,17 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
-  String lang = 'en';
+  // String lang = 'en';
 
-  void changeLang()
+  void changeLang(String language)
   {
-    if(lang == 'en')
-    {
-      lang = 'ar';
 
-    }else
-    {
-      lang = 'en';
-    }
 
-    CachHelper.saveData(key: 'lang', value: lang).then((value)
+    CachHelper.saveData(key: 'lang', value: language).then((value)
     {
+      print(language);
+      current_lang = language;
+
       emit(AppChangeAppLangState());
 
       // refresh();

@@ -17,6 +17,7 @@ import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
+import 'package:social_app/generated/l10n.dart';
 
 
 
@@ -288,7 +289,7 @@ PreferredSizeWidget defaultAppBar({
 {
   return AppBar(
     leading: IconButton(
-      icon: AppLang(context).isEn ? const Icon(IconBroken.Arrow___Left_2) : const Icon(IconBroken.Arrow___Right_2),
+      icon: current_lang != 'ar' ? const Icon(IconBroken.Arrow___Left_2) : const Icon(IconBroken.Arrow___Right_2),
       onPressed: () => Navigator.of(context).pop(),
     ),
 
@@ -305,6 +306,7 @@ Widget mySendMessageSection(
       required Function() onPressed,
       void Function(String text)? textChange,
       bool isSearch = false,
+      required S lang
 
     })
 {
@@ -338,7 +340,7 @@ Widget mySendMessageSection(
                   textInputAction: isSearch ? TextInputAction.search : TextInputAction.send,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: AppCubit.get(context).lang == 'en' ? 'Type your message here ...' : 'أكتب هنا ...',
+                      hintText: lang.typeYourMessage,
 
                   ),
                    onFieldSubmitted:(s)
@@ -395,7 +397,7 @@ Future<User_Model> getUserDataByUid({
 
 }
 
-Widget buildPostItem(Post_Model model,context , AppLang lang ,
+Widget buildPostItem(Post_Model model,context , S lang ,
     {bool isOnHomeScreen = false})
 {
   var commentController = TextEditingController();
@@ -458,7 +460,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                           [
                             Icon(model.type! == 'private' ? IconBroken.Lock : IconBroken.User , color: Colors.grey,size: 18.0,),
                             const SizedBox(width: 4.0,),
-                            Text(model.type! == 'private' ? lang.privatePost() : lang.publicPost(),
+                            Text(model.type! == 'private' ? lang.privatePost : lang.publicPost,
                               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   height: 1.4
                               )
@@ -487,7 +489,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                             [
                               Icon(IconBroken.Edit,color: fontColor(context),),
                               const SizedBox(width: 10.0,),
-                              Text(lang.edit(),style: TextStyle(color: fontColor(context)),)
+                              Text(lang.edit,style: TextStyle(color: fontColor(context)),)
                             ],
 
                           ),
@@ -500,7 +502,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                           [
                             Icon(IconBroken.Delete,color: fontColor(context),),
                             const SizedBox(width: 10.0,),
-                            Text(lang.delete(),style: TextStyle(color: fontColor(context)),)
+                            Text(lang.delete,style: TextStyle(color: fontColor(context)),)
                           ],
 
                         ),
@@ -527,10 +529,10 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                       {
                         myDialog(
                             context: context,
-                            title: lang.deletePostHeader(),
-                            desc: lang.deletePostDesc(),
-                            okText: lang.ok(),
-                            cancelText: lang.cancel(),
+                            title: lang.deletePostHeader,
+                            desc: lang.deletePostDesc,
+                            okText: lang.ok,
+                            cancelText: lang.cancel,
                             okOnTap: ()
                             {
                               cubit.deletePost(postModel: model);
@@ -579,6 +581,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 
           ReadMoreText('${model.text}',
           style: Theme.of(context).textTheme.titleMedium,
+
 
           ),
 
@@ -710,7 +713,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                       Text('${model.commentsCount}',
                         style: Theme.of(context).textTheme.bodySmall,),
                       const SizedBox(width: 5,),
-                      Text(lang.comments(),
+                      Text(lang.comments,
                         style: Theme.of(context).textTheme.bodySmall,),
                     ],
                   ),
@@ -729,7 +732,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                     }
                     else
                     {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(lang.noComments())));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(lang.noComments)));
 
                     }
 
@@ -765,7 +768,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   controller: commentController,
                   maxLines: 1,
                   decoration: InputDecoration(
-                    hintText: lang.writeAComment(),
+                    hintText: lang.writeAComment,
                     hintStyle: Theme.of(context).textTheme.bodySmall,
                     border: InputBorder.none,
                   ),
@@ -773,7 +776,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                   {
                     if(!cubit.user_model!.isEmailVrified!)
                     {
-                      myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                      myToast(msg: lang.verifyYourEmail, state: ToastStates.WARNING);
                     }
                     else
                     {
@@ -811,7 +814,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                       ),
                     ),
                     const SizedBox(width: 5.0,),
-                    Text( lang.like(),
+                    Text( lang.like,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: model.isLiked! ? Colors.red : Colors.grey
                       ),),
@@ -821,7 +824,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
                 {
                   if(!cubit.user_model!.isEmailVrified!)
                   {
-                    myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                    myToast(msg: lang.verifyYourEmail, state: ToastStates.WARNING);
                   }else {
                     cubit.likePost(postID: model.postId!);
                   }
@@ -836,7 +839,7 @@ Widget buildPostItem(Post_Model model,context , AppLang lang ,
 }
 
 
-Widget buildUserItem(User_Model model,context,AppLang lang,{isSmallImg = false , isChatScreen = false})
+Widget buildUserItem(User_Model model,context,{isSmallImg = false , isChatScreen = false})
 {
   return InkWell(
     onTap: ()

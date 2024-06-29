@@ -6,3 +6,7 @@ import 'package:social_app/Shared/Network/Local/Cach_Helper.dart';
 // String token = '';
 
 String uId = '';
+
+bool isDark = false;
+
+String current_lang = 'en';

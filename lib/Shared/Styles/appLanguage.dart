@@ -2,16 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 
-class AppLang
+class AppLangg
 {
 
   // Initializations
   BuildContext context;
   late bool isEn;
 
-  AppLang(this.context)
+  AppLangg(this.context)
   {
-    isEn = AppCubit.get(context).lang == 'en' ? true : false;
+    // isEn = AppCubit.get(context).lang == 'en' ? true : false;
   }
 
 

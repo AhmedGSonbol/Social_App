@@ -13,6 +13,7 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class ProfileScreen extends StatelessWidget
 {
@@ -23,6 +24,8 @@ class ProfileScreen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    var lang = S.of(context);
+
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state) {},
       builder: (context, state)
@@ -40,8 +43,6 @@ class ProfileScreen extends StatelessWidget
         {
           cubit.getUserPosts(userModel.uId!);
         }
-
-        AppLang lang = AppLang(context);
 
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -121,7 +122,7 @@ class ProfileScreen extends StatelessWidget
                                   Text('104',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
-                                  Text(lang.posts(),
+                                  Text(lang.posts,
                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color: Colors.grey
                                     ),
@@ -139,7 +140,7 @@ class ProfileScreen extends StatelessWidget
                                   Text('33',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
-                                  Text(lang.photos(),
+                                  Text(lang.photos,
                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color: Colors.grey
                                     ),
@@ -157,7 +158,7 @@ class ProfileScreen extends StatelessWidget
                                   Text('13K',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
-                                  Text(lang.followers(),
+                                  Text(lang.followers,
                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color: Colors.grey
                                     ),
@@ -175,7 +176,7 @@ class ProfileScreen extends StatelessWidget
                                   Text('167',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
-                                  Text(lang.following(),
+                                  Text(lang.following,
                                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color: Colors.grey
                                     ),
@@ -202,7 +203,7 @@ class ProfileScreen extends StatelessWidget
                                 {
                                   if(!cubit.user_model!.isEmailVrified!)
                                   {
-                                    myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
+                                    myToast(msg: lang.verifyYourEmail, state: ToastStates.WARNING);
                                   }
                                   else {
                                     navTo(context, New_Post_Screen());
@@ -211,7 +212,7 @@ class ProfileScreen extends StatelessWidget
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide( color: Colors.grey),
                                 ),
-                                child: Text(lang.addPost(),style: Theme.of(context).textTheme.titleMedium,),
+                                child: Text(lang.addPost,style: Theme.of(context).textTheme.titleMedium,),
                               )
                           ),
                           const SizedBox(width: 10.0,),
@@ -258,7 +259,7 @@ class ProfileScreen extends StatelessWidget
               :
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
-                    child: Text(lang.noPosts(),style: Theme.of(context).textTheme.titleMedium,),
+                    child: Text(lang.noPosts,style: Theme.of(context).textTheme.titleMedium,),
                   )
                   :
                   const Padding(

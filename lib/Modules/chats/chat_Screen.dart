@@ -7,6 +7,7 @@ import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class ChatsScreen extends StatelessWidget {
   const ChatsScreen({Key? key}) : super(key: key);
@@ -20,20 +21,20 @@ class ChatsScreen extends StatelessWidget {
       {
         var cubit = AppCubit.get(context);
 
-        AppLang lang = AppLang(context);
+        var lang = S.of(context);
+
 
         return cubit.usersChatWith.isNotEmpty && cubit.user_model != null
             ?
         ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildUserItem(cubit.usersChatWith[index],context,lang,isChatScreen: true),
+            itemBuilder: (context, index) => buildUserItem(cubit.usersChatWith[index],context,isChatScreen: true),
             separatorBuilder: (context, index) => myDivider(),
             itemCount: cubit.usersChatWith.length,
           padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :
-            Center(child: Text(lang.noChats(),style: Theme.of(context).textTheme.titleMedium,))
-        ;
+            Center(child: Text(lang.noChats,style: Theme.of(context).textTheme.titleMedium,));
 
       },
     );

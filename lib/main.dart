@@ -17,11 +17,14 @@ import 'package:social_app/Shared/Styles/themes.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
 import 'package:social_app/firebase_options.dart';
+import 'package:social_app/generated/l10n.dart';
 
 import 'Models/notification_Model.dart';
 import 'Models/user_Model.dart';
 import 'Modules/chat_Details/chat_Details_Screen.dart';
 import 'Modules/new_post/new_Post_Screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 
 
@@ -46,8 +49,7 @@ void main() async
 
 
   Widget startScreen;
-  bool isDark = false;
-  String lang = 'en';
+
 
 
   uId = CachHelper.getData(key: 'uId') ?? '';
@@ -64,19 +66,20 @@ void main() async
   // uId = '5qhouenCOFh8dehxpwxGB6dfOdl2';
 
 
-  if(CachHelper.getData(key: 'isdarkmode')!= null)
-  {
-    isDark = CachHelper.getData(key: 'isdarkmode');
-  }
+  // if(CachHelper.getData(key: 'isdarkmode')!= null)
+  // {
+    isDark = CachHelper.getData(key: 'isdarkmode') ?? false;
+  // }
 
-  if(CachHelper.getData(key: 'lang')!= null)
-  {
-    lang = CachHelper.getData(key: 'lang');
-  }
+  // if(CachHelper.getData(key: 'lang')!= null)
+  // {
+
+  current_lang = CachHelper.getData(key: 'lang') ?? 'en';
+  // }
 
   runApp(MainScreen(
     startScreen: startScreen,
-    lang: lang,
+    lang: current_lang,
     isDark: isDark,
   ));
 }
@@ -96,7 +99,7 @@ class MainScreen extends StatelessWidget
   Widget build(BuildContext context)
   {
     return BlocProvider(
-      create: (context) => AppCubit()..lang = lang..isDarkMode = isDark..getAppData(),
+      create: (context) => AppCubit()..isDarkMode = isDark..getAppData(),
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context, state) {},
         builder: (context, state)
@@ -104,16 +107,23 @@ class MainScreen extends StatelessWidget
           // print('###############################################################################');
 
           return MaterialApp(
+            localizationsDelegates:
+            const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+
+            locale:  Locale(current_lang),
 
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             themeMode: AppCubit.get(context).isDarkMode ? ThemeMode.dark : ThemeMode.light,
             theme: lightTheme,
             darkTheme: darkTheme,
-            home: Directionality(
-              child: startScreen,
-              textDirection: AppCubit.get(context).lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
-          ),
+            home: startScreen,
           );
         },
       )

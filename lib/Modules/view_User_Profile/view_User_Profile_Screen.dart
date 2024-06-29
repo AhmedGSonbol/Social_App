@@ -14,6 +14,7 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class View_User_Profile_Screen extends StatelessWidget
 {
@@ -28,30 +29,26 @@ class View_User_Profile_Screen extends StatelessWidget
       listener: (context, state) {},
       builder: (context, state)
       {
-        AppLang lang = AppLang(context);
 
         var cubit = AppCubit.get(context);
 
-        return Directionality(
-          textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
-          child: Scaffold(
-            backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
-            appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
-            body: ProfileScreen(viewerUserModel: userModel,),
-            floatingActionButton: FloatingActionButton(
-              child: const Icon(IconBroken.Message,size: 25.0),
-                onPressed: ()
+        return Scaffold(
+          backgroundColor: cubit.isDarkMode ? darkColor :  const Color.fromRGBO(240, 240, 240, 1),
+          appBar:defaultAppBar(context: context,title: Text(userModel.name!)),
+          body: ProfileScreen(viewerUserModel: userModel,),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(IconBroken.Message,size: 25.0),
+              onPressed: ()
+              {
+                if(!cubit.user_model!.isEmailVrified!)
                 {
-                  if(!cubit.user_model!.isEmailVrified!)
-                  {
-                    myToast(msg: lang.verifyYourEmail(), state: ToastStates.WARNING);
-                  }
-                  else {
-                    // send model
-                    navTo(context, Chat_Details_Screen(receiver_Model: userModel,));
-                  }
+                  myToast(msg: S.of(context).verifyYourEmail, state: ToastStates.WARNING);
                 }
-            ),
+                else {
+                  // send model
+                  navTo(context, Chat_Details_Screen(receiver_Model: userModel,));
+                }
+              }
           ),
         );
 

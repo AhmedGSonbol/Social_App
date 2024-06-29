@@ -8,6 +8,7 @@ import 'package:social_app/Shared/Components/Components.dart';
 import 'package:social_app/Shared/Styles/appLanguage.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class UsersScreen extends StatelessWidget
 {
@@ -22,21 +23,17 @@ class UsersScreen extends StatelessWidget
       {
         var cubit = AppCubit.get(context);
 
-        AppLang lang = AppLang(context);
-
         return cubit.users.isNotEmpty && cubit.user_model != null
             ?
         ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildUserItem(cubit.users[index],context,lang),
+            itemBuilder: (context, index) => buildUserItem(cubit.users[index],context),
             separatorBuilder: (context, index) => myDivider(),
             itemCount: cubit.users.length,
           padding: const EdgeInsets.symmetric(vertical: 5.0),
         )
             :
-        const Center(child: CircularProgressIndicator())
-        ;
-
+        const Center(child: CircularProgressIndicator());
       },
     );
   }

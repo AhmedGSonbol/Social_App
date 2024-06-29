@@ -7,6 +7,7 @@ import 'package:social_app/Shared/Styles/colors.dart';
 import 'package:social_app/Shared/Styles/icon_broken.dart';
 import 'package:social_app/Shared/cubit/cubit.dart';
 import 'package:social_app/Shared/cubit/states.dart';
+import 'package:social_app/generated/l10n.dart';
 
 class Chat_Details_Screen extends StatelessWidget
 {
@@ -23,7 +24,7 @@ class Chat_Details_Screen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
-    AppLang lang = AppLang(context);
+    var lang = S.of(context);
 
     AppCubit.get(context).getMessages(receiverId: receiver_Model.uId!);
 
@@ -40,72 +41,70 @@ class Chat_Details_Screen extends StatelessWidget
 
         var cubit = AppCubit.get(context);
 
-        return Directionality(
-          textDirection: lang.isEn ? TextDirection.ltr : TextDirection.rtl,
-          child: Scaffold(
+        return Scaffold(
 
-              appBar:defaultAppBar(
-                context: context,
-                title: buildUserItem(
-                    receiver_Model,
-                    context,
-                    lang,
-                    isSmallImg: true
-                ),
+            appBar:defaultAppBar(
+              context: context,
+              title: buildUserItem(
+                  receiver_Model,
+                  context,
+                  // lang,
+                  isSmallImg: true
               ),
-              body:
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children:
-                  [
-                    if (cubit.messages.isNotEmpty) Expanded(
-                      child: ListView.separated(
-                        // controller: scrollController,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index)
+            ),
+            body:
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children:
+                [
+                  if (cubit.messages.isNotEmpty) Expanded(
+                    child: ListView.separated(
+                      // controller: scrollController,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index)
+                      {
+                        if(cubit.messages[index].receiverId != receiver_Model.uId )
                         {
-                          if(cubit.messages[index].receiverId != receiver_Model.uId )
-                          {
-                            return buildReceiverMessages(cubit.messages[index].text!);
-                          }
-                          else
-                          {
-                            return buildMyMessages(cubit.messages[index].text!,context);
-                          }
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(height: 15.0,),
-                        itemCount: cubit.messages.length,
-                      ),
-                    )
-
-                    else Expanded(
-                      child: Center(
-                        child: Text(lang.noMessagesYet(),style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 15.0)),
-                      ),
+                          return buildReceiverMessages(cubit.messages[index].text!);
+                        }
+                        else
+                        {
+                          return buildMyMessages(cubit.messages[index].text!,context);
+                        }
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(height: 15.0,),
+                      itemCount: cubit.messages.length,
                     ),
+                  )
 
-                    mySendMessageSection(
-                        context: context,
-                        messageController: messageController,
-                        onPressed: ()
+                  else Expanded(
+                    child: Center(
+                      child: Text(lang.noMessagesYet,style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 15.0)),
+                    ),
+                  ),
+
+                  mySendMessageSection(
+                    lang: lang,
+                      context: context,
+                      messageController: messageController,
+                      onPressed: ()
+                      {
+                        if(messageController.text.trim().isNotEmpty)
                         {
-                          if(messageController.text.trim().isNotEmpty)
-                          {
-                            cubit.sendMessage(
-                              receiverId: receiver_Model.uId!,
-                              datetime: DateTime.now().toString(),
-                              text: messageController.text,
-                            );
-                            messageController.text = '';
-                          }
+                          cubit.sendMessage(
+                            receiverId: receiver_Model.uId!,
+                            datetime: DateTime.now().toString(),
+                            text: messageController.text,
+                          );
+                          messageController.text = '';
+                        }
 
-                        })
+                      })
 
-                  ],
-                ),
-              )
-          ),
+                ],
+              ),
+            )
         );
       },
     );
