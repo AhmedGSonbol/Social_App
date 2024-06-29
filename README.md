@@ -23,7 +23,7 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - View others profile.
   - Edit and update your information.
   - Switch between (Light / Dark) Mode.
-  - Switch between (Arabic / English) Language.
+  - Switch between (Arabic / English / French / Spanish) Language.
   - Users can not post, comment, like, or chat until their account become verified.
   - Logout.
 
@@ -33,7 +33,8 @@ Is a communication app like Facebook that has been built using (Flutter).<br>
   - Flutter
   - Dart
   - Firebase ( Authentication , Firestore , Storage , Messaging )
-  - Bloc & Cubit
+  - Bloc & Cubit State Management
+  - Localization
   - API
   - Shared Preferences
 
